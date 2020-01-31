@@ -34,3 +34,4 @@ org.keycloak.social.stackoverflow.StackoverflowUserAttributeMapper
 org.keycloak.social.microsoft.MicrosoftUserAttributeMapper
 org.keycloak.social.instagram.InstagramUserAttributeMapper
 org.keycloak.social.kakao.KakaoUserAttributeMapper
+org.keycloak.social.naver.NaverUserAttributeMapper

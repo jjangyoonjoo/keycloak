@@ -38,7 +38,8 @@ import org.keycloak.social.openshift.OpenshiftV3IdentityProviderFactory;
 import org.keycloak.social.paypal.PayPalIdentityProviderFactory;
 import org.keycloak.social.stackoverflow.StackoverflowIdentityProviderFactory;
 import org.keycloak.social.twitter.TwitterIdentityProviderFactory;
-import org.keycloak.social.kakao.KakaoIdentityProviderFactory;;
+import org.keycloak.social.kakao.KakaoIdentityProviderFactory;
+import org.keycloak.social.naver.NaverIdentityProviderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,8 @@ public class UsernameTemplateMapper extends AbstractClaimMapper {
             PayPalIdentityProviderFactory.PROVIDER_ID,
             StackoverflowIdentityProviderFactory.PROVIDER_ID,
             TwitterIdentityProviderFactory.PROVIDER_ID,
-            KakaoIdentityProviderFactory.PROVIDER_ID
+            KakaoIdentityProviderFactory.PROVIDER_ID,
+            NaverIdentityProviderFactory.PROVIDER_ID
     };
 
     private static final List<ProviderConfigProperty> configProperties = new ArrayList<ProviderConfigProperty>();
