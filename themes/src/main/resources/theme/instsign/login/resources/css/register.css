@@ -1,0 +1,41 @@
+
+.instsign-content-register{
+    height: 640px;
+}
+
+
+.instsign-content-first-name{
+    margin-top: 40px;
+    margin-left: 48px;
+}
+
+.instsign-content-last-name{
+    margin-top: 16px;
+    margin-left: 48px;
+}
+
+.instsign-content-username{
+    margin-top: 16px;
+    margin-left: 48px;
+}
+
+.instsign-content-email{
+    margin-top: 16px;
+    margin-left: 48px;
+}
+
+.instsign-content-password{
+    margin-top: 16px;
+    margin-left: 48px;
+}
+
+.instsign-content-confirm-password{
+    margin-top: 16px;
+    margin-left: 48px;
+}
+
+.instsign-content-footer-login{
+    padding-top: 22px;
+    padding-bottom: 22px;
+    text-align: center;
+}
