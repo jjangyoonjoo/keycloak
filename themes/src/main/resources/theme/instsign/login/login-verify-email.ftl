@@ -11,9 +11,10 @@
           ${msg("verify-email-content-subtitle")}
       </div>
     </div>
-    <div class="instsign-content-email-address">
-      <span></span>
-    </div>
+<#--    <div class="instsign-content-email-address">-->
+<#--      <span>${Session["authenticatedUser"]["email"]}</span>-->
+<#--      <span>${account.email}</span>-->
+<#--    </div>-->
   </div>
   <div class="instsign-content-footer instsign-content-verify-email-footer">
     <div class="instsign-content-footer-msg">

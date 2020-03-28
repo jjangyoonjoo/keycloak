@@ -1,5 +1,6 @@
 .instsign-content-verify-email {
-    height: 340px;
+    /*height: 340px;*/
+    height: 200px;
     width: 580px;
 }
 .instsign-content-verify-email-header-svg {
