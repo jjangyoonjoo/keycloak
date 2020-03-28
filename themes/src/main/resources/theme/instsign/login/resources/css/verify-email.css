@@ -58,7 +58,10 @@
     text-align: center;
     color: var(--dark-navy-blue);
 }
+.instsign-content-verify-email-footer .instsign-content-footer-msg{
+    width: 270px;
+}
 .instsign-content-footer-resend{
-    width: 130px;
+    width: 173px;
     display: inline-block;
 }

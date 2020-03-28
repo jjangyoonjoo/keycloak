@@ -72,8 +72,10 @@ Before contributing to Keycloak please read our [contributing guidelines](CONTRI
 * [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 
-## copy
+## Docker Theme Copy
 docker cp themes/src/main/resources/theme/instsign dcfc003bf641:/opt/jboss/keycloak/themes/instsign
-mvn -f testsuite/utils/pom.xml exec:java -Pkeycloak-server -Pkeycloak.theme.dir="D:\git\keycloak\themes\src\main\resources\theme"
+
+## Docker Theme Test
 cd testsuite/utils
-mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="D:\git\keycloak\themes\src\main\resources\theme"
+mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme"
+mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme" -Dimport="../../../signus-service/src/main/docker/realm-config/jhipster-realm.json"

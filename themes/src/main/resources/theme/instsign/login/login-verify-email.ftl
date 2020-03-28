@@ -12,10 +12,10 @@
       </div>
     </div>
     <div class="instsign-content-email-address">
-      <span>${account.email}</span>
+      <span></span>
     </div>
   </div>
-  <div class="instsign-content-footer">
+  <div class="instsign-content-footer instsign-content-verify-email-footer">
     <div class="instsign-content-footer-msg">
         ${msg("verify-email-msg")}
     </div>
