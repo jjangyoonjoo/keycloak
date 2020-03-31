@@ -7,22 +7,26 @@
       </div>
       <div class="instsign-content-input-text instsign-content-first-name">
         <input id="firstName" name="firstName" type="text"
+               value="${(register.formData.firstName!'')}"
                placeholder="${msg("instsign-content-first-name-placeholder")}"/>
       </div>
       <div class="instsign-content-input-text instsign-content-last-name">
         <input id="lastName" name="lastName" type="text"
+               value="${(register.formData.lastName!'')}"
                placeholder="${msg("instsign-content-last-name-placeholder")}"/>
       </div>
         <#if !realm.registrationEmailAsUsername>
           <div class="instsign-content-input-text instsign-content-username">
             <input id="username" name="username" type="text"
                    autocomplete="username"
+                   value="${(register.formData.username!'')}"
                    placeholder="${msg("instsign-content-username-placeholder")}"/>
           </div>
         </#if>
       <div class="instsign-content-input-text instsign-content-email">
         <input id="email" name="email" type="text"
                autocomplete="email"
+               value="${(register.formData.email!'')}"
                placeholder="${msg("instsign-content-email-placeholder")}"/>
       </div>
         <#if passwordRequired>
