@@ -50,25 +50,32 @@
       <div class="instsign-left-menu-logo"></div>
       <div class="instsign-left-menu-title">${msg("login-left-menu.title")}</div>
       <div class="instsign-left-menu-subtitle">${msg("login-left-menu.subtitle")}</div>
-        <#if realm.internationalizationEnabled  && locale.supported?size gt 1>
-          <div id="kc-locale">
-            <div id="kc-locale-wrapper" class="${properties.kcLocaleWrapperClass!}">
-              <div class="kc-dropdown" id="kc-locale-dropdown">
-<#--                <a href="#" id="kc-current-locale-link">${locale.current}</a>-->
-                <ul>
-                    <#list locale.supported as l>
-                      <li class="kc-dropdown-item"><a href="${l.url}">${l.label}</a></li>
-                    </#list>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </#if>
+<#--        <#if realm.internationalizationEnabled  && locale.supported?size gt 1>-->
+<#--          <div id="kc-locale">-->
+<#--            <div id="kc-locale-wrapper" class="${properties.kcLocaleWrapperClass!}">-->
+<#--              <div class="kc-dropdown" id="kc-locale-dropdown">-->
+<#--                  &lt;#&ndash;                <a href="#" id="kc-current-locale-link">${locale.current}</a>&ndash;&gt;-->
+<#--                <ul>-->
+<#--                    <#list locale.supported as l>-->
+<#--                      <li class="kc-dropdown-item"><a href="${l.url}">${l.label}</a></li>-->
+<#--                    </#list>-->
+<#--                </ul>-->
+<#--              </div>-->
+<#--            </div>-->
+<#--          </div>-->
+<#--        </#if>-->
     </div>
     <div class="instsign-content-wrapper">
-      <div id="kc-content-wrapper">
-           <#nested "form">
-      </div>
+        <#if displayMessage && message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
+          <div class="alert alert-${message.type}">
+              <#if message.type = 'success'><span class="${properties.kcFeedbackSuccessIcon!}"></span></#if>
+              <#if message.type = 'warning'><span class="${properties.kcFeedbackWarningIcon!}"></span></#if>
+              <#if message.type = 'error'><span class="${properties.kcFeedbackErrorIcon!}"></span></#if>
+              <#if message.type = 'info'><span class="${properties.kcFeedbackInfoIcon!}"></span></#if>
+            <span class="kc-feedback-text">${kcSanitize(message.summary)?no_esc}</span>
+          </div>
+        </#if>
+        <#nested "form">
     </div>
 
   </div>
