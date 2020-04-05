@@ -229,3 +229,19 @@ input {
     border-radius: 4px;
     background-color: var(--very-light-pink);
 }
+.instsign-content-message-body{
+    margin: 48px 48px;
+    background-color: var(--very-light-pink);
+    height: 150px;
+}
+.instsign-content-message-text{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 10px;
+    color:  var(--dark-navy-blue);
+}
