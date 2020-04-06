@@ -3,7 +3,7 @@
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" rel="stylesheet" type="text/css">
   <style type="text/css">
     body {
-      font-family: NotoSansKR, sans-serif;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     .custom-button-dnb {
