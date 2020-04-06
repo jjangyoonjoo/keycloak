@@ -77,5 +77,6 @@ docker cp themes/src/main/resources/theme/instsign dcfc003bf641:/opt/jboss/keycl
 
 ## Docker Theme Test
 cd testsuite/utils
+mvn clean package
 mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme"
 mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme" -Dimport="../../../signus-service/src/main/docker/realm-config/jhipster-realm.json"

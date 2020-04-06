@@ -81,6 +81,18 @@ input {
     background-color: var(--white);
 }
 
+.instsign-left-menu-locale{
+    margin-top: 48px;
+    margin-left: 24px;
+}
+.instsign-left-menu-locale-item{
+    height: 30px !important;
+}
+.instsign-left-menu-locale-item span {
+    color: var(--dark-navy-blue);
+    text-decoration: none;
+    border-bottom: solid 2px var(--dark-navy-blue);
+}
 .instsign-left-menu-logo {
     margin-top: 28px;
     margin-left: 24px;
@@ -159,6 +171,7 @@ input {
     font-size: 14px;
     font-weight: normal;
     color: var(--dark-navy-blue);
+    cursor: pointer;
 }
 .instsign-link-text span{
     border-bottom: solid 2px var(--dark-navy-blue);
