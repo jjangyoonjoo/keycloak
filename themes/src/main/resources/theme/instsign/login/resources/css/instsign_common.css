@@ -81,6 +81,18 @@ input {
     background-color: var(--white);
 }
 
+.instsign-left-menu-locale{
+    margin-top: 48px;
+    margin-left: 24px;
+}
+.instsign-left-menu-locale-item{
+    height: 30px !important;
+}
+.instsign-left-menu-locale-item span {
+    color: var(--dark-navy-blue);
+    text-decoration: none;
+    border-bottom: solid 2px var(--dark-navy-blue);
+}
 .instsign-left-menu-logo {
     margin-top: 28px;
     margin-left: 24px;
@@ -151,7 +163,7 @@ input {
     width: 100%;
     font-size: 14px;
     font-weight: normal;
-    color: #9b9b9b;
+    color: var(--dark-navy-blue);
 }
 
 .instsign-link-text {
@@ -159,6 +171,7 @@ input {
     font-size: 14px;
     font-weight: normal;
     color: var(--dark-navy-blue);
+    cursor: pointer;
 }
 .instsign-link-text span{
     border-bottom: solid 2px var(--dark-navy-blue);
@@ -174,6 +187,7 @@ input {
     margin-left: 48px;
     margin-right: 48px;
     margin-top: 48px;
+    cursor: pointer;
 }
 
 .instsign-button:hover {
@@ -228,4 +242,20 @@ input {
     height: 64px;
     border-radius: 4px;
     background-color: var(--very-light-pink);
+}
+.instsign-content-message-body{
+    margin: 48px 48px;
+    background-color: var(--very-light-pink);
+    height: 150px;
+}
+.instsign-content-message-text{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 10px;
+    color:  var(--dark-navy-blue);
 }

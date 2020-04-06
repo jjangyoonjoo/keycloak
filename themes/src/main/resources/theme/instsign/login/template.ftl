@@ -50,20 +50,15 @@
       <div class="instsign-left-menu-logo"></div>
       <div class="instsign-left-menu-title">${msg("login-left-menu.title")}</div>
       <div class="instsign-left-menu-subtitle">${msg("login-left-menu.subtitle")}</div>
-<#--        <#if realm.internationalizationEnabled  && locale.supported?size gt 1>-->
-<#--          <div id="kc-locale">-->
-<#--            <div id="kc-locale-wrapper" class="${properties.kcLocaleWrapperClass!}">-->
-<#--              <div class="kc-dropdown" id="kc-locale-dropdown">-->
-<#--                  &lt;#&ndash;                <a href="#" id="kc-current-locale-link">${locale.current}</a>&ndash;&gt;-->
-<#--                <ul>-->
-<#--                    <#list locale.supported as l>-->
-<#--                      <li class="kc-dropdown-item"><a href="${l.url}">${l.label}</a></li>-->
-<#--                    </#list>-->
-<#--                </ul>-->
-<#--              </div>-->
-<#--            </div>-->
-<#--          </div>-->
-<#--        </#if>-->
+        <#if realm.internationalizationEnabled  && locale.supported?size gt 1>
+          <div class="instsign-left-menu-locale">
+              <#list locale.supported as l>
+            <div class="instsign-link-text instsign-left-menu-locale-item" onclick="goToUrl('${l.url}')">
+                <span>${l.label}</span>
+            </div>
+              </#list>
+          </div>
+        </#if>
     </div>
     <div class="instsign-content-wrapper">
         <#if displayMessage && message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
