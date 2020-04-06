@@ -187,6 +187,7 @@ input {
     margin-left: 48px;
     margin-right: 48px;
     margin-top: 48px;
+    cursor: pointer;
 }
 
 .instsign-button:hover {
