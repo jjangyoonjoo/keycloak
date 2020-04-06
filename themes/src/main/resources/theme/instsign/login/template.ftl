@@ -47,7 +47,9 @@
   </script>
   <div class="instsign-main">
     <div class="instsign-left-menu">
-      <div class="instsign-left-menu-logo"></div>
+      <a class="instsign-left-menu-link" href="https://app.instsign.com">
+        <div class="instsign-left-menu-logo"></div>
+      </a>
       <div class="instsign-left-menu-title">${msg("login-left-menu.title")}</div>
       <div class="instsign-left-menu-subtitle">${msg("login-left-menu.subtitle")}</div>
         <#if realm.internationalizationEnabled  && locale.supported?size gt 1>

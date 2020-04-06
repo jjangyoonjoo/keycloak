@@ -80,7 +80,10 @@ input {
     box-shadow: inset -1px 0 0 0 #f2f2f2;
     background-color: var(--white);
 }
-
+.instsign-left-menu-link{
+    text-decoration: none;
+    border: none;
+}
 .instsign-left-menu-locale{
     margin-top: 48px;
     margin-left: 24px;

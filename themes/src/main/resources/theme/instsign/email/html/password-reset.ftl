@@ -346,6 +346,10 @@
       text-align: center;
       color: rgba(0, 0, 33, 0.3);
     }
+    .instsign-left-menu-link{
+      text-decoration: none;
+      border: none;
+    }
   </style>
 
 </head>
