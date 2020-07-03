@@ -3,7 +3,7 @@
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" rel="stylesheet" type="text/css">
   <style type="text/css">
     body {
-      font-family: NotoSansKR, sans-serif;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     .custom-button-dnb {
@@ -345,6 +345,10 @@
       letter-spacing: normal;
       text-align: center;
       color: rgba(0, 0, 33, 0.3);
+    }
+    .instsign-left-menu-link{
+      text-decoration: none;
+      border: none;
     }
   </style>
 

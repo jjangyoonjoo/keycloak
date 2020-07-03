@@ -26,6 +26,7 @@ import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.utils.IdentityProviderUtils;
 
 /**
  * @author <a href="mailto:yoonjoo.jang@gmail.com">YoonJoo jang</a>
@@ -60,7 +61,7 @@ public class KakaoIdentityProvider extends AbstractOAuth2IdentityProvider implem
 			BrokeredIdentityContext user = new BrokeredIdentityContext(id);
 
 			String full_name = getJsonProperty(profile, "nickname");
-			user.setName(full_name);
+			IdentityProviderUtils.setName(user, full_name);
 
 			String email = getJsonProperty(account, "email");
 			user.setEmail(email);
