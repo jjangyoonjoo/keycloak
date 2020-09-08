@@ -1,41 +1,147 @@
 
-.instsign-content-register{
-    height: 640px;
+.instsign-content-register {
+
+}
+
+.instsign-content-register .instsign-button {
+  margin-bottom: 40px;
+}
+
+.instsign-content-register .register-login-text {
+  display: inline-block;
+  vertical-align: top;
+  height: 14px;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.88;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+.instsign-content-register .register-login {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 20px;
+  height: 14px;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.88;
+  letter-spacing: normal;
+  color: #275ae6;
+}
+
+.instsign-content-register .register-login:hover {
+  cursor: pointer;
+}
+
+.register-content-label-password-description{
+  font-size: 12px;
+}
+.instsign-content-register .register-agreement{
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 30px;
+  width: 100%;
+  height: 43px;
+  border-radius: 2px;
+  border: solid 1px #d1d6e2;
+  background-color: #ffffff;
+}
+.instsign-content-register .register-agreement-checkbox{
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 2px;
+  background-color: #275ae6;
+}
+.instsign-content-register .register-agreement-checkbox-small{
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px 10px;
+  width: 19px;
+  height: 19px;
+  border-radius: 2px;
+  background-color: #275ae6;
+}
+
+.all-agreement-checkbox-checked-svg {
+  display: inline-block;
+  vertical-align: top;
+  margin: 2px 2px;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  background: url("../img/checkbox-selected-icon.svg") no-repeat center center;
+}
+
+.small-agreement-checkbox-checked-svg {
+  display: inline-block;
+  vertical-align: top;
+  margin: 2px 2px;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  background: url("../img/checkbox-selected-icon.svg") no-repeat center center;
+}
+
+.register-agreement-text{
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 15px;
+  margin-left: 1px;
+  height: 14px;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.88;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+.register-agreement-text-small{
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 15px;
+  margin-left: 1px;
+  height: 14px;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.88;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+.all-agreement-dropdown{
+  margin-top: 17px;
+  margin-right: 20px;
+  position: relative;
+  float: right;
 }
 
 
-.instsign-content-first-name{
-    margin-top: 40px;
-    margin-left: 48px;
+.register-agreement-select-options{
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  margin-bottom: 40px;
+  width: 100%;
+  box-shadow: inset 0 1px 0 0 #d1d6e2;
+  background-color: #ffffff;
 }
 
-.instsign-content-last-name{
-    margin-top: 16px;
-    margin-left: 48px;
-}
-
-.instsign-content-username{
-    margin-top: 16px;
-    margin-left: 48px;
-}
-
-.instsign-content-email{
-    margin-top: 16px;
-    margin-left: 48px;
-}
-
-.instsign-content-password{
-    margin-top: 16px;
-    margin-left: 48px;
-}
-
-.instsign-content-confirm-password{
-    margin-top: 16px;
-    margin-left: 48px;
-}
-
-.instsign-content-footer-login{
-    padding-top: 22px;
-    padding-bottom: 22px;
-    text-align: center;
+.register-agreement-select-section-row{
+  width: 100%;
 }

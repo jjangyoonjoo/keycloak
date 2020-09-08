@@ -17,6 +17,7 @@
 
 package org.keycloak.authentication.forms;
 
+import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.authentication.FormAction;
 import org.keycloak.authentication.FormActionFactory;
@@ -41,12 +42,15 @@ import org.keycloak.services.validation.Validation;
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
 public class RegistrationUserCreation implements FormAction, FormActionFactory {
+
+    private static final Logger logger = Logger.getLogger(RegistrationUserCreation.class);
 
     public static final String PROVIDER_ID = "registration-user-creation";
 
@@ -118,6 +122,14 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
 
     }
 
+    private String getBooleanValue(MultivaluedMap<String, String> formData, String propertyName){
+        String value = formData.getFirst(propertyName);
+        if (value == null || value.isEmpty()){
+            value = "false";
+        }
+        return value;
+    }
+
     @Override
     public void success(FormContext context) {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
@@ -133,7 +145,16 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         UserModel user = context.getSession().users().addUser(context.getRealm(), username);
         user.setEnabled(true);
 
+        user.setSingleAttribute(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER));
+        user.setSingleAttribute(RegistrationPage.FIELD_COMPANY, formData.getFirst(RegistrationPage.FIELD_COMPANY));
+        user.setSingleAttribute(RegistrationPage.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_SERVICE_AGREEMENT));
+        user.setSingleAttribute(RegistrationPage.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_PRIVACY_AGREEMENT));
+        user.setSingleAttribute(RegistrationPage.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_MARKETING_AGREEMENT));
         user.setEmail(email);
+        logger.info(user.toString());
+        for(Map.Entry<String, List<String>> entry: user.getAttributes().entrySet()){
+            logger.info(entry.getKey()+":"+entry.getValue());
+        }
         context.getAuthenticationSession().setClientNote(OIDCLoginProtocol.LOGIN_HINT_PARAM, username);
         AttributeFormDataProcessor.process(formData, context.getRealm(), user);
         context.setUser(user);

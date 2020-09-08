@@ -1,9 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-    <g fill="none">
-        <circle cx="24" cy="24" r="23" fill="#FAE100" stroke="#222" stroke-opacity=".05" stroke-width="2"/>
-        <g fill="#3C1E1E" transform="translate(12 13)">
-            <ellipse cx="12" cy="9.5" rx="12" ry="9.5"/>
-            <path d="M6.612 12.891L3.54 21.637c-.091.261.046.546.306.638.15.052.314.031.444-.056l10.807-7.241-8.484-2.087z"/>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+    <g fill="none" fill-rule="evenodd">
+        <rect width="60" height="60" fill="#FAE100" rx="30"/>
+        <path fill="#1E1E1E" d="M30.5 18C23.597 18 18 22.421 18 27.875c0 3.274 2.02 6.17 5.124 7.967l-1.472 5.497c-.14.527.448.947.9.641l6.385-4.31c.512.051 1.033.08 1.563.08 6.904 0 12.5-4.42 12.5-9.875C43 22.421 37.404 18 30.5 18"/>
     </g>
 </svg>

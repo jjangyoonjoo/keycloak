@@ -853,6 +853,7 @@ public class AuthenticationProcessor {
             return new AuthenticationFlowURLHelper(session, realm, uriInfo).showPageExpired(authenticationSession);
         }
         UserModel authUser = authenticationSession.getAuthenticatedUser();
+        logger.info("authenticationAction::authUser:" + (authUser!= null?authUser.toString():""));
         validateUser(authUser);
         AuthenticationExecutionModel model = realm.getAuthenticationExecutionById(execution);
         if (model == null) {
