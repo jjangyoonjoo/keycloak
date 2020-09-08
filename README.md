@@ -79,4 +79,14 @@ docker cp themes/src/main/resources/theme/instsign dcfc003bf641:/opt/jboss/keycl
 cd testsuite/utils
 mvn clean package
 mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme"
-mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme" -Dimport="../../../signus-service/src/main/docker/realm-config/jhipster-realm.json"
+mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme" -Dimport="../../../signus-service/src/main/docker/realm-config/instsign-realm.json"
+Use following url for debugging: http://localhost:8081/auth/realms/instsign/account
+
+intellij debug setting
+create maven run 
+set working directory:
+keycloak/testsuite/utils
+set command line:
+exec:java -Dresources -Pkeycloak.theme.dir=../../themes/src/main/resources/theme "-Dimport=../../../signus-service/src/main/docker/realm-config/instsign-realm.json"
+set profiles:
+keycloak-server

@@ -17,6 +17,7 @@
 
 package org.keycloak.authentication.forms;
 
+import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.authentication.FormAction;
 import org.keycloak.authentication.FormActionFactory;
@@ -45,6 +46,7 @@ import java.util.List;
  */
 public class RegistrationProfile implements FormAction, FormActionFactory {
     public static final String PROVIDER_ID = "registration-profile-action";
+    private static final Logger logger = Logger.getLogger(RegistrationProfile.class);
 
     @Override
     public String getHelpText() {
@@ -70,6 +72,15 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
 
         if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_LAST_NAME)))) {
             errors.add(new FormMessage(RegistrationPage.FIELD_LAST_NAME, Messages.MISSING_LAST_NAME));
+        }
+        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_MOBILE_PHONE_NUMBER)))) {
+            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.MISSING_MOBILE_PHONE_NUMBER));
+        }
+        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_SERVICE_AGREEMENT)))) {
+            errors.add(new FormMessage(RegistrationPage.FIELD_SERVICE_AGREEMENT, Messages.MISSING_SERVICE_AGREEMENT));
+        }
+        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_PRIVACY_AGREEMENT)))) {
+            errors.add(new FormMessage(RegistrationPage.FIELD_PRIVACY_AGREEMENT, Messages.MISSING_PRIVACY_AGREEMENT));
         }
 
         String email = formData.getFirst(Validation.FIELD_EMAIL);
@@ -100,6 +111,13 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         }
     }
 
+    private String getBooleanValue(MultivaluedMap<String, String> formData, String propertyName){
+        String value = formData.getFirst(propertyName);
+        if (value == null || value.isEmpty()){
+            value = "false";
+        }
+        return value;
+    }
     @Override
     public void success(FormContext context) {
         UserModel user = context.getUser();
@@ -107,6 +125,12 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         user.setFirstName(formData.getFirst(RegistrationPage.FIELD_FIRST_NAME));
         user.setLastName(formData.getFirst(RegistrationPage.FIELD_LAST_NAME));
         user.setEmail(formData.getFirst(RegistrationPage.FIELD_EMAIL));
+        user.setSingleAttribute(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER));
+        user.setSingleAttribute(RegistrationPage.FIELD_COMPANY, formData.getFirst(RegistrationPage.FIELD_COMPANY));
+        user.setSingleAttribute(RegistrationPage.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_SERVICE_AGREEMENT));
+        user.setSingleAttribute(RegistrationPage.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_PRIVACY_AGREEMENT));
+        user.setSingleAttribute(RegistrationPage.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_MARKETING_AGREEMENT));
+        logger.info(user.toString());
     }
 
     @Override

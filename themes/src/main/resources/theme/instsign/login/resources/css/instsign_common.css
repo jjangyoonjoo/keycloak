@@ -1,264 +1,279 @@
 :root {
-    --dark-navy-blue: #000021;
-    --dust: #b09c72;
-    --very-light-pink: #fafafa;
-    --white-65: rgba(255, 255, 255, 0.65);
-    --white: #ffffff;
+  --dark-navy-blue: #000021;
+  --dust: #b09c72;
+  --very-light-pink: #fafafa;
+  --white-65: rgba(255, 255, 255, 0.65);
+  --white: #ffffff;
 }
 
 
 @font-face {
-    font-family: NotoSansKR;
-    src: url('../font/notosanskr/NotoSansCJKkr-Medium.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
+  font-family: NotoSansKR;
+  src: url('../font/notosanskr/NotoSansCJKkr-Medium.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
 }
 
 @font-face {
-    font-family: NotoSansKR;
-    src: url('../font/notosanskr/NotoSansCJKkr-Medium.otf') format('opentype');
-    font-weight: 500;
-    font-style: normal;
-    font-stretch: normal;
+  font-family: NotoSansKR;
+  src: url('../font/notosanskr/NotoSansCJKkr-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
 }
 
 @font-face {
-    font-family: NotoSansKR;
-    src: url('../font/notosanskr/NotoSansCJKkr-Bold.otf') format('opentype');
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
+  font-family: NotoSansKR;
+  src: url('../font/notosanskr/NotoSansCJKkr-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
 }
 
 @font-face {
-    font-family: Roboto;
-    src: url('../font/roboto/Roboto-Regular.ttf') format('ttf');
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
+  font-family: Roboto;
+  src: url('../font/roboto/Roboto-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: NanumSquareOTFEB;
+  src: url('../font/nanumsquare/NanumSquareEB.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: NanumSquareOTFB;
+  src: url('../font/nanumsquare/NanumSquareB.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: NanumSquareOTFR;
+  src: url('../font/nanumsquare/NanumSquareR.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
 }
 
 body {
-    background-color: var(--white);
-    font-family: NotoSansKR, sans-serif !important;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
+  background-color: #f9fafd !important;
+  font-family: NanumSquareOTFB, sans-serif !important;
+  font-size: 14px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
 }
 
-input {
-    font-family: NotoSansKR, sans-serif !important;
+.instsign-main .alert {
+  margin-left: 48px;
+  margin-bottom: 0;
+  padding: 0;
+  min-height: 47px;
+  width: 576px;
 }
 
-.instsign-main .alert{
-    margin-left: 48px;
-    margin-bottom: 0;
-    padding: 0;
-    min-height: 47px;
-    width: 576px;
-}
-
-.alert .kc-feedback-text{
-    position: relative;
-    left: 45px;
-    top: 12px;
+.alert .kc-feedback-text {
+  position: relative;
+  left: 45px;
+  top: 12px;
 }
 
 .instsign-main {
-    width: 100%;
-    height: 800px;
-    background-color: var(--very-light-pink);
-}
-
-.instsign-left-menu {
-    vertical-align: top;
-    display: inline-block;
-    width: 240px;
-    height: 100%;
-    box-shadow: inset -1px 0 0 0 #f2f2f2;
-    background-color: var(--white);
-}
-.instsign-left-menu-link{
-    text-decoration: none;
-    border: none;
-}
-.instsign-left-menu-locale{
-    margin-top: 48px;
-    margin-left: 24px;
-}
-.instsign-left-menu-locale-item{
-    height: 30px !important;
-}
-.instsign-left-menu-locale-item span {
-    color: var(--dark-navy-blue);
-    text-decoration: none;
-    border-bottom: solid 2px var(--dark-navy-blue);
-}
-.instsign-left-menu-logo {
-    margin-top: 28px;
-    margin-left: 24px;
-    width: 133px;
-    height: 48px;
-    object-fit: contain;
-    background: url("../img/instsign.svg") no-repeat center center;
-}
-
-.instsign-left-menu-title {
-
-    margin-top: 52px;
-    margin-left: 24px;
-    width: 192px;
-    height: 54px;
-    font-size: 36px;
-    font-weight: bold;
-    letter-spacing: -0.5px;
-    color: var(--dark-navy-blue);
-}
-
-.instsign-left-menu-subtitle {
-    margin-top: 5px;
-    margin-left: 24px;
-    width: 192px;
-    height: 48px;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--dark-navy-blue);
+  width: 100%;
+  height: 100%;
 }
 
 .instsign-content-wrapper {
-    display: inline-block;
-    height: 100%;
-    background-color: var(--very-light-pink);
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  justify-content: center;
+  align-content: center;
+  height: 100%;
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.instsign-header {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  height: 20px;
+  margin-left: calc(50% - 71px);
+}
+
+.instsign-header-img {
+  width: 141.4px;
+  height: 20px;
+  object-fit: contain;
+  background: url("../img/instsign-logo-with-symbol.svg") no-repeat center center;
+}
+
+
+.instsign-centered {
+  position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
+}
+
+.instsign-horizon-centered {
+  position: fixed; /* or absolute */
+  left: 50%;
+}
+
+.instsign-form {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
 }
 
 .instsign-content {
-    margin-top: 50px;
-    margin-left: 50px;
-    width: 576px;
-    border-radius: 4px;
-    box-shadow: 0 16px 48px 0 rgba(0, 0, 33, 0.05);
-    border: solid 1px rgba(0, 0, 33, 0.05);
-    background-color: var(--white);
+  display: inline-block;
+  margin-left: calc(50% - 250px);
+  vertical-align: top;
+  width: 500px;
+  box-shadow: 0 0 9px 0 #cfd3e4;
+  background-color: #ffffff;
+  padding: 50px 51px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-top-30 {
+  margin-top: 30px;
 }
 
 .instsign-content-title {
-    margin-left: 48px;
-    margin-top: 48px;
-    width: 380px;
-    height: 33px;
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--dark-navy-blue);
+  font-family: NanumSquareOTFEB, sans-serif;
+  font-size: 26px;
+  text-align: left;
+  color: #000000;
+}
+
+.instsign-content-input-label {
+  font-size: 14px;
+  color: #000000;
 }
 
 .instsign-content-input-text {
-    background-color: var(--white);
-    height: 50px;
-    width: 480px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #000000;
 }
 
 .instsign-content-input-text input {
-    border-radius: 4px;
-    border: solid 1px rgba(0, 0, 33, 0.25);
-    padding: 14px 16px;
-    width: 100%;
-    font-size: 14px;
-    font-weight: normal;
-    color: var(--dark-navy-blue);
+  width: 400px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #f0f2f9;
+  border: none;
+  padding: 3px 15px;
 }
 
-.instsign-link-text {
-    height: 20px;
-    font-size: 14px;
-    font-weight: normal;
-    color: var(--dark-navy-blue);
-    cursor: pointer;
+.instsign-content-input-text input:focus {
+  text-decoration: none;
+  outline: none;
+  border: none;
 }
-.instsign-link-text span{
-    border-bottom: solid 2px var(--dark-navy-blue);
+
+.instsign-content-input-text input::placeholder {
+  font-family: NanumSquareOTFEB, sans-serif;
 }
+
 .instsign-button {
-    vertical-align: top;
-    padding-top: 15px;
-    padding-bottom: 17px;
-    display: inline-block;
-    width: 480px;
-    border-radius: 4px;
-    background-color: var(--dark-navy-blue);
-    margin-left: 48px;
-    margin-right: 48px;
-    margin-top: 48px;
-    cursor: pointer;
-}
-
-.instsign-button:hover {
-    background-color: #404059;
-}
-
-.instsign-button:active {
-    background-color: #000019;
+  vertical-align: top;
+  display: inline-block;
+  width: 100%;
+  height: 50px;
+  border-radius: 2px;
+  background-color: #275ae6;
+  margin-top: 40px;
+  text-align: center;
+  padding: 17px 0;
 }
 
 .instsign-button span {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 0 10px;
-    color: var(--white);
-}
-.instsign-button-disabled {
-    vertical-align: top;
-    padding-top: 15px;
-    padding-bottom: 17px;
-    display: inline-block;
-    width: 480px;
-    border-radius: 4px;
-    background-color: var(--dark-navy-blue);
-    margin-left: 48px;
-    margin-right: 48px;
-    margin-top: 48px;
-    opacity: 0.5;
-}
-.instsign-button-disabled span {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 0 10px;
-    color: var(--white);
-    opacity: 0.5;
+  width: 44px;
+  height: 16px;
+  font-family: NanumSquareOTFEB, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
 }
 
-.instsign-content-footer{
-    margin-left: 48px;
-    margin-right: 48px;
-    width: 576px;
-    height: 64px;
-    border-radius: 4px;
-    background-color: var(--very-light-pink);
+.instsign-content-hr {
+  margin-top: 39px;
+  margin-bottom: 40px;
+  width: 100%;
+  height: 1px;
+  border: solid 1px #d1d6e2;
 }
-.instsign-content-message-body{
-    margin: 48px 48px;
-    background-color: var(--very-light-pink);
-    height: 150px;
+
+.instsign-link-text {
+  height: 14px;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.88;
+  letter-spacing: normal;
+  color: #000000;
 }
-.instsign-content-message-text{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 0 10px;
-    color:  var(--dark-navy-blue);
+
+.instsign-link-text:hover {
+  cursor: pointer;
+}
+
+.instsign-link-text span {
+  border-bottom: solid 2px #000000;
+}
+
+input[type=password] {
+  font-family: sans-serif;
+}
+
+.dropdown-default {
+  display: inline-block;
+  vertical-align: top;
+  width: 16px;
+  height: 8px;
+  object-fit: contain;
+  background: url("../img/dropbox-btn-default.svg") no-repeat center center;
+}
+
+.dropdown-clicked {
+  display: inline-block;
+  vertical-align: top;
+  width: 16px;
+  height: 8px;
+  object-fit: contain;
+  background: url("../img/dropbox-btn-clicked.svg") no-repeat center center;
+}
+
+.instsign-content-hide{
+  display: none !important;
+}
+.margin-top-139{
+  margin-top: 139px !important;
+}
+.instsign-content-blue {
+  color: #275ae6;
 }

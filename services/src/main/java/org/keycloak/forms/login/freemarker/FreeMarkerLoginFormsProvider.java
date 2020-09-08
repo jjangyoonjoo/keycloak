@@ -143,6 +143,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
             case VERIFY_EMAIL:
                 actionMessage = Messages.VERIFY_EMAIL;
                 page = LoginFormsPages.LOGIN_VERIFY_EMAIL;
+                this.attributes.put("email", user.getEmail());
                 break;
             default:
                 return Response.serverError().build();
