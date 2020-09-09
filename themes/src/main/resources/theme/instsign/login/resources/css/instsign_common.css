@@ -75,11 +75,12 @@ body {
 }
 
 .instsign-main .alert {
-  margin-left: 48px;
-  margin-bottom: 0;
   padding: 0;
-  min-height: 47px;
-  width: 576px;
+  position: relative; /* or absolute */
+  left: 50%;
+  top: -30px;
+  width: 300px;
+  margin-left: -250px;
 }
 
 .alert .kc-feedback-text {
@@ -276,4 +277,20 @@ input[type=password] {
 }
 .instsign-content-blue {
   color: #275ae6;
+}
+
+.instsign-content-weak {
+  color: #a0141b;
+}
+
+.instsign-content-normal {
+  color: #ffbf56;
+}
+
+.instsign-content-strong {
+  color: #7bbc2f;
+}
+
+.instsign-error {
+  border: solid 1px #a0141b !important;
 }
