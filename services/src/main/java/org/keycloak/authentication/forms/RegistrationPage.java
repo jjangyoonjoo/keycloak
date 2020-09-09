@@ -43,6 +43,7 @@ public class RegistrationPage implements FormAuthenticator, FormAuthenticatorFac
     public static final String FIELD_LAST_NAME = "lastName";
     public static final String FIELD_FIRST_NAME = "firstName";
     public static final String FIELD_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
+    public static final String FIELD_BIRTH_DATE = "birthDate";
     public static final String FIELD_COMPANY = "company";
     public static final String FIELD_SERVICE_AGREEMENT = "serviceAgreement";
     public static final String FIELD_PRIVACY_AGREEMENT = "privacyAgreement";
