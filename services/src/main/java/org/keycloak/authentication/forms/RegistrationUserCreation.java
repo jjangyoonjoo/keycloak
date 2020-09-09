@@ -148,7 +148,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         user.setSingleAttribute(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER));
         user.setSingleAttribute(RegistrationPage.FIELD_COMPANY, formData.getFirst(RegistrationPage.FIELD_COMPANY));
         user.setSingleAttribute(RegistrationPage.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_SERVICE_AGREEMENT));
-        user.setSingleAttribute(RegistrationPage.FIELD_BIRTH_DATE, getBooleanValue(formData, RegistrationPage.FIELD_BIRTH_DATE));
+        user.setSingleAttribute(RegistrationPage.FIELD_BIRTH_DATE, formData.getFirst(RegistrationPage.FIELD_BIRTH_DATE));
         user.setSingleAttribute(RegistrationPage.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_PRIVACY_AGREEMENT));
         user.setSingleAttribute(RegistrationPage.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_MARKETING_AGREEMENT));
         user.setEmail(email);
