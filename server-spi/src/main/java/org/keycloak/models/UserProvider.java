@@ -19,6 +19,7 @@ package org.keycloak.models;
 
 import org.keycloak.component.ComponentModel;
 import org.keycloak.provider.Provider;
+import org.keycloak.representations.idm.UserPasswordRepresentation;
 import org.keycloak.storage.user.UserBulkUpdateProvider;
 import org.keycloak.storage.user.UserLookupProvider;
 import org.keycloak.storage.user.UserQueryProvider;
@@ -97,5 +98,7 @@ public interface UserProvider extends Provider,
     void close();
 
     void preRemove(RealmModel realm, ComponentModel component);
+
+    boolean validate(RealmModel realm, UserPasswordRepresentation userPasswordRepresentation);
 
 }
