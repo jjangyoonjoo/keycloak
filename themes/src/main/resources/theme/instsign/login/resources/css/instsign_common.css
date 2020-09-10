@@ -272,13 +272,20 @@ input[type=password] {
 .instsign-content-hide{
   display: none !important;
 }
-.margin-top-139{
-  margin-top: 139px !important;
+.margin-top-155{
+  margin-top: 155px !important;
 }
 .instsign-content-blue {
   color: #275ae6;
 }
 
+.instsign-content-disabled {
+  background-color: #d9d9d9 !important;
+}
+
+.instsign-content-disabled span{
+  color: #bcbcbc !important;
+}
 .instsign-content-weak {
   color: #a0141b;
 }

@@ -3,6 +3,11 @@
 
 }
 
+.instsign-content-register .instsign-content-title {
+  width: 210px;
+  display: inline-block;
+  vertical-align: top;
+}
 .instsign-content-register .instsign-button {
   margin-bottom: 40px;
 }
@@ -40,10 +45,11 @@
   cursor: pointer;
 }
 
-.register-content-label-password-description{
+.register-content-label-password-description {
   font-size: 12px;
 }
-.instsign-content-register .register-agreement{
+
+.instsign-content-register .register-agreement {
   display: inline-block;
   vertical-align: top;
   margin-top: 30px;
@@ -53,7 +59,8 @@
   border: solid 1px #d1d6e2;
   background-color: #ffffff;
 }
-.instsign-content-register .register-agreement-checkbox{
+
+.instsign-content-register .register-agreement-checkbox {
   display: inline-block;
   vertical-align: top;
   margin: 10px 10px;
@@ -62,7 +69,8 @@
   border-radius: 2px;
   background-color: #275ae6;
 }
-.instsign-content-register .register-agreement-checkbox-small{
+
+.instsign-content-register .register-agreement-checkbox-small {
   display: inline-block;
   vertical-align: top;
   margin: 10px 10px;
@@ -92,7 +100,7 @@
   background: url("../img/checkbox-selected-icon.svg") no-repeat center center;
 }
 
-.register-agreement-text{
+.register-agreement-text {
   display: inline-block;
   vertical-align: top;
   margin-top: 15px;
@@ -108,7 +116,7 @@
   color: #000000;
 }
 
-.register-agreement-text-small{
+.register-agreement-text-small {
   display: inline-block;
   vertical-align: top;
   margin-top: 15px;
@@ -124,7 +132,7 @@
   color: #000000;
 }
 
-.all-agreement-dropdown{
+.all-agreement-dropdown {
   margin-top: 17px;
   margin-right: 20px;
   position: relative;
@@ -132,29 +140,30 @@
 }
 
 
-.register-agreement-select-options{
+.register-agreement-select-options {
   display: inline-block;
   vertical-align: top;
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 0;
   width: 100%;
   box-shadow: 0 0 1px 1px #d1d6e2;
   background-color: #ffffff;
 }
 
-.register-agreement-select-section-row{
+.register-agreement-select-section-row {
   width: 100%;
 }
 
-.instsign-content-register .instsign-password-strength{
+.instsign-content-register .instsign-password-strength {
   display: inline-block;
   vertical-align: top;
   position: relative;
-  float:right;
+  float: right;
   margin-top: -25px;
   margin-right: 20px;
 }
-.instsign-content-register .instsign-password-strength-text{
+
+.instsign-content-register .instsign-password-strength-text {
   display: inline-block;
   vertical-align: top;
   font-family: NanumSquareOTFB, sans-serif;
@@ -168,7 +177,7 @@
   color: #000000;
 }
 
-.instsign-content-register .instsign-password-strength-value{
+.instsign-content-register .instsign-password-strength-value {
   display: inline-block;
   vertical-align: top;
   font-family: NanumSquareOTFEB, sans-serif;
@@ -180,4 +189,34 @@
   letter-spacing: normal;
   text-align: right;
   margin-left: 10px;
+}
+
+.instsign-content-register .register-validation-required {
+  display: inline-block;
+  vertical-align: top;
+  width: 185px;
+  margin-top: 13px;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  color: #a0141b;
+}
+
+.instsign-content-register .register-validation-agreement {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  margin-top: 5px;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  color: #a0141b;
 }
