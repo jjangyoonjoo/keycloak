@@ -1059,7 +1059,7 @@ public class JpaUserProvider implements UserProvider, UserCredentialStore {
   public boolean validate(RealmModel realm, UserPasswordRepresentation userPasswordRepresentation) {
     UserModel userModel = getUserByEmail(userPasswordRepresentation.getEmail(), realm);
     PasswordUserCredentialModel passwordUserCredentialModel = UserCredentialModel.password(userPasswordRepresentation.getPassword(), true);
-    System.err.println("JpaUserProvider.validate:" + userPasswordRepresentation.getEmail() +":"+ userPasswordRepresentation.getPassword());
+//    System.err.println("JpaUserProvider.validate:" + userPasswordRepresentation.getEmail() +":"+ userPasswordRepresentation.getPassword());
     PasswordCredentialProvider passwordProvider = (PasswordCredentialProvider) session.getProvider(CredentialProvider.class, PasswordCredentialProviderFactory.PROVIDER_ID);
     return passwordProvider.isValid(realm, userModel, passwordUserCredentialModel);
   }
