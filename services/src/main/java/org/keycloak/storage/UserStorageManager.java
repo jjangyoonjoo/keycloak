@@ -40,6 +40,7 @@ import org.keycloak.models.cache.OnUserCache;
 import org.keycloak.models.cache.UserCache;
 import org.keycloak.models.utils.ComponentUtil;
 import org.keycloak.models.utils.ReadOnlyUserModelDelegate;
+import org.keycloak.representations.idm.UserPasswordRepresentation;
 import org.keycloak.services.managers.UserStorageSyncManager;
 import org.keycloak.storage.client.ClientStorageProvider;
 import org.keycloak.storage.federated.UserFederatedStorageProvider;
@@ -714,6 +715,11 @@ public class UserStorageManager implements UserProvider, OnUserCache, OnCreateCo
         if (getFederatedStorage() != null) getFederatedStorage().preRemove(realm, component);
         new UserStorageSyncManager().notifyToRefreshPeriodicSync(session, realm, new UserStorageProviderModel(component), true);
 
+    }
+
+    @Override
+    public boolean validate(RealmModel realm, UserPasswordRepresentation userPasswordRepresentation) {
+        return localStorage().validate(realm, userPasswordRepresentation);
     }
 
     @Override

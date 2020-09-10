@@ -19,23 +19,13 @@ package org.keycloak.models.cache.infinispan;
 
 import org.jboss.logging.Logger;
 import org.keycloak.cluster.ClusterProvider;
-import org.keycloak.models.ClientScopeModel;
+import org.keycloak.credential.CredentialProvider;
+import org.keycloak.models.*;
 import org.keycloak.models.cache.CachedObject;
 import org.keycloak.models.cache.infinispan.events.InvalidationEvent;
 import org.keycloak.common.constants.ServiceAccountConstants;
 import org.keycloak.common.util.Time;
 import org.keycloak.component.ComponentModel;
-import org.keycloak.models.ClientModel;
-import org.keycloak.models.FederatedIdentityModel;
-import org.keycloak.models.GroupModel;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.KeycloakTransaction;
-import org.keycloak.models.ProtocolMapperModel;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.RoleModel;
-import org.keycloak.models.UserConsentModel;
-import org.keycloak.models.UserModel;
-import org.keycloak.models.UserProvider;
 import org.keycloak.models.cache.CachedUserModel;
 import org.keycloak.models.cache.OnUserCache;
 import org.keycloak.models.cache.UserCache;
@@ -50,8 +40,10 @@ import org.keycloak.models.cache.infinispan.events.UserFederationLinkRemovedEven
 import org.keycloak.models.cache.infinispan.events.UserFederationLinkUpdatedEvent;
 import org.keycloak.models.cache.infinispan.events.UserFullInvalidationEvent;
 import org.keycloak.models.cache.infinispan.events.UserUpdatedEvent;
+import org.keycloak.models.credential.PasswordUserCredentialModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
 import org.keycloak.models.utils.ReadOnlyUserModelDelegate;
+import org.keycloak.representations.idm.UserPasswordRepresentation;
 import org.keycloak.storage.CacheableStorageProviderModel;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
@@ -864,6 +856,11 @@ public class UserCacheSession implements UserCache {
         addRealmInvalidation(realm.getId()); // easier to just invalidate whole realm
         getDelegate().preRemove(realm, component);
 
+    }
+
+    @Override
+    public boolean validate(RealmModel realm, UserPasswordRepresentation userPasswordRepresentation) {
+        return getDelegate().validate(realm, userPasswordRepresentation);
     }
 
     @Override

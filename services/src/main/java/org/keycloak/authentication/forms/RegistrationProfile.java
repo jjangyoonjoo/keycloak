@@ -48,6 +48,24 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     public static final String PROVIDER_ID = "registration-profile-action";
     private static final Logger logger = Logger.getLogger(RegistrationProfile.class);
 
+    public static final String[] LAST_NAMES = new String[] {"남궁", "동방", "무본", "서문", "선우", "어금", "제갈", "황목", "황보"};
+
+
+    public static void populateLastNameFirstNameUsingName(MultivaluedMap<String, String> formData, List<FormMessage> errors){
+        String inputName = formData.getFirst(RegistrationPage.FIELD_NAME);
+        if (Validation.isBlank(inputName)) {
+            errors.add(new FormMessage(RegistrationPage.FIELD_NAME, Messages.MISSING_NAME));
+        } else {
+            for (int i = 0; i < LAST_NAMES.length; i++) {
+                String temp = LAST_NAMES[i];
+                if (inputName.startsWith(temp)) {
+                    formData.addFirst(RegistrationPage.FIELD_LAST_NAME, temp);
+                    formData.addFirst(RegistrationPage.FIELD_FIRST_NAME, inputName.substring((temp.length())));
+                    break;
+                }
+            }
+        }
+    }
     @Override
     public String getHelpText() {
         return "Validates email, first name, and last name attributes and stores them in user data.";
@@ -66,13 +84,15 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         context.getEvent().detail(Details.REGISTER_METHOD, "form");
         String eventError = Errors.INVALID_REGISTRATION;
 
-        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_FIRST_NAME)))) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_FIRST_NAME, Messages.MISSING_FIRST_NAME));
-        }
+        populateLastNameFirstNameUsingName(formData, errors);
 
-        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_LAST_NAME)))) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_LAST_NAME, Messages.MISSING_LAST_NAME));
-        }
+//        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_FIRST_NAME)))) {
+//            errors.add(new FormMessage(RegistrationPage.FIELD_FIRST_NAME, Messages.MISSING_FIRST_NAME));
+//        }
+//
+//        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_LAST_NAME)))) {
+//            errors.add(new FormMessage(RegistrationPage.FIELD_LAST_NAME, Messages.MISSING_LAST_NAME));
+//        }
         if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_MOBILE_PHONE_NUMBER)))) {
             errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.MISSING_MOBILE_PHONE_NUMBER));
         }
@@ -96,7 +116,7 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
 
         if (emailValid && !context.getRealm().isDuplicateEmailsAllowed() && context.getSession().users().getUserByEmail(email, context.getRealm()) != null) {
             eventError = Errors.EMAIL_IN_USE;
-            formData.remove(Validation.FIELD_EMAIL);
+//            formData.remove(Validation.FIELD_EMAIL);
             context.getEvent().detail(Details.EMAIL, email);
             errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.EMAIL_EXISTS));
         }
@@ -128,6 +148,7 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         user.setSingleAttribute(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER));
         user.setSingleAttribute(RegistrationPage.FIELD_COMPANY, formData.getFirst(RegistrationPage.FIELD_COMPANY));
         user.setSingleAttribute(RegistrationPage.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_SERVICE_AGREEMENT));
+        user.setSingleAttribute(RegistrationPage.FIELD_BIRTH_DATE, formData.getFirst(RegistrationPage.FIELD_BIRTH_DATE));
         user.setSingleAttribute(RegistrationPage.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_PRIVACY_AGREEMENT));
         user.setSingleAttribute(RegistrationPage.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_MARKETING_AGREEMENT));
         logger.info(user.toString());

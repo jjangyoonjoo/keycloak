@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.keycloak.authentication.forms.RegistrationProfile.populateLastNameFirstNameUsingName;
+
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
@@ -70,6 +72,8 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         List<FormMessage> errors = new ArrayList<>();
         context.getEvent().detail(Details.REGISTER_METHOD, "form");
 
+        populateLastNameFirstNameUsingName(formData, errors);
+
         String email = formData.getFirst(Validation.FIELD_EMAIL);
         String username = formData.getFirst(RegistrationPage.FIELD_USERNAME);
         context.getEvent().detail(Details.USERNAME, username);
@@ -83,7 +87,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
                 errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.MISSING_EMAIL));
             } else if (!Validation.isEmailValid(email)) {
                 errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.INVALID_EMAIL));
-                formData.remove(Validation.FIELD_EMAIL);
+//                formData.remove(Validation.FIELD_EMAIL);
             }
             if (errors.size() > 0) {
                 context.error(Errors.INVALID_REGISTRATION);
@@ -92,7 +96,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
             }
             if (email != null && !context.getRealm().isDuplicateEmailsAllowed() && context.getSession().users().getUserByEmail(email, context.getRealm()) != null) {
                 context.error(Errors.EMAIL_IN_USE);
-                formData.remove(Validation.FIELD_EMAIL);
+//                formData.remove(Validation.FIELD_EMAIL);
                 errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.EMAIL_EXISTS));
                 context.validationError(formData, errors);
                 return;
@@ -148,6 +152,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         user.setSingleAttribute(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER));
         user.setSingleAttribute(RegistrationPage.FIELD_COMPANY, formData.getFirst(RegistrationPage.FIELD_COMPANY));
         user.setSingleAttribute(RegistrationPage.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_SERVICE_AGREEMENT));
+        user.setSingleAttribute(RegistrationPage.FIELD_BIRTH_DATE, formData.getFirst(RegistrationPage.FIELD_BIRTH_DATE));
         user.setSingleAttribute(RegistrationPage.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_PRIVACY_AGREEMENT));
         user.setSingleAttribute(RegistrationPage.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_MARKETING_AGREEMENT));
         user.setEmail(email);

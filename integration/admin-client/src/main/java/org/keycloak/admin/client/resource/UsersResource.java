@@ -17,6 +17,7 @@
 
 package org.keycloak.admin.client.resource;
 
+import org.keycloak.representations.idm.UserPasswordRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import javax.ws.rs.Consumes;
@@ -123,5 +124,10 @@ public interface UsersResource {
     @DELETE
     Response delete(@PathParam("id") String id);
 
+    @POST
+    @Path("password/validate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    boolean validate(UserPasswordRepresentation userPasswordRepresentation);
 
 }

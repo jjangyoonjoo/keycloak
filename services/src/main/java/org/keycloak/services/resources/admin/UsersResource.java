@@ -31,6 +31,7 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.ModelToRepresentation;
 import org.keycloak.models.utils.RepresentationToModel;
+import org.keycloak.representations.idm.UserPasswordRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.services.ErrorResponse;
 import org.keycloak.services.ForbiddenException;
@@ -269,5 +270,15 @@ public class UsersResource {
             results.add(userRep);
         }
         return results;
+    }
+
+    @POST
+    @Path("password/validate")
+    @NoCache
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean validate(UserPasswordRepresentation userPasswordRepresentation){
+//        auth.users().requireView();
+        return session.users().validate(realm, userPasswordRepresentation);
     }
 }
