@@ -443,7 +443,8 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
         try {
             String result = freeMarker.processTemplate(attributes, templateName, theme);
             javax.ws.rs.core.MediaType mediaType = contentType == null ? MediaType.TEXT_HTML_UTF_8_TYPE : contentType;
-            Response.ResponseBuilder builder = Response.status(status == null ? Response.Status.OK : status).type(mediaType).language(locale).entity(result);
+//            Response.ResponseBuilder builder = Response.status(status == null ? Response.Status.OK : status).type(mediaType).language(locale).entity(result);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(mediaType).language(locale).entity(result);
             BrowserSecurityHeaderSetup.headers(builder, realm);
             for (Map.Entry<String, String> entry : httpResponseHeaders.entrySet()) {
                 builder.header(entry.getKey(), entry.getValue());

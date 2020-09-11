@@ -7,9 +7,9 @@
         }
         function emailOnChange(value){
             if (buttonEnabled(value)){
-                document.getElementById('submitDiv').classList.remove("instsign-content-disabled");
+                document.getElementById('submitDiv').className = "instsign-button";
             } else {
-                document.getElementById('submitDiv').classList.add("instsign-content-disabled");
+                document.getElementById('submitDiv').className ="instsign-button-disabled";
             }
         }
         function buttonEnabled(inputEmail){
@@ -20,7 +20,7 @@
             }
         }
         function validateAndSubmit(formId){
-            var email = document.getElementById('email').value;
+            var email = document.getElementById('username').value;
             if (buttonEnabled(email)){
                 clickSubmit(formId);
             }
@@ -31,22 +31,18 @@
             <div class="instsign-content-title">
                 ${msg("reset-password-content-title")}
             </div>
-            <div class="instsign-content-subtitle">
-                ${msg("reset-password-content-subtitle")?no_esc}
+            <div class="instsign-content-input-text instsign-content-username">
+                <input id="username" name="username" type="email"
+                       autofocus onchange="emailOnChange(event.target.value)"
+                       placeholder="${msg("instsign-content-email-placeholder")}"/>
             </div>
-            <div class="instsign-content-input-group margin-top-30">
-                <div class="instsign-content-input-label">
-                    <span>${msg("register-content-email")}</span>
-                </div>
-                <div class="instsign-content-input-text">
-                    <input id="email" name="username" type="text"
-                           autocomplete="email"
-                           autofocus onchange="emailOnChange(event.target.value)"
-                           placeholder="${msg("instsign-content-email-placeholder")}"/>
-                </div>
-            </div>
-            <div id="submitDiv" class="instsign-button instsign-content-disabled" onclick="validateAndSubmit('kc-reset-password-form')">
+            <div id="submitDiv" class="instsign-button-disabled" onclick="validateAndSubmit('kc-reset-password-form')">
                 <span>${msg("reset-password-button")}</span>
+            </div>
+        </div>
+        <div class="instsign-content-footer">
+            <div class="instsign-link-text instsign-content-footer-login" onclick="goToUrl('${url.loginUrl}')">
+                <span>${msg("instsign-go-back-to-login-link")}</span>
             </div>
         </div>
     </form>

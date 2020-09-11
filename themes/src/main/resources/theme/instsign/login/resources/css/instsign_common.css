@@ -79,11 +79,8 @@ body {
   position: absolute; /* or absolute */
   left: 50%;
   top: 50px;
-  width: 300px;
-  margin-left: -31px;
-}
-
-.instsign-main .alert-error {
+  /*width: 280px;*/
+  margin-left: 0;
   font-family: NanumSquareOTFB, sans-serif;
   font-size: 14px;
   font-weight: normal;
@@ -91,21 +88,40 @@ body {
   font-style: normal;
   line-height: 1;
   letter-spacing: normal;
-  color: #a0141b;
 }
 
-.instsign-main .alert-error .pficon {
+.instsign-main .alert .pficon {
   display: none !important;
 }
 
 .instsign-main .alert .kc-feedback-text{
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .alert .kc-feedback-text {
-  position: relative;
-  left: 45px;
-  top: 12px;
+  /*position: relative;*/
+  /*left: 45px;*/
+  /*top: 0;*/
+  /*width: 230px;*/
+}
+
+.instsign-main .alert-error {
+  background-color: #ffffff !important;
+  border: none !important;
+  color: #a0141b !important;
+}
+
+.instsign-main .alert-success {
+  background-color: #ffffff !important;
+  border: none !important;
+  color: #275ae6 !important;
+}
+
+.instsign-main .alert-warning {
+  background-color: #ffffff !important;
+  border: none !important;
+  color: #bdbdbd !important;
 }
 
 .instsign-main {
@@ -115,8 +131,9 @@ body {
 .instsign-main .instsign-content-footer{
   padding: 0;
   position: absolute; /* or absolute */
+  align-content: baseline;
   left: 50%;
-  top: 130px;
+  bottom: 22px;
   width: 300px;
   margin-left: -197px;
 }
@@ -183,10 +200,39 @@ body {
   margin-top: 30px;
 }
 
+.margin-left-10{
+  margin-left: 10px;
+}
+.margin-left-20{
+  margin-left: 20px;
+}
+.margin-left-30{
+  margin-left: 30px;
+}
+.margin-left-40{
+  margin-left: 40px;
+}
+.margin-left-50{
+  margin-left: 50px;
+}
+
 .instsign-content-title {
   font-family: NanumSquareOTFEB, sans-serif;
   font-size: 26px;
   text-align: left;
+  color: #000000;
+}
+
+.instsign-content-subtitle {
+  margin: 10px 0;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 14px;
+  text-align: left;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.57;
+  letter-spacing: normal;
   color: #000000;
 }
 
@@ -337,4 +383,69 @@ input[type=password] {
 
 .instsign-error {
   border: solid 1px #a0141b !important;
+}
+
+.instsign-error-text {
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  color: #a0141b;
+}
+
+.instsign-info-text {
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  color: #275ae6;
+}
+
+.instsign-content-ib-vt {
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+.instsign-content .instsign-password-strength {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  float: right;
+  margin-top: -25px;
+  margin-right: 20px;
+}
+
+.instsign-content .instsign-password-strength-text {
+  display: inline-block;
+  vertical-align: top;
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: right;
+  color: #000000;
+}
+
+.instsign-content .instsign-password-strength-value {
+  display: inline-block;
+  vertical-align: top;
+  font-family: NanumSquareOTFEB, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: right;
+  margin-left: 10px;
 }

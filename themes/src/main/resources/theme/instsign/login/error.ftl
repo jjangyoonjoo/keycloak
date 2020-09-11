@@ -1,15 +1,11 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=false; section>
-  <div class="instsign-content-error-main">
-    <div class="instsign-content instsign-content-error">
-      <div class="instsign-content-title">
-          ${msg("login-content-title")}
-      </div>
-      <div class="instsign-content-message-body">
-        <div class="instsign-content-message-text">
-            ${message.summary}
-        </div>
-      </div>
+  <div class="instsign-content instsign-content-error">
+    <div class="instsign-content-title">
+        ${msg("login-content-title")}
+    </div>
+    <div class="instsign-content-subtitle instsign-error-text">
+        ${message.summary?no_esc}
     </div>
     <div class="instsign-content-footer">
         <#if client?? && client.baseUrl?has_content>

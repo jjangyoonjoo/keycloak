@@ -47,6 +47,7 @@
 
 .register-content-label-password-description {
   font-size: 12px;
+  margin-left: 10px;
 }
 
 .instsign-content-register .register-agreement {
@@ -152,43 +153,6 @@
 
 .register-agreement-select-section-row {
   width: 100%;
-}
-
-.instsign-content-register .instsign-password-strength {
-  display: inline-block;
-  vertical-align: top;
-  position: relative;
-  float: right;
-  margin-top: -25px;
-  margin-right: 20px;
-}
-
-.instsign-content-register .instsign-password-strength-text {
-  display: inline-block;
-  vertical-align: top;
-  font-family: NanumSquareOTFB, sans-serif;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.17;
-  letter-spacing: normal;
-  text-align: right;
-  color: #000000;
-}
-
-.instsign-content-register .instsign-password-strength-value {
-  display: inline-block;
-  vertical-align: top;
-  font-family: NanumSquareOTFEB, sans-serif;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.17;
-  letter-spacing: normal;
-  text-align: right;
-  margin-left: 10px;
 }
 
 .instsign-content-register .register-validation-agreement {

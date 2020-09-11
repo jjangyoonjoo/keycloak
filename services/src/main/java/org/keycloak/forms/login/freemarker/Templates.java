@@ -42,6 +42,8 @@ public class Templates {
                 return "login-oauth-grant.ftl";
             case LOGIN_RESET_PASSWORD:
                 return "login-reset-password.ftl";
+            case LOGIN_FIND_EMAIL:
+                return "login-find-email.ftl";
             case LOGIN_UPDATE_PASSWORD:
                 return "login-update-password.ftl";
             case REGISTER:
