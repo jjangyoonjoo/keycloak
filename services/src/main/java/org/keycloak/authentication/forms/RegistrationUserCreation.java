@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.keycloak.authentication.forms.RegistrationProfile.populateFormFields;
 import static org.keycloak.authentication.forms.RegistrationProfile.populateLastNameFirstNameUsingName;
 
 /**
@@ -72,28 +73,29 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         List<FormMessage> errors = new ArrayList<>();
         context.getEvent().detail(Details.REGISTER_METHOD, "form");
 
-        populateLastNameFirstNameUsingName(formData, errors);
+        String inputName = formData.getFirst(Validation.FIELD_NAME);
+
+        populateLastNameFirstNameUsingName(formData);
+
+        Validation.validateProfileForm(formData, errors);
 
         String email = formData.getFirst(Validation.FIELD_EMAIL);
-        String username = formData.getFirst(RegistrationPage.FIELD_USERNAME);
-        String mobilePhoneNumber = formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER);
+        String username = formData.getFirst(Validation.FIELD_USERNAME);
+        String password = formData.getFirst(Validation.FIELD_PASSWORD);
+        String name = formData.getFirst(Validation.FIELD_NAME);
+        String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
+
         context.getEvent().detail(Details.USERNAME, username);
         context.getEvent().detail(Details.EMAIL, email);
 
-        if (Validation.isBlank(mobilePhoneNumber)) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.MISSING_MOBILE_PHONE_NUMBER));
-        } else if (!Validation.isMobilePhoneNumberValid(mobilePhoneNumber)) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.INVALID_MOBILE_PHONE_NUMBER));
-        }
-
-        String usernameField = RegistrationPage.FIELD_USERNAME;
+        String usernameField = Validation.FIELD_USERNAME;
         if (context.getRealm().isRegistrationEmailAsUsername()) {
             context.getEvent().detail(Details.USERNAME, email);
 
             if (Validation.isBlank(email)) {
-                errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.MISSING_EMAIL));
+                errors.add(new FormMessage(Validation.FIELD_EMAIL, Messages.MISSING_EMAIL));
             } else if (!Validation.isEmailValid(email)) {
-                errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.INVALID_EMAIL));
+                errors.add(new FormMessage(Validation.FIELD_EMAIL, Messages.INVALID_EMAIL));
 //                formData.remove(Validation.FIELD_EMAIL);
             }
 
@@ -105,14 +107,14 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
             if (email != null && !context.getRealm().isDuplicateEmailsAllowed() && context.getSession().users().getUserByEmail(email, context.getRealm()) != null) {
                 context.error(Errors.EMAIL_IN_USE);
 //                formData.remove(Validation.FIELD_EMAIL);
-                errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.EMAIL_EXISTS));
+                errors.add(new FormMessage(Validation.FIELD_EMAIL, Messages.EMAIL_EXISTS));
                 context.validationError(formData, errors);
                 return;
             }
         } else {
             if (Validation.isBlank(username)) {
                 context.error(Errors.INVALID_REGISTRATION);
-                errors.add(new FormMessage(RegistrationPage.FIELD_USERNAME, Messages.MISSING_USERNAME));
+                errors.add(new FormMessage(Validation.FIELD_USERNAME, Messages.MISSING_USERNAME));
                 context.validationError(formData, errors);
                 return;
             }
@@ -134,21 +136,13 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
 
     }
 
-    private String getBooleanValue(MultivaluedMap<String, String> formData, String propertyName){
-        String value = formData.getFirst(propertyName);
-        if (value == null || value.isEmpty()){
-            value = "false";
-        }
-        return value;
-    }
-
     @Override
     public void success(FormContext context) {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
         String email = formData.getFirst(Validation.FIELD_EMAIL);
-        String username = formData.getFirst(RegistrationPage.FIELD_USERNAME);
+        String username = formData.getFirst(Validation.FIELD_USERNAME);
         if (context.getRealm().isRegistrationEmailAsUsername()) {
-            username = formData.getFirst(RegistrationPage.FIELD_EMAIL);
+            username = formData.getFirst(Validation.FIELD_EMAIL);
         }
         context.getEvent().detail(Details.USERNAME, username)
                 .detail(Details.REGISTER_METHOD, "form")
@@ -157,14 +151,8 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         UserModel user = context.getSession().users().addUser(context.getRealm(), username);
         user.setEnabled(true);
 
-        user.setSingleAttribute(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER));
-        user.setSingleAttribute(RegistrationPage.FIELD_COMPANY, formData.getFirst(RegistrationPage.FIELD_COMPANY));
-        user.setSingleAttribute(RegistrationPage.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_SERVICE_AGREEMENT));
-        user.setSingleAttribute(RegistrationPage.FIELD_BIRTH_DATE, formData.getFirst(RegistrationPage.FIELD_BIRTH_DATE));
-        user.setSingleAttribute(RegistrationPage.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_PRIVACY_AGREEMENT));
-        user.setSingleAttribute(RegistrationPage.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_MARKETING_AGREEMENT));
-        user.setEmail(email);
-        logger.info(user.toString());
+        populateFormFields(user, formData);
+
         for(Map.Entry<String, List<String>> entry: user.getAttributes().entrySet()){
             logger.info(entry.getKey()+":"+entry.getValue());
         }

@@ -202,6 +202,7 @@ public class IdentityProviderUtils {
     );
 
   public static void setName(BrokeredIdentityContext user , String inputName) {
+      user.setName(inputName);
       boolean foundMatchingLastName = false;
       for (String temp : KOREAN_LAST_NAMES) {
         if (inputName.startsWith(temp)) {
@@ -212,7 +213,13 @@ public class IdentityProviderUtils {
         }
       }
       if (!foundMatchingLastName){
-        user.setName(inputName);
+          if (inputName.length() > 4){
+              user.setFirstName(inputName);
+              user.setLastName(null);
+          } else {
+              user.setLastName(inputName.substring(0, 1));
+              user.setFirstName(inputName.substring(1));
+          }
       }
   }
 }

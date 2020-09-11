@@ -37,18 +37,6 @@ import java.util.List;
 public class RegistrationPage implements FormAuthenticator, FormAuthenticatorFactory {
 
     public static final String FIELD_PASSWORD_CONFIRM = "password-confirm";
-    public static final String FIELD_PASSWORD = "password";
-    public static final String FIELD_EMAIL = "email";
-    public static final String FIELD_USERNAME = "username";
-    public static final String FIELD_LAST_NAME = "lastName";
-    public static final String FIELD_FIRST_NAME = "firstName";
-    public static final String FIELD_NAME = "name";
-    public static final String FIELD_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
-    public static final String FIELD_BIRTH_DATE = "birthDate";
-    public static final String FIELD_COMPANY = "company";
-    public static final String FIELD_SERVICE_AGREEMENT = "serviceAgreement";
-    public static final String FIELD_PRIVACY_AGREEMENT = "privacyAgreement";
-    public static final String FIELD_MARKETING_AGREEMENT = "marketingAgreement";
     public static final String PROVIDER_ID = "registration-page-form";
 
     @Override

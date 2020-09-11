@@ -1,6 +1,6 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout; section>
-  <form id="kc-register-form" class="instsign-form" action="${url.registrationAction}" method="post">
+  <form id="kc-update-profile-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post">
     <script>
 
       function onLoadFunction() {
@@ -11,44 +11,20 @@
 
       window.addEventListener('load', onLoadFunction);
     </script>
+    <input id="password" name="password" type="hidden" value="1111">
+    <input name="email" type="hidden"  value="${(user.email!'')}">
     <div class="instsign-content instsign-content-register">
       <div class="instsign-content-title">
-          ${msg("register-content-title")}
+          ${msg("update-profile-content-title")}
       </div>
       <br/>
-        <#--      <input id="user.attributes.mobilePhoneNumber" name="user.attributes.mobilePhoneNumber" type="hidden" />-->
-        <#--      <input id="user.attributes.company" name="user.attributes.company" type="hidden" />-->
-        <#--      <input id="user.attributes.serviceAgreement" name="user.attributes.serviceAgreement" type="hidden" />-->
-        <#--      <input id="user.attributes.privacyAgreement" name="user.attributes.privacyAgreement" type="hidden" />-->
-        <#--      <input id="user.attributes.marketingAgreement" name="user.attributes.marketingAgreement" type="hidden" />-->
       <div class="instsign-content-input-group margin-top-30">
         <div class="instsign-content-input-label">
           <span>${msg("register-content-email")}</span>
         </div>
-        <div class="instsign-content-input-text">
-          <input id="email" name="email" type="text"
-                 autocomplete="email" onchange="isRequiredFieldValueEntered(this, true)"
-                 value="${(register.formData.email!'')}"
-                 placeholder="${msg("instsign-content-email-placeholder")}"/>
-        </div>
-      </div>
-      <div class="instsign-content-input-group margin-top-20">
-        <div class="instsign-content-input-label">
-          <span>${msg("register-content-password")}</span>
-          <span class="register-content-label-password-description">${msg("register-content-password-description")}</span>
-        </div>
-        <div class="instsign-content-input-text">
-          <input id="password" name="password" type="password" autocomplete="new-password"
-                 placeholder="${msg("instsign-content-password-placeholder")}" onchange="validatePassword(this)"/>
-          <input id="password-confirm" name="password-confirm" type="hidden"/>
-          <div id="instsign-password-strength-group" class="instsign-password-strength instsign-content-hide">
-            <div class="instsign-password-strength-text">
-              <span>${msg("instsign-password-strength-text")} :</span>
-            </div>
-            <div class="instsign-password-strength-value">
-              <span id="instsign-password-strength-value-span"></span>
-            </div>
-          </div>
+        <div class="instsign-content-input-text instsign-content-disabled">
+          <input id="email" name="email1" type="text" disabled
+                 value="${(user.email!'')}"/>
         </div>
       </div>
       <div class="instsign-content-input-group margin-top-20">
@@ -58,7 +34,7 @@
         <div class="instsign-content-input-text">
           <input id="name" name="name" type="text"
                  onchange="isRequiredFieldValueEntered(this, true)"
-                 value="${(register.formData.name!'')}"
+                 value="${(user.name!'')}"
                  placeholder="${msg("instsign-content-name-placeholder")}"/>
         </div>
       </div>
@@ -70,7 +46,7 @@
           <input id="mobilePhoneNumber" name="mobilePhoneNumber" type="text"
                  autocomplete="off"
                  onchange="isRequiredFieldValueEntered(this, true)"
-                 value="${(register.formData.mobilePhoneNumber!'')}"
+                 value="${(user.mobilePhoneNumber!'')}"
                  placeholder="${msg("instsign-content-mobile-phone-number-placeholder")}"/>
         </div>
       </div>
@@ -81,7 +57,7 @@
         <div class="instsign-content-input-text">
           <input id="company" name="company" type="text"
                  autocomplete="off"
-                 value="${(register.formData.company!'')}"
+                 value="${(user.company!'')}"
                  placeholder="${msg("instsign-content-company-placeholder")}"/>
         </div>
       </div>
@@ -103,7 +79,8 @@
         <div id="register-agreement-option-section" class="register-agreement-select-options instsign-content-hide">
           <div class="register-agreement-select-section-row">
             <div class="register-agreement-checkbox-small" onclick="onServiceAgreementClick(undefined, true, true)">
-              <div id="service-agreement-checkbox" class="small-agreement-checkbox-checked-svg instsign-content-hide"></div>
+              <div id="service-agreement-checkbox"
+                   class="small-agreement-checkbox-checked-svg instsign-content-hide"></div>
             </div>
             <input id="serviceAgreement" name="serviceAgreement" type="hidden">
             <div class="register-agreement-text-small">
@@ -112,7 +89,8 @@
           </div>
           <div class="register-agreement-select-section-row">
             <div class="register-agreement-checkbox-small" onclick="onPrivacyAgreementClick(undefined, true, true)">
-              <div id="privacy-agreement-checkbox" class="small-agreement-checkbox-checked-svg instsign-content-hide"></div>
+              <div id="privacy-agreement-checkbox"
+                   class="small-agreement-checkbox-checked-svg instsign-content-hide"></div>
             </div>
             <input id="privacyAgreement" name="privacyAgreement" type="hidden">
             <div class="register-agreement-text-small">
@@ -121,7 +99,8 @@
           </div>
           <div class="register-agreement-select-section-row">
             <div class="register-agreement-checkbox-small" onclick="onMarketingAgreementClick(undefined, true, true)">
-              <div id="marketing-agreement-checkbox" class="small-agreement-checkbox-checked-svg instsign-content-hide"></div>
+              <div id="marketing-agreement-checkbox"
+                   class="small-agreement-checkbox-checked-svg instsign-content-hide"></div>
             </div>
             <input id="marketingAgreement" name="marketingAgreement" type="hidden">
             <div class="register-agreement-text-small">
@@ -133,7 +112,7 @@
           <span>${msg("instsign-validation-require-accept")}</span>
         </div>
       </div>
-      <div id="register-button" class="instsign-button" onclick="registerSubmit('kc-register-form')">
+      <div id="register-button" class="instsign-button" onclick="registerSubmit('kc-update-profile-form')">
         <span>${msg("register-button")}</span>
       </div>
       <div class="register-login-text">
@@ -143,5 +122,64 @@
         <span>${msg("register-login-link")}</span>
       </div>
     </div>
+<#--      <#if user.editUsernameAllowed>-->
+<#--        <div class="${properties.kcFormGroupClass!} ${messagesPerField.printIfExists('username',properties.kcFormGroupErrorClass!)}">-->
+<#--          <div class="${properties.kcLabelWrapperClass!}">-->
+<#--            <label for="username" class="${properties.kcLabelClass!}">${msg("username")}</label>-->
+<#--          </div>-->
+<#--          <div class="${properties.kcInputWrapperClass!}">-->
+<#--            <input type="text" id="username" name="username" value="${(user.username!'')}"-->
+<#--                   class="${properties.kcInputClass!}"/>-->
+<#--          </div>-->
+<#--        </div>-->
+<#--      </#if>-->
+<#--    <div class="${properties.kcFormGroupClass!} ${messagesPerField.printIfExists('email',properties.kcFormGroupErrorClass!)}">-->
+<#--      <div class="${properties.kcLabelWrapperClass!}">-->
+<#--        <label for="email" class="${properties.kcLabelClass!}">${msg("email")}</label>-->
+<#--      </div>-->
+<#--      <div class="${properties.kcInputWrapperClass!}">-->
+<#--        <input type="text" id="email" name="email" value="${(user.email!'')}" class="${properties.kcInputClass!}"/>-->
+<#--      </div>-->
+<#--    </div>-->
+
+<#--    <div class="${properties.kcFormGroupClass!} ${messagesPerField.printIfExists('firstName',properties.kcFormGroupErrorClass!)}">-->
+<#--      <div class="${properties.kcLabelWrapperClass!}">-->
+<#--        <label for="firstName" class="${properties.kcLabelClass!}">${msg("firstName")}</label>-->
+<#--      </div>-->
+<#--      <div class="${properties.kcInputWrapperClass!}">-->
+<#--        <input type="text" id="firstName" name="firstName" value="${(user.firstName!'')}"-->
+<#--               class="${properties.kcInputClass!}"/>-->
+<#--      </div>-->
+<#--    </div>-->
+
+<#--    <div class="${properties.kcFormGroupClass!} ${messagesPerField.printIfExists('lastName',properties.kcFormGroupErrorClass!)}">-->
+<#--      <div class="${properties.kcLabelWrapperClass!}">-->
+<#--        <label for="lastName" class="${properties.kcLabelClass!}">${msg("lastName")}</label>-->
+<#--      </div>-->
+<#--      <div class="${properties.kcInputWrapperClass!}">-->
+<#--        <input type="text" id="lastName" name="lastName" value="${(user.lastName!'')}"-->
+<#--               class="${properties.kcInputClass!}"/>-->
+<#--      </div>-->
+<#--    </div>-->
+
+<#--    <div class="${properties.kcFormGroupClass!}">-->
+<#--      <div id="kc-form-options" class="${properties.kcFormOptionsClass!}">-->
+<#--        <div class="${properties.kcFormOptionsWrapperClass!}">-->
+<#--        </div>-->
+<#--      </div>-->
+
+<#--      <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">-->
+<#--          <#if isAppInitiatedAction??>-->
+<#--            <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}"-->
+<#--                   type="submit" value="${msg("doSubmit")}"/>-->
+<#--            <button-->
+<#--            class="${properties.kcButtonClass!} ${properties.kcButtonDefaultClass!} ${properties.kcButtonLargeClass!}"-->
+<#--            type="submit" name="cancel-aia" value="true" />${msg("doCancel")}</button>-->
+<#--          <#else>-->
+<#--            <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}"-->
+<#--                   type="submit" value="${msg("doSubmit")}"/>-->
+<#--          </#if>-->
+<#--      </div>-->
+<#--    </div>-->
   </form>
 </@layout.registrationLayout>

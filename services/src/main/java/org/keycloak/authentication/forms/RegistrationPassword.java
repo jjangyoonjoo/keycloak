@@ -65,20 +65,20 @@ public class RegistrationPassword implements FormAction, FormActionFactory {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
         List<FormMessage> errors = new ArrayList<>();
         context.getEvent().detail(Details.REGISTER_METHOD, "form");
-        if (Validation.isBlank(formData.getFirst(RegistrationPage.FIELD_PASSWORD))) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_PASSWORD, Messages.MISSING_PASSWORD));
-        } else if (!formData.getFirst(RegistrationPage.FIELD_PASSWORD).equals(formData.getFirst(RegistrationPage.FIELD_PASSWORD_CONFIRM))) {
+        if (Validation.isBlank(formData.getFirst(Validation.FIELD_PASSWORD))) {
+            errors.add(new FormMessage(Validation.FIELD_PASSWORD, Messages.MISSING_PASSWORD));
+        } else if (!formData.getFirst(Validation.FIELD_PASSWORD).equals(formData.getFirst(RegistrationPage.FIELD_PASSWORD_CONFIRM))) {
             errors.add(new FormMessage(RegistrationPage.FIELD_PASSWORD_CONFIRM, Messages.INVALID_PASSWORD_CONFIRM));
         }
-        if (formData.getFirst(RegistrationPage.FIELD_PASSWORD) != null) {
-            PolicyError err = context.getSession().getProvider(PasswordPolicyManagerProvider.class).validate(context.getRealm().isRegistrationEmailAsUsername() ? formData.getFirst(RegistrationPage.FIELD_EMAIL) : formData.getFirst(RegistrationPage.FIELD_USERNAME), formData.getFirst(RegistrationPage.FIELD_PASSWORD));
+        if (formData.getFirst(Validation.FIELD_PASSWORD) != null) {
+            PolicyError err = context.getSession().getProvider(PasswordPolicyManagerProvider.class).validate(context.getRealm().isRegistrationEmailAsUsername() ? formData.getFirst(Validation.FIELD_EMAIL) : formData.getFirst(Validation.FIELD_USERNAME), formData.getFirst(Validation.FIELD_PASSWORD));
             if (err != null)
-                errors.add(new FormMessage(RegistrationPage.FIELD_PASSWORD, err.getMessage(), err.getParameters()));
+                errors.add(new FormMessage(Validation.FIELD_PASSWORD, err.getMessage(), err.getParameters()));
         }
 
         if (errors.size() > 0) {
             context.error(Errors.INVALID_REGISTRATION);
-            formData.remove(RegistrationPage.FIELD_PASSWORD);
+            formData.remove(Validation.FIELD_PASSWORD);
             formData.remove(RegistrationPage.FIELD_PASSWORD_CONFIRM);
             context.validationError(formData, errors);
             return;
@@ -90,7 +90,7 @@ public class RegistrationPassword implements FormAction, FormActionFactory {
     @Override
     public void success(FormContext context) {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
-        String password = formData.getFirst(RegistrationPage.FIELD_PASSWORD);
+        String password = formData.getFirst(Validation.FIELD_PASSWORD);
         UserCredentialModel credentials = new UserCredentialModel();
         credentials.setType(CredentialRepresentation.PASSWORD);
         credentials.setValue(password);

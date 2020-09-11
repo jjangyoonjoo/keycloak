@@ -19,9 +19,14 @@ package org.keycloak.authentication.requiredactions.util;
 
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.utils.FormMessage;
+import org.keycloak.services.messages.Messages;
+import org.keycloak.services.validation.Validation;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.keycloak.authentication.forms.RegistrationProfile.LAST_NAMES;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -79,6 +84,34 @@ public class UserUpdateProfileContext implements UpdateProfileContext {
     @Override
     public void setLastName(String lastName) {
         user.setLastName(lastName);
+    }
+
+    @Override
+    public String getName() {
+        return user.getLastName() + user.getFirstName();
+    }
+
+    @Override
+    public void setName(String name) {
+        if (name != null && !name.isEmpty()) {
+            boolean lastNameFound = false;
+            for (int i = 0; i < LAST_NAMES.length; i++) {
+                String temp = LAST_NAMES[i];
+                if (name.startsWith(temp)) {
+                    setLastName(temp);
+                    setFirstName(name.substring((temp.length())));
+                    lastNameFound = true;
+                    break;
+                }
+            }
+            if (!lastNameFound) {
+                setLastName(name.substring(0, 1));
+                setFirstName(name.substring(1));
+            }
+        } else {
+            setLastName(null);
+            setFirstName(null);
+        }
     }
 
     @Override

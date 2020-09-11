@@ -44,6 +44,7 @@ public class Messages {
     public static final String MISSING_FIRST_NAME = "missingFirstNameMessage";
     public static final String MISSING_NAME = "missingNameMessage";
     public static final String MISSING_MOBILE_PHONE_NUMBER = "missingMobilePhoneNumberMessage";
+    public static final String MISSING_REQUIRED_FIELDS = "missingRequiredFields";
     public static final String MISSING_SERVICE_AGREEMENT = "missingServiceAgreementMessage";
     public static final String MISSING_PRIVACY_AGREEMENT = "missingPrivacyAgreementMessage";
 

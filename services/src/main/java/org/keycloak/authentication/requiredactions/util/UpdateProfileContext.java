@@ -17,6 +17,8 @@
 
 package org.keycloak.authentication.requiredactions.util;
 
+import org.keycloak.models.IUser;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface UpdateProfileContext {
+public interface UpdateProfileContext extends IUser {
 
     boolean isEditUsernameAllowed();
 
@@ -45,6 +47,10 @@ public interface UpdateProfileContext {
     String getLastName();
 
     void setLastName(String lastName);
+
+    String getName();
+
+    void setName(String name);
 
     Map<String, List<String>> getAttributes();
 

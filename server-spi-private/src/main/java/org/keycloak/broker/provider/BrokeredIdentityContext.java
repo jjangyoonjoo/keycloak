@@ -38,6 +38,7 @@ public class BrokeredIdentityContext {
     private String modelUsername;
     private String email;
     private String firstName;
+    private String name;
     private String lastName;
     private String brokerSessionId;
     private String brokerUserId;
@@ -198,18 +199,13 @@ public class BrokeredIdentityContext {
         this.authenticationSession = authenticationSession;
     }
 
-    public void setName(String name) {
-        if (name != null) {
-            int i = name.lastIndexOf(' ');
-            if (i != -1) {
-                firstName  = name.substring(0, i);
-                lastName = name.substring(i + 1);
-            } else {
-                firstName = name;
-            }
-        }
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public String toString() {

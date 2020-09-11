@@ -40,11 +40,60 @@ public class Validation {
     public static final String FIELD_FIRST_NAME = "firstName";
     public static final String FIELD_PASSWORD = "password";
     public static final String FIELD_USERNAME = "username";
+    public static final String FIELD_NAME = "name";
     public static final String FIELD_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
+    public static final String FIELD_ENTER_REQUIRED = "enterRequired";
+    public static final String FIELD_BIRTH_DATE = "birthDate";
+    public static final String FIELD_COMPANY = "company";
+    public static final String FIELD_SERVICE_AGREEMENT = "serviceAgreement";
+    public static final String FIELD_PRIVACY_AGREEMENT = "privacyAgreement";
+    public static final String FIELD_MARKETING_AGREEMENT = "marketingAgreement";
 
     // Actually allow same emails like angular. See ValidationTest.testEmailValidation()
     private static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*");
     private static final Pattern MOBILE_PHONE_NUMBER_PATTERN = Pattern.compile("^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$");
+
+    public static void validateProfileForm(MultivaluedMap<String, String> formData, List<FormMessage> errors) {
+        String email = formData.getFirst(FIELD_EMAIL);
+        String username = formData.getFirst(FIELD_USERNAME);
+        String password = formData.getFirst(FIELD_PASSWORD);
+        String name = formData.getFirst(FIELD_NAME);
+        String mobilePhoneNumber = formData.getFirst(FIELD_MOBILE_PHONE_NUMBER);
+
+//        if (isBlank(formData.getFirst(FIELD_FIRST_NAME))) {
+//            addError(errors, FIELD_FIRST_NAME, Messages.MISSING_FIRST_NAME);
+//        }
+
+//        if (isBlank(formData.getFirst(FIELD_LAST_NAME))) {
+//            addError(errors, FIELD_LAST_NAME, Messages.MISSING_LAST_NAME);
+//        }
+
+        if (isBlank(email)) {
+            addError(errors, FIELD_EMAIL, Messages.MISSING_EMAIL);
+        } else if (!isEmailValid(email)) {
+            addError(errors, FIELD_EMAIL, Messages.INVALID_EMAIL);
+        }
+
+        if (isBlank(mobilePhoneNumber)) {
+            addError(errors, FIELD_MOBILE_PHONE_NUMBER, Messages.MISSING_MOBILE_PHONE_NUMBER);
+        } else if (!isMobilePhoneNumberValid(mobilePhoneNumber)) {
+            addError(errors, FIELD_MOBILE_PHONE_NUMBER, Messages.INVALID_MOBILE_PHONE_NUMBER);
+        }
+
+        if (isBlank(email) || isBlank(password) ||
+            isBlank(name) || isBlank(mobilePhoneNumber)) {
+            addError(errors, FIELD_ENTER_REQUIRED, Messages.MISSING_REQUIRED_FIELDS);
+        }
+    }
+
+    public static void validateAgreementForm(MultivaluedMap<String, String> formData, List<FormMessage> errors) {
+        if (isBlank(formData.getFirst((FIELD_SERVICE_AGREEMENT)))) {
+            addError(errors, FIELD_SERVICE_AGREEMENT, Messages.MISSING_SERVICE_AGREEMENT);
+        }
+        if (isBlank(formData.getFirst((FIELD_PRIVACY_AGREEMENT)))) {
+            addError(errors, FIELD_PRIVACY_AGREEMENT, Messages.MISSING_PRIVACY_AGREEMENT);
+        }
+    }
 
     public static List<FormMessage> validateRegistrationForm(KeycloakSession session, RealmModel realm, MultivaluedMap<String, String> formData, List<String> requiredCredentialTypes, PasswordPolicy policy) {
         List<FormMessage> errors = new ArrayList<>();
@@ -53,19 +102,7 @@ public class Validation {
             addError(errors, FIELD_USERNAME, Messages.MISSING_USERNAME);
         }
 
-        if (isBlank(formData.getFirst(FIELD_FIRST_NAME))) {
-            addError(errors, FIELD_FIRST_NAME, Messages.MISSING_FIRST_NAME);
-        }
-
-        if (isBlank(formData.getFirst(FIELD_LAST_NAME))) {
-            addError(errors, FIELD_LAST_NAME, Messages.MISSING_LAST_NAME);
-        }
-
-        if (isBlank(formData.getFirst(FIELD_EMAIL))) {
-            addError(errors, FIELD_EMAIL, Messages.MISSING_EMAIL);
-        } else if (!isEmailValid(formData.getFirst(FIELD_EMAIL))) {
-            addError(errors, FIELD_EMAIL, Messages.INVALID_EMAIL);
-        }
+        validateProfileForm(formData, errors);
 
         if (requiredCredentialTypes.contains(CredentialRepresentation.PASSWORD)) {
             if (isBlank(formData.getFirst(FIELD_PASSWORD))) {
@@ -80,62 +117,68 @@ public class Validation {
             if (err != null)
                 errors.add(new FormMessage(FIELD_PASSWORD, err.getMessage(), err.getParameters()));
         }
-        
+
         return errors;
     }
-    
-    private static void addError(List<FormMessage> errors, String field, String message){
+
+    private static void addError(List<FormMessage> errors, String field, String message) {
         errors.add(new FormMessage(field, message));
     }
 
     public static List<FormMessage> validateUpdateProfileForm(RealmModel realm, MultivaluedMap<String, String> formData) {
         List<FormMessage> errors = new ArrayList<>();
-        
+
         if (!realm.isRegistrationEmailAsUsername() && realm.isEditUsernameAllowed() && isBlank(formData.getFirst(FIELD_USERNAME))) {
             addError(errors, FIELD_USERNAME, Messages.MISSING_USERNAME);
         }
-
-        if (isBlank(formData.getFirst(FIELD_FIRST_NAME))) {
-            addError(errors, FIELD_FIRST_NAME, Messages.MISSING_FIRST_NAME);
-        }
-
-        if (isBlank(formData.getFirst(FIELD_LAST_NAME))) {
-            addError(errors, FIELD_LAST_NAME, Messages.MISSING_LAST_NAME);
-        }
-
-        if (isBlank(formData.getFirst(FIELD_EMAIL))) {
-            addError(errors, FIELD_EMAIL, Messages.MISSING_EMAIL);
-        } else if (!isEmailValid(formData.getFirst(FIELD_EMAIL))) {
-            addError(errors, FIELD_EMAIL, Messages.INVALID_EMAIL);
-        }
+        validateProfileForm(formData, errors);
 
         return errors;
     }
-    
+
     /**
      * Validate if user object contains all mandatory fields.
-     * 
+     *
      * @param realm user is for
-     * @param user to validate
+     * @param user  to validate
      * @return true if user object contains all mandatory values, false if some mandatory value is missing
      */
-    public static boolean validateUserMandatoryFields(RealmModel realm, UpdateProfileContext user){
-        return!(isBlank(user.getFirstName()) || isBlank(user.getLastName()) || isBlank(user.getEmail()));        
+    public static boolean validateUserMandatoryFields(RealmModel realm, UpdateProfileContext user) {
+        List<String> mobilePhoneNumberValueList = user.getAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER);
+        List<String> serviceAgreementValueList = user.getAttribute(Validation.FIELD_SERVICE_AGREEMENT);
+        List<String> privacyAgreementValueList = user.getAttribute(Validation.FIELD_PRIVACY_AGREEMENT);
+        boolean isMobilePhoneNumberBlank = true;
+        if (mobilePhoneNumberValueList != null && mobilePhoneNumberValueList.size() > 0 &&
+            mobilePhoneNumberValueList.get(0) != null && !mobilePhoneNumberValueList.get(0).isEmpty()) {
+            isMobilePhoneNumberBlank = false;
+        }
+        boolean isServiceAgreementBlank = true;
+        if (serviceAgreementValueList != null && serviceAgreementValueList.size() > 0 &&
+            serviceAgreementValueList.get(0) != null && !serviceAgreementValueList.get(0).isEmpty()) {
+            isServiceAgreementBlank = false;
+        }
+        boolean isPrivacyAgreementBlank = true;
+        if (privacyAgreementValueList != null && privacyAgreementValueList.size() > 0 &&
+            privacyAgreementValueList.get(0) != null && !privacyAgreementValueList.get(0).isEmpty()) {
+            isPrivacyAgreementBlank = false;
+        }
+        return !(isBlank(user.getEmail()) || isBlank(user.getName()) || isMobilePhoneNumberBlank ||
+            isServiceAgreementBlank || isPrivacyAgreementBlank);
     }
 
     /**
      * Check if string is empty (null or lenght is 0)
-     * 
+     *
      * @param s to check
      * @return true if string is empty
      */
     public static boolean isEmpty(String s) {
         return s == null || s.length() == 0;
     }
-    
+
     /**
      * Check if string is blank (null or lenght is 0 or contains only white characters)
-     * 
+     *
      * @param s to check
      * @return true if string is blank
      */

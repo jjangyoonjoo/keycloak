@@ -26,11 +26,7 @@ import org.keycloak.authentication.ValidationContext;
 import org.keycloak.events.Details;
 import org.keycloak.events.Errors;
 import org.keycloak.forms.login.LoginFormsProvider;
-import org.keycloak.models.AuthenticationExecutionModel;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.KeycloakSessionFactory;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.UserModel;
+import org.keycloak.models.*;
 import org.keycloak.models.utils.FormMessage;
 import org.keycloak.provider.ProviderConfigProperty;
 import org.keycloak.services.messages.Messages;
@@ -48,24 +44,53 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     public static final String PROVIDER_ID = "registration-profile-action";
     private static final Logger logger = Logger.getLogger(RegistrationProfile.class);
 
-    public static final String[] LAST_NAMES = new String[] {"남궁", "동방", "무본", "서문", "선우", "어금", "제갈", "황목", "황보"};
+    public static final String[] LAST_NAMES = new String[]{"남궁", "동방", "무본", "서문", "선우", "어금", "제갈", "황목", "황보"};
 
 
-    public static void populateLastNameFirstNameUsingName(MultivaluedMap<String, String> formData, List<FormMessage> errors){
-        String inputName = formData.getFirst(RegistrationPage.FIELD_NAME);
-        if (Validation.isBlank(inputName)) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_NAME, Messages.MISSING_NAME));
-        } else {
+    public static void populateLastNameFirstNameUsingName(MultivaluedMap<String, String> formData) {
+        String inputName = formData.getFirst(Validation.FIELD_NAME);
+        if (!Validation.isBlank(inputName)) {
+            boolean lastNameFound = false;
             for (int i = 0; i < LAST_NAMES.length; i++) {
                 String temp = LAST_NAMES[i];
                 if (inputName.startsWith(temp)) {
-                    formData.addFirst(RegistrationPage.FIELD_LAST_NAME, temp);
-                    formData.addFirst(RegistrationPage.FIELD_FIRST_NAME, inputName.substring((temp.length())));
+                    formData.putSingle(Validation.FIELD_LAST_NAME, temp);
+                    formData.putSingle(Validation.FIELD_FIRST_NAME, inputName.substring((temp.length())));
+                    lastNameFound = true;
                     break;
                 }
             }
+            if (!lastNameFound) {
+                if (inputName.length() > 4){
+                    formData.remove(Validation.FIELD_LAST_NAME);
+                    formData.putSingle(Validation.FIELD_FIRST_NAME, inputName);
+                } else {
+                    formData.putSingle(Validation.FIELD_LAST_NAME, inputName.substring(0, 1));
+                    formData.putSingle(Validation.FIELD_FIRST_NAME, inputName.substring(1));
+                }
+
+            }
         }
     }
+
+    public static void populateFormFields(IUser user, MultivaluedMap<String, String> formData) {
+        populateLastNameFirstNameUsingName(formData);
+        user.setFirstName(formData.getFirst(Validation.FIELD_FIRST_NAME));
+        user.setLastName(formData.getFirst(Validation.FIELD_LAST_NAME));
+        user.setEmail(formData.getFirst(Validation.FIELD_EMAIL));
+
+        populateAttributes(user, formData);
+    }
+
+    public static void populateAttributes(IUser user, MultivaluedMap<String, String> formData) {
+        user.setSingleAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER));
+        user.setSingleAttribute(Validation.FIELD_COMPANY, formData.getFirst(Validation.FIELD_COMPANY));
+        user.setSingleAttribute(Validation.FIELD_BIRTH_DATE, formData.getFirst(Validation.FIELD_BIRTH_DATE));
+        user.setSingleAttribute(Validation.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, Validation.FIELD_SERVICE_AGREEMENT));
+        user.setSingleAttribute(Validation.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, Validation.FIELD_PRIVACY_AGREEMENT));
+        user.setSingleAttribute(Validation.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, Validation.FIELD_MARKETING_AGREEMENT));
+    }
+
     @Override
     public String getHelpText() {
         return "Validates email, first name, and last name attributes and stores them in user data.";
@@ -84,36 +109,19 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         context.getEvent().detail(Details.REGISTER_METHOD, "form");
         String eventError = Errors.INVALID_REGISTRATION;
 
-        populateLastNameFirstNameUsingName(formData, errors);
-
-//        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_FIRST_NAME)))) {
-//            errors.add(new FormMessage(RegistrationPage.FIELD_FIRST_NAME, Messages.MISSING_FIRST_NAME));
-//        }
-//
-//        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_LAST_NAME)))) {
-//            errors.add(new FormMessage(RegistrationPage.FIELD_LAST_NAME, Messages.MISSING_LAST_NAME));
-//        }
-        String mobilePhoneNumber = formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER);
-        if (Validation.isBlank(mobilePhoneNumber)) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.MISSING_MOBILE_PHONE_NUMBER));
-        } else if (!Validation.isMobilePhoneNumberValid(mobilePhoneNumber)) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.INVALID_MOBILE_PHONE_NUMBER));
-        }
-        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_SERVICE_AGREEMENT)))) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_SERVICE_AGREEMENT, Messages.MISSING_SERVICE_AGREEMENT));
-        }
-        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_PRIVACY_AGREEMENT)))) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_PRIVACY_AGREEMENT, Messages.MISSING_PRIVACY_AGREEMENT));
-        }
-
+        Validation.validateProfileForm(formData, errors);
         String email = formData.getFirst(Validation.FIELD_EMAIL);
+        String password = formData.getFirst(Validation.FIELD_PASSWORD);
+        String name = formData.getFirst(Validation.FIELD_NAME);
+        String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
+
         boolean emailValid = true;
         if (Validation.isBlank(email)) {
-            errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.MISSING_EMAIL));
+            errors.add(new FormMessage(Validation.FIELD_EMAIL, Messages.MISSING_EMAIL));
             emailValid = false;
         } else if (!Validation.isEmailValid(email)) {
             context.getEvent().detail(Details.EMAIL, email);
-            errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.INVALID_EMAIL));
+            errors.add(new FormMessage(Validation.FIELD_EMAIL, Messages.INVALID_EMAIL));
             emailValid = false;
         }
 
@@ -121,7 +129,7 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
             eventError = Errors.EMAIL_IN_USE;
 //            formData.remove(Validation.FIELD_EMAIL);
             context.getEvent().detail(Details.EMAIL, email);
-            errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.EMAIL_EXISTS));
+            errors.add(new FormMessage(Validation.FIELD_EMAIL, Messages.EMAIL_EXISTS));
         }
 
         if (errors.size() > 0) {
@@ -134,26 +142,19 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         }
     }
 
-    private String getBooleanValue(MultivaluedMap<String, String> formData, String propertyName){
+    public static String getBooleanValue(MultivaluedMap<String, String> formData, String propertyName) {
         String value = formData.getFirst(propertyName);
-        if (value == null || value.isEmpty()){
+        if (value == null || value.isEmpty()) {
             value = "false";
         }
         return value;
     }
+
     @Override
     public void success(FormContext context) {
         UserModel user = context.getUser();
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
-        user.setFirstName(formData.getFirst(RegistrationPage.FIELD_FIRST_NAME));
-        user.setLastName(formData.getFirst(RegistrationPage.FIELD_LAST_NAME));
-        user.setEmail(formData.getFirst(RegistrationPage.FIELD_EMAIL));
-        user.setSingleAttribute(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER));
-        user.setSingleAttribute(RegistrationPage.FIELD_COMPANY, formData.getFirst(RegistrationPage.FIELD_COMPANY));
-        user.setSingleAttribute(RegistrationPage.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_SERVICE_AGREEMENT));
-        user.setSingleAttribute(RegistrationPage.FIELD_BIRTH_DATE, formData.getFirst(RegistrationPage.FIELD_BIRTH_DATE));
-        user.setSingleAttribute(RegistrationPage.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_PRIVACY_AGREEMENT));
-        user.setSingleAttribute(RegistrationPage.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, RegistrationPage.FIELD_MARKETING_AGREEMENT));
+        populateFormFields(user, formData);
         logger.info(user.toString());
     }
 
@@ -204,13 +205,15 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     }
 
     private static AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES = {
-            AuthenticationExecutionModel.Requirement.REQUIRED,
-            AuthenticationExecutionModel.Requirement.DISABLED
+        AuthenticationExecutionModel.Requirement.REQUIRED,
+        AuthenticationExecutionModel.Requirement.DISABLED
     };
+
     @Override
     public AuthenticationExecutionModel.Requirement[] getRequirementChoices() {
         return REQUIREMENT_CHOICES;
     }
+
     @Override
     public FormAction create(KeycloakSession session) {
         return this;

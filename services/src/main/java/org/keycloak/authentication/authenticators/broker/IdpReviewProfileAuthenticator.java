@@ -20,6 +20,7 @@ package org.keycloak.authentication.authenticators.broker;
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.authenticators.broker.util.SerializedBrokeredIdentityContext;
+import org.keycloak.authentication.requiredactions.util.UpdateProfileContext;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.common.util.ObjectUtil;
 import org.keycloak.events.Details;
@@ -39,6 +40,8 @@ import org.keycloak.services.validation.Validation;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.util.List;
+
+import static org.keycloak.authentication.forms.RegistrationProfile.*;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -110,10 +113,12 @@ public class IdpReviewProfileAuthenticator extends AbstractIdpAuthenticator {
             return;
         }
 
+        populateFormFields(userCtx, formData);
+
         String username = realm.isRegistrationEmailAsUsername() ? formData.getFirst(UserModel.EMAIL) : formData.getFirst(UserModel.USERNAME);
         userCtx.setUsername(username);
-        userCtx.setFirstName(formData.getFirst(UserModel.FIRST_NAME));
-        userCtx.setLastName(formData.getFirst(UserModel.LAST_NAME));
+//        userCtx.setFirstName(formData.getFirst(UserModel.FIRST_NAME));
+//        userCtx.setLastName(formData.getFirst(UserModel.LAST_NAME));
 
         String email = formData.getFirst(UserModel.EMAIL);
         if (!ObjectUtil.isEqualOrBothNull(email, userCtx.getEmail())) {

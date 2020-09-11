@@ -49,6 +49,7 @@ public class SerializedBrokeredIdentityContext implements UpdateProfileContext {
     private String modelUsername;
     private String email;
     private String firstName;
+    private String name;
     private String lastName;
     private String brokerSessionId;
     private String brokerUserId;
@@ -180,6 +181,16 @@ public class SerializedBrokeredIdentityContext implements UpdateProfileContext {
         this.contextData = contextData;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @JsonIgnore
     @Override
     public Map<String, List<String>> getAttributes() {
@@ -252,6 +263,7 @@ public class SerializedBrokeredIdentityContext implements UpdateProfileContext {
         ctx.setUsername(getBrokerUsername());
         ctx.setModelUsername(getModelUsername());
         ctx.setEmail(getEmail());
+        ctx.setName(getName());
         ctx.setFirstName(getFirstName());
         ctx.setLastName(getLastName());
         ctx.setBrokerSessionId(getBrokerSessionId());
@@ -292,6 +304,7 @@ public class SerializedBrokeredIdentityContext implements UpdateProfileContext {
         ctx.setBrokerUsername(context.getUsername());
         ctx.setModelUsername(context.getModelUsername());
         ctx.setEmail(context.getEmail());
+        ctx.setName(context.getName());
         ctx.setFirstName(context.getFirstName());
         ctx.setLastName(context.getLastName());
         ctx.setBrokerSessionId(context.getBrokerSessionId());

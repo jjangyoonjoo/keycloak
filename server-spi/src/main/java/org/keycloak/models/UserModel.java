@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public interface UserModel extends RoleMapperModel {
+public interface UserModel extends RoleMapperModel, IUser{
     String USERNAME = "username";
     String LAST_NAME = "lastName";
     String FIRST_NAME = "firstName";
