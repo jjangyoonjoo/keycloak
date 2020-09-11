@@ -23,6 +23,10 @@
       }
 
       function validateAllFields() {
+        isRequiredFieldValueEntered(document.getElementById("email"));
+        isRequiredFieldValueEntered(document.getElementById("password"));
+        isRequiredFieldValueEntered(document.getElementById("name"));
+        isRequiredFieldValueEntered(document.getElementById("mobilePhoneNumber"));
         var emailValue = document.getElementById("email").value;
         var passwordValue = document.getElementById("password").value;
         var nameValue = document.getElementById("name").value;
@@ -88,22 +92,22 @@
         // document.getElementById('register-button').classList.remove("instsign-content-disabled");
       }
 
-      function isRequiredField(inputElement, inputValidateAllFields) {
+      function isRequiredFieldValueEntered(inputElement, inputValidateAllFields) {
         var inputValue = inputElement.value;
-        console.log('isRequiredField:', inputValue, inputElement);
+        console.log('isRequiredFieldValueEntered:', inputValue, inputElement);
         console.log("::" + inputValue + "::");
         if (inputValue && inputValue.length > 0) {
           inputElement.classList.remove("instsign-error");
           if (inputValidateAllFields === true) {
             validateAllFields();
           }
-          return false;
+          return true;
         } else {
           inputElement.classList.add("instsign-error");
           if (inputValidateAllFields === true) {
             validateAllFields();
           }
-          return true;
+          return false;
         }
       }
 
@@ -196,7 +200,7 @@
           spanElement.classList.add("instsign-content-weak");
           spanElement.innerHTML = "${msg("instsign-password-strength-weak")}";
         }
-        isRequiredField(inputElement, true);
+        isRequiredFieldValueEntered(inputElement, true);
         return validCount;
       }
 
@@ -334,7 +338,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="email" name="email" type="text"
-                 autocomplete="email" onchange="isRequiredField(this, true)"
+                 autocomplete="email" onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(register.formData.email!'')}"
                  placeholder="${msg("instsign-content-email-placeholder")}"/>
         </div>
@@ -364,7 +368,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="name" name="name" type="text"
-                 onchange="isRequiredField(this, true)"
+                 onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(register.formData.name!'')}"
                  placeholder="${msg("instsign-content-name-placeholder")}"/>
         </div>
@@ -376,7 +380,7 @@
         <div class="instsign-content-input-text">
           <input id="mobilePhoneNumber" name="mobilePhoneNumber" type="text"
                  autocomplete="off"
-                 onchange="isRequiredField(this, true)"
+                 onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(register.formData.mobilePhoneNumber!'')}"
                  placeholder="${msg("instsign-content-mobile-phone-number-placeholder")}"/>
         </div>

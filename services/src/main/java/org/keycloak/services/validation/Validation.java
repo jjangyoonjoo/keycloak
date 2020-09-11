@@ -40,9 +40,11 @@ public class Validation {
     public static final String FIELD_FIRST_NAME = "firstName";
     public static final String FIELD_PASSWORD = "password";
     public static final String FIELD_USERNAME = "username";
-    
+    public static final String FIELD_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
+
     // Actually allow same emails like angular. See ValidationTest.testEmailValidation()
     private static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*");
+    private static final Pattern MOBILE_PHONE_NUMBER_PATTERN = Pattern.compile("^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$");
 
     public static List<FormMessage> validateRegistrationForm(KeycloakSession session, RealmModel realm, MultivaluedMap<String, String> formData, List<String> requiredCredentialTypes, PasswordPolicy policy) {
         List<FormMessage> errors = new ArrayList<>();
@@ -145,5 +147,8 @@ public class Validation {
         return EMAIL_PATTERN.matcher(email).matches();
     }
 
+    public static boolean isMobilePhoneNumberValid(String mobilePhoneNumber) {
+        return MOBILE_PHONE_NUMBER_PATTERN.matcher(mobilePhoneNumber).matches();
+    }
 
 }

@@ -76,8 +76,15 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
 
         String email = formData.getFirst(Validation.FIELD_EMAIL);
         String username = formData.getFirst(RegistrationPage.FIELD_USERNAME);
+        String mobilePhoneNumber = formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER);
         context.getEvent().detail(Details.USERNAME, username);
         context.getEvent().detail(Details.EMAIL, email);
+
+        if (Validation.isBlank(mobilePhoneNumber)) {
+            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.MISSING_MOBILE_PHONE_NUMBER));
+        } else if (!Validation.isMobilePhoneNumberValid(mobilePhoneNumber)) {
+            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.INVALID_MOBILE_PHONE_NUMBER));
+        }
 
         String usernameField = RegistrationPage.FIELD_USERNAME;
         if (context.getRealm().isRegistrationEmailAsUsername()) {
@@ -89,6 +96,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
                 errors.add(new FormMessage(RegistrationPage.FIELD_EMAIL, Messages.INVALID_EMAIL));
 //                formData.remove(Validation.FIELD_EMAIL);
             }
+
             if (errors.size() > 0) {
                 context.error(Errors.INVALID_REGISTRATION);
                 context.validationError(formData, errors);

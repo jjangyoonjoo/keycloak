@@ -76,11 +76,30 @@ body {
 
 .instsign-main .alert {
   padding: 0;
-  position: relative; /* or absolute */
+  position: absolute; /* or absolute */
   left: 50%;
-  top: -30px;
+  top: 70px;
   width: 300px;
-  margin-left: -250px;
+  margin-left: -31px;
+}
+
+.instsign-main .alert-error {
+  font-family: NanumSquareOTFB, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  color: #a0141b;
+}
+
+.instsign-main .alert-error .pficon {
+  display: none !important;
+}
+
+.instsign-main .alert .kc-feedback-text{
+  line-height: 1.5;
 }
 
 .alert .kc-feedback-text {

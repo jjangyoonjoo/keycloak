@@ -93,8 +93,11 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
 //        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_LAST_NAME)))) {
 //            errors.add(new FormMessage(RegistrationPage.FIELD_LAST_NAME, Messages.MISSING_LAST_NAME));
 //        }
-        if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_MOBILE_PHONE_NUMBER)))) {
+        String mobilePhoneNumber = formData.getFirst(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER);
+        if (Validation.isBlank(mobilePhoneNumber)) {
             errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.MISSING_MOBILE_PHONE_NUMBER));
+        } else if (!Validation.isMobilePhoneNumberValid(mobilePhoneNumber)) {
+            errors.add(new FormMessage(RegistrationPage.FIELD_MOBILE_PHONE_NUMBER, Messages.INVALID_MOBILE_PHONE_NUMBER));
         }
         if (Validation.isBlank(formData.getFirst((RegistrationPage.FIELD_SERVICE_AGREEMENT)))) {
             errors.add(new FormMessage(RegistrationPage.FIELD_SERVICE_AGREEMENT, Messages.MISSING_SERVICE_AGREEMENT));
