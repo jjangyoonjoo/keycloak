@@ -16,6 +16,7 @@
  */
 package org.keycloak.social.google;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.broker.oidc.OIDCIdentityProvider;
@@ -23,6 +24,7 @@ import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
 import org.keycloak.broker.provider.AuthenticationRequest;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
+import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.common.ClientConnection;
 import org.keycloak.common.util.KeycloakUriBuilder;
@@ -41,7 +43,7 @@ public class GoogleIdentityProvider extends OIDCIdentityProvider implements Soci
     public static final String AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
     public static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
     public static final String PROFILE_URL = "https://openidconnect.googleapis.com/v1/userinfo";
-    public static final String DEFAULT_SCOPE = "openid profile email";
+    public static final String DEFAULT_SCOPE = "openid profile email ../auth/user.phonenumbers.read ../auth/user.birthday.read ../auth/user.gender.read ";
 
     private static final String OIDC_PARAMETER_HOSTED_DOMAINS = "hd";
     private static final String OIDC_PARAMETER_ACCESS_TYPE = "access_type";
@@ -62,7 +64,7 @@ public class GoogleIdentityProvider extends OIDCIdentityProvider implements Soci
     @Override
     protected String getUserInfoUrl() {
         String uri = super.getUserInfoUrl();
-        if (((GoogleIdentityProviderConfig)getConfig()).isUserIp()) {
+        if (((GoogleIdentityProviderConfig) getConfig()).isUserIp()) {
             ClientConnection connection = ResteasyProviderFactory.getContextData(ClientConnection.class);
             if (connection != null) {
                 uri = KeycloakUriBuilder.fromUri(super.getUserInfoUrl()).queryParam("userIp", connection.getRemoteAddr()).build().toString();
@@ -71,6 +73,18 @@ public class GoogleIdentityProvider extends OIDCIdentityProvider implements Soci
         }
         logger.debugv("GOOGLE userInfoUrl: {0}", uri);
         return uri;
+    }
+
+    @Override
+    protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
+        BrokeredIdentityContext user = super.extractIdentityFromProfile(event, profile);
+
+        String username = getJsonProperty(profile, "username");
+
+        String firstName = getJsonProperty(profile, "first_name");
+        String lastName = getJsonProperty(profile, "last_name");
+
+        return user;
     }
 
     @Override
@@ -101,11 +115,11 @@ public class GoogleIdentityProvider extends OIDCIdentityProvider implements Soci
         if (hostedDomain != null) {
             uriBuilder.queryParam(OIDC_PARAMETER_HOSTED_DOMAINS, hostedDomain);
         }
-        
+
         if (googleConfig.isOfflineAccess()) {
             uriBuilder.queryParam(OIDC_PARAMETER_ACCESS_TYPE, ACCESS_TYPE_OFFLINE);
         }
-        
+
         return uriBuilder;
     }
 
@@ -124,7 +138,7 @@ public class GoogleIdentityProvider extends OIDCIdentityProvider implements Soci
             throw new IdentityBrokerException("Identity token does not contain hosted domain parameter.");
         }
 
-        if (hostedDomain.equals("*") || hostedDomain.equals(receivedHdParam))  {
+        if (hostedDomain.equals("*") || hostedDomain.equals(receivedHdParam)) {
             return token;
         }
 
