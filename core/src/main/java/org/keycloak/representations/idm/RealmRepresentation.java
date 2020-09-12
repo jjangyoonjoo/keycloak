@@ -66,6 +66,7 @@ public class RealmRepresentation {
     protected Boolean loginWithEmailAllowed;
     protected Boolean duplicateEmailsAllowed;
     protected Boolean resetPasswordAllowed;
+    protected Boolean findEmailAllowed;
     protected Boolean editUsernameAllowed;
 
     @Deprecated
@@ -146,6 +147,7 @@ public class RealmRepresentation {
     protected String registrationFlow;
     protected String directGrantFlow;
     protected String resetCredentialsFlow;
+    protected String findEmailFlow;
     protected String clientAuthenticationFlow;
     protected String dockerAuthenticationFlow;
 
@@ -526,6 +528,14 @@ public class RealmRepresentation {
 
     public void setResetPasswordAllowed(Boolean resetPassword) {
         this.resetPasswordAllowed = resetPassword;
+    }
+
+    public Boolean isFindEmailAllowed() {
+        return findEmailAllowed;
+    }
+
+    public void setFindEmailAllowed(Boolean findEmailAllowed) {
+        this.findEmailAllowed = findEmailAllowed;
     }
 
     public Boolean isEditUsernameAllowed() {
@@ -946,6 +956,14 @@ public class RealmRepresentation {
 
     public void setResetCredentialsFlow(String resetCredentialsFlow) {
         this.resetCredentialsFlow = resetCredentialsFlow;
+    }
+
+    public String getFindEmailFlow() {
+        return findEmailFlow;
+    }
+
+    public void setFindEmailFlow(String findEmailFlow) {
+        this.findEmailFlow = findEmailFlow;
     }
 
     public String getClientAuthenticationFlow() {

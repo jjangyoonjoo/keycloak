@@ -40,6 +40,7 @@ public class DefaultAuthenticationFlows {
     public static final String BROWSER_FLOW = "browser";
     public static final String DIRECT_GRANT_FLOW = "direct grant";
     public static final String RESET_CREDENTIALS_FLOW = "reset credentials";
+    public static final String FIND_EMAIL_FLOW = "find email";
     public static final String LOGIN_FORMS_FLOW = "forms";
     public static final String SAML_ECP_FLOW = "saml ecp";
     public static final String DOCKER_AUTH = "docker auth";
@@ -57,6 +58,7 @@ public class DefaultAuthenticationFlows {
         if (realm.getFlowByAlias(DIRECT_GRANT_FLOW) == null) directGrantFlow(realm, false);
         if (realm.getFlowByAlias(REGISTRATION_FLOW) == null) registrationFlow(realm);
         if (realm.getFlowByAlias(RESET_CREDENTIALS_FLOW) == null) resetCredentialsFlow(realm);
+        if (realm.getFlowByAlias(FIND_EMAIL_FLOW) == null) findEmailFlow(realm);
         if (realm.getFlowByAlias(CLIENT_AUTHENTICATION_FLOW) == null) clientAuthFlow(realm);
         if (realm.getFlowByAlias(FIRST_BROKER_LOGIN_FLOW) == null) firstBrokerLoginFlow(realm, false);
         if (realm.getFlowByAlias(SAML_ECP_FLOW) == null) samlEcpProfile(realm);
@@ -68,6 +70,7 @@ public class DefaultAuthenticationFlows {
         if (realm.getFlowByAlias(DIRECT_GRANT_FLOW) == null) directGrantFlow(realm, true);
         if (realm.getFlowByAlias(REGISTRATION_FLOW) == null) registrationFlow(realm);
         if (realm.getFlowByAlias(RESET_CREDENTIALS_FLOW) == null) resetCredentialsFlow(realm);
+        if (realm.getFlowByAlias(FIND_EMAIL_FLOW) == null) findEmailFlow(realm);
         if (realm.getFlowByAlias(CLIENT_AUTHENTICATION_FLOW) == null) clientAuthFlow(realm);
         if (realm.getFlowByAlias(FIRST_BROKER_LOGIN_FLOW) == null) firstBrokerLoginFlow(realm, true);
         if (realm.getFlowByAlias(SAML_ECP_FLOW) == null) samlEcpProfile(realm);
@@ -207,6 +210,36 @@ public class DefaultAuthenticationFlows {
         execution.setPriority(40);
         execution.setAuthenticatorFlow(false);
         realm.addAuthenticatorExecution(execution);
+    }
+
+    public static void findEmailFlow(RealmModel realm) {
+        AuthenticationFlowModel grant = new AuthenticationFlowModel();
+        grant.setAlias(FIND_EMAIL_FLOW);
+        grant.setDescription("Find email for a user if they forgot their email");
+        grant.setProviderId("basic-flow");
+        grant.setTopLevel(true);
+        grant.setBuiltIn(true);
+        grant = realm.addAuthenticationFlow(grant);
+        realm.setFindEmailFlow(grant);
+
+        // find user
+        AuthenticationExecutionModel execution = new AuthenticationExecutionModel();
+        execution.setParentFlow(grant.getId());
+        execution.setRequirement(AuthenticationExecutionModel.Requirement.REQUIRED);
+        execution.setAuthenticator("find-email-choose-user");
+        execution.setPriority(10);
+        execution.setAuthenticatorFlow(false);
+        realm.addAuthenticatorExecution(execution);
+
+        // find email
+        execution = new AuthenticationExecutionModel();
+        execution.setParentFlow(grant.getId());
+        execution.setRequirement(AuthenticationExecutionModel.Requirement.REQUIRED);
+        execution.setAuthenticator("find-email-display");
+        execution.setPriority(20);
+        execution.setAuthenticatorFlow(false);
+        realm.addAuthenticatorExecution(execution);
+
     }
 
     public static void directGrantFlow(RealmModel realm, boolean migrate) {

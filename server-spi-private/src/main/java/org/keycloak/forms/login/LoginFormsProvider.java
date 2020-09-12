@@ -59,6 +59,8 @@ public interface LoginFormsProvider extends Provider {
 
     Response createPasswordReset();
 
+    Response createFindEmail();
+
     Response createLoginTotp();
 
     Response createRegistration();
@@ -66,6 +68,8 @@ public interface LoginFormsProvider extends Provider {
     Response createInfoPage();
 
     Response createUpdateProfilePage();
+
+    Response createLoginDisplayEmailPage();
 
     Response createIdpLinkConfirmLinkPage();
 

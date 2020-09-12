@@ -359,6 +359,18 @@ public class RealmAdapter implements CachedRealmModel {
     }
 
     @Override
+    public boolean isFindEmailAllowed() {
+        if (isUpdated()) return updated.isFindEmailAllowed();
+        return cached.isFindEmailAllowed();
+    }
+
+    @Override
+    public void setFindEmailAllowed(boolean findEmailAllowed) {
+        getDelegateForUpdate();
+        updated.setFindEmailAllowed(findEmailAllowed);
+    }
+
+    @Override
     public boolean isEditUsernameAllowed() {
         if (isUpdated()) return updated.isEditUsernameAllowed();
         return cached.isEditUsernameAllowed();
@@ -1109,6 +1121,19 @@ public class RealmAdapter implements CachedRealmModel {
     public void setResetCredentialsFlow(AuthenticationFlowModel flow) {
         getDelegateForUpdate();
         updated.setResetCredentialsFlow(flow);
+
+    }
+
+    @Override
+    public AuthenticationFlowModel getFindEmailFlow() {
+        if (isUpdated()) return updated.getFindEmailFlow();
+        return cached.getFindEmailFlow();
+    }
+
+    @Override
+    public void setFindEmailFlow(AuthenticationFlowModel flow) {
+        getDelegateForUpdate();
+        updated.setFindEmailFlow(flow);
 
     }
 

@@ -40,6 +40,9 @@ public interface Errors {
     String DIFFERENT_USER_AUTHENTICATED = "different_user_authenticated";
 
     String USERNAME_MISSING = "username_missing";
+    String NAME_MISSING = "name_missing";
+    String MOBILE_PHONE_NUMBER_MISSING = "mobile_phone_number_missing";
+    String INVALID_MOBILE_PHONE_NUMBER = "invalid_mobile_phone_number";
     String USERNAME_IN_USE = "username_in_use";
     String EMAIL_IN_USE = "email_in_use";
 

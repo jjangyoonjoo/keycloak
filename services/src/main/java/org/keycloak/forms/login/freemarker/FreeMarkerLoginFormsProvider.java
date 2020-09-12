@@ -43,6 +43,7 @@ import org.keycloak.models.utils.FormMessage;
 import org.keycloak.services.Urls;
 import org.keycloak.services.messages.Messages;
 import org.keycloak.services.resources.LoginActionsService;
+import org.keycloak.services.validation.Validation;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import org.keycloak.social.facebook.FacebookIdentityProvider;
 import org.keycloak.social.google.GoogleIdentityProvider;
@@ -73,6 +74,7 @@ import java.util.*;
 import static org.keycloak.models.UserModel.RequiredAction.UPDATE_PASSWORD;
 import static org.keycloak.models.UserModel.RequiredAction.UPDATE_PROFILE;
 import static org.keycloak.services.managers.AuthenticationManager.IS_AIA_REQUEST;
+import static org.keycloak.utils.IdentityProviderUtils.maskEmail;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
@@ -232,6 +234,15 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
                 attributes.put("brokerContext", brokerContext);
                 attributes.put("idpAlias", idpAlias);
+                break;
+            case LOGIN_FIND_EMAIL:
+                attributes.put("mobilePhoneNumber", formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER));
+                attributes.put("name", formData.getFirst(Validation.FIELD_NAME));
+                break;
+            case LOGIN_DISPLAY_EMAIL:
+                if (user != null) {
+                    attributes.put("email", maskEmail(user.getEmail()));
+                }
                 break;
             case REGISTER:
                 attributes.put("register", new RegisterBean(formData));
@@ -494,6 +505,16 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
     @Override
     public Response createPasswordReset() {
         return createResponse(LoginFormsPages.LOGIN_RESET_PASSWORD);
+    }
+
+    @Override
+    public Response createFindEmail() {
+        return createResponse(LoginFormsPages.LOGIN_FIND_EMAIL);
+    }
+
+    @Override
+    public Response createLoginDisplayEmailPage() {
+        return createResponse(LoginFormsPages.LOGIN_DISPLAY_EMAIL);
     }
 
     @Override

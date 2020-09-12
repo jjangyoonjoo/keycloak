@@ -94,7 +94,7 @@
       <div class="instsign-content-hr">
       </div>
       <div class="instsign-login-forgot-id instsign-link-text"
-           onclick="goToUrl('${url.loginResetCredentialsUrl}')">
+           onclick="goToUrl('${url.loginFindEmailUrl}')">
         <span>${msg("login-content-forgot-id")}</span>
       </div>
       <div class="instsign-login-register" onclick="goToUrl('${url.registrationUrl}')">

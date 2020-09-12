@@ -33,6 +33,7 @@ public interface UserModel extends RoleMapperModel, IUser{
     String USERNAME = "username";
     String LAST_NAME = "lastName";
     String FIRST_NAME = "firstName";
+    String MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
     String EMAIL = "email";
     String LOCALE = "locale";
     String INCLUDE_SERVICE_ACCOUNT = "keycloak.session.realm.users.query.include_service_account";

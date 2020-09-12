@@ -202,7 +202,7 @@ public class IdentityProviderUtils {
         "후"
     );
 
-    public static List<String> splitNameFromName(String inputName) {
+    public static List<String> splitNames(String inputName) {
         List<String> returnValue = new ArrayList<String>();
         boolean lastNameFound = false;
         String lastName = null;
@@ -236,8 +236,20 @@ public class IdentityProviderUtils {
         return returnValue;
     }
 
+    public static String stripMobilePhoneNumber(String inputValue) {
+        if (inputValue == null || inputValue.isEmpty()) {
+            return null;
+        }
+        String returnValue = inputValue.trim();
+        returnValue = returnValue.replaceAll("-", "");
+        returnValue = returnValue.replaceAll("/", "");
+        returnValue = returnValue.replaceAll("\\(", "");
+        returnValue = returnValue.replaceAll("\\)", "");
+        return returnValue;
+    }
+
     public static void populateLastNameFirstNameUsingName(BrokeredIdentityContext identity, String inputName) {
-        List<String> splittedName = splitNameFromName(inputName);
+        List<String> splittedName = splitNames(inputName);
         if (splittedName.size() > 0) {
             identity.setFirstName(splittedName.get(0));
             if (splittedName.size() > 1) {
@@ -249,5 +261,55 @@ public class IdentityProviderUtils {
     public static void setName(BrokeredIdentityContext user, String inputName) {
         user.setName(inputName);
         populateLastNameFirstNameUsingName(user, inputName);
+    }
+
+    protected static String buildAsterisk(int count){
+        StringBuilder asterisk = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            asterisk.append("*");
+        }
+        return asterisk.toString();
+    }
+
+    protected static String maskValue(String inputValue) {
+        if (inputValue == null) {
+            return null;
+        }
+        String returnValue = inputValue;
+        if (returnValue.length() >= 8) {
+            String asterisk = buildAsterisk(returnValue.length() - 4);
+            returnValue = returnValue.substring(0, 2) + asterisk + returnValue.substring(returnValue.length() - 2);
+        } else if (returnValue.length() > 2) {
+            String asterisk = buildAsterisk(returnValue.length() - 2);
+            return asterisk + returnValue.substring(returnValue.length() - 2);
+        } else if (returnValue.length() == 2) {
+            return "*" + returnValue.substring(1);
+        } else if (returnValue.length() == 1) {
+            return "*";
+        } else {
+            return "";
+        }
+        return returnValue;
+    }
+
+    public static String maskEmail(String inputValue) {
+        if (inputValue == null || inputValue.isEmpty()) {
+            return null;
+        }
+        StringBuilder returnValue = new StringBuilder(inputValue.trim());
+        String[] splitList = returnValue.toString().split("@");
+        if (splitList.length == 2) {
+            returnValue = new StringBuilder(maskValue(splitList[0]) + "@");
+            int lastIndex = splitList[1].lastIndexOf(".");
+            if (lastIndex > -1) {
+                returnValue.append(maskValue(splitList[1].substring(0, lastIndex)));
+                returnValue.append(splitList[1].substring(lastIndex));
+            } else {
+                returnValue.append(maskValue(splitList[1]));
+            }
+        } else {
+            returnValue = new StringBuilder();
+        }
+        return returnValue.toString();
     }
 }

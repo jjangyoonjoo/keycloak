@@ -74,6 +74,8 @@ public class RealmEntity {
     protected boolean verifyEmail;
     @Column(name="RESET_PASSWORD_ALLOWED")
     protected boolean resetPasswordAllowed;
+    @Column(name="FIND_EMAIL_ALLOWED")
+    protected boolean findEmailAllowed;
     @Column(name="LOGIN_WITH_EMAIL_ALLOWED")
     protected boolean loginWithEmailAllowed;
     @Column(name="DUPLICATE_EMAILS_ALLOWED")
@@ -224,6 +226,9 @@ public class RealmEntity {
     @Column(name="RESET_CREDENTIALS_FLOW")
     protected String resetCredentialsFlow;
 
+    @Column(name="FIND_EMAIL_FLOW")
+    protected String findEmailFlow;
+
     @Column(name="CLIENT_AUTH_FLOW")
     protected String clientAuthenticationFlow;
 
@@ -332,6 +337,14 @@ public class RealmEntity {
 
     public void setResetPasswordAllowed(boolean resetPasswordAllowed) {
         this.resetPasswordAllowed = resetPasswordAllowed;
+    }
+
+    public boolean isFindEmailAllowed() {
+        return findEmailAllowed;
+    }
+
+    public void setFindEmailAllowed(boolean findEmailAllowed) {
+        this.findEmailAllowed = findEmailAllowed;
     }
 
     public boolean isEditUsernameAllowed() {
@@ -759,6 +772,14 @@ public class RealmEntity {
 
     public void setResetCredentialsFlow(String resetCredentialsFlow) {
         this.resetCredentialsFlow = resetCredentialsFlow;
+    }
+
+    public String getFindEmailFlow() {
+        return findEmailFlow;
+    }
+
+    public void setFindEmailFlow(String findEmailFlow) {
+        this.findEmailFlow = findEmailFlow;
     }
 
     public String getClientAuthenticationFlow() {

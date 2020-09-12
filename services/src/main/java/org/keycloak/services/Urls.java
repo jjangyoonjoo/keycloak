@@ -187,6 +187,11 @@ public class Urls {
         return loginResetCredentialsBuilder(baseUri).build(realmName);
     }
 
+    public static URI loginFindEmail(URI baseUri, String realmName) {
+        return loginFindEmailBuilder(baseUri).build(realmName);
+    }
+
+
     public static UriBuilder actionTokenBuilder(URI baseUri, String tokenString, String clientId, String tabId) {
         return loginActionsBase(baseUri).path(LoginActionsService.class, "executeActionToken")
                 .queryParam(Constants.KEY, tokenString)
@@ -198,6 +203,11 @@ public class Urls {
     public static UriBuilder loginResetCredentialsBuilder(URI baseUri) {
         return loginActionsBase(baseUri).path(LoginActionsService.RESET_CREDENTIALS_PATH);
     }
+
+    public static UriBuilder loginFindEmailBuilder(URI baseUri) {
+        return loginActionsBase(baseUri).path(LoginActionsService.FIND_EMAIL_PATH);
+    }
+
 
     public static URI loginUsernameReminder(URI baseUri, String realmName) {
         return loginUsernameReminderBuilder(baseUri).build(realmName);

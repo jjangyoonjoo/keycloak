@@ -163,6 +163,10 @@ public interface RealmModel extends RoleContainerModel {
 
     void setResetPasswordAllowed(boolean resetPasswordAllowed);
 
+    boolean isFindEmailAllowed();
+
+    void setFindEmailAllowed(boolean findEmailAllowed);
+
     String getDefaultSignatureAlgorithm();
     void setDefaultSignatureAlgorithm(String defaultSignatureAlgorithm);
 
@@ -279,6 +283,9 @@ public interface RealmModel extends RoleContainerModel {
 
     AuthenticationFlowModel getResetCredentialsFlow();
     void setResetCredentialsFlow(AuthenticationFlowModel flow);
+
+    AuthenticationFlowModel getFindEmailFlow();
+    void setFindEmailFlow(AuthenticationFlowModel flow);
 
     AuthenticationFlowModel getClientAuthenticationFlow();
     void setClientAuthenticationFlow(AuthenticationFlowModel flow);

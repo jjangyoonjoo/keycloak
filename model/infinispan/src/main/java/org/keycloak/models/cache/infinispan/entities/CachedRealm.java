@@ -61,6 +61,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
     protected boolean loginWithEmailAllowed;
     protected boolean duplicateEmailsAllowed;
     protected boolean resetPasswordAllowed;
+    protected boolean findEmailAllowed;
     protected boolean identityFederationEnabled;
     protected boolean editUsernameAllowed;
     //--- brute force settings
@@ -123,6 +124,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
     protected AuthenticationFlowModel registrationFlow;
     protected AuthenticationFlowModel directGrantFlow;
     protected AuthenticationFlowModel resetCredentialsFlow;
+    protected AuthenticationFlowModel findEmailFlow;
     protected AuthenticationFlowModel clientAuthenticationFlow;
     protected AuthenticationFlowModel dockerAuthenticationFlow;
 
@@ -169,6 +171,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
         loginWithEmailAllowed = model.isLoginWithEmailAllowed();
         duplicateEmailsAllowed = model.isDuplicateEmailsAllowed();
         resetPasswordAllowed = model.isResetPasswordAllowed();
+        findEmailAllowed = model.isFindEmailAllowed();
         identityFederationEnabled = model.isIdentityFederationEnabled();
         editUsernameAllowed = model.isEditUsernameAllowed();
         //--- brute force settings
@@ -273,6 +276,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
         registrationFlow = model.getRegistrationFlow();
         directGrantFlow = model.getDirectGrantFlow();
         resetCredentialsFlow = model.getResetCredentialsFlow();
+        findEmailFlow = model.getFindEmailFlow();
         clientAuthenticationFlow = model.getClientAuthenticationFlow();
         dockerAuthenticationFlow = model.getDockerAuthenticationFlow();
 
@@ -391,6 +395,9 @@ public class CachedRealm extends AbstractExtendableRevisioned {
 
     public boolean isResetPasswordAllowed() {
         return resetPasswordAllowed;
+    }
+    public boolean isFindEmailAllowed() {
+        return findEmailAllowed;
     }
 
     public boolean isEditUsernameAllowed() {
@@ -612,6 +619,10 @@ public class CachedRealm extends AbstractExtendableRevisioned {
 
     public AuthenticationFlowModel getResetCredentialsFlow() {
         return resetCredentialsFlow;
+    }
+
+    public AuthenticationFlowModel getFindEmailFlow() {
+        return findEmailFlow;
     }
 
     public AuthenticationFlowModel getClientAuthenticationFlow() {

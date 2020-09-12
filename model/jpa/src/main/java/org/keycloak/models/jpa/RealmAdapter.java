@@ -385,6 +385,17 @@ public class RealmAdapter implements RealmModel, JpaModel<RealmEntity> {
     }
 
     @Override
+    public boolean isFindEmailAllowed() {
+        return realm.isFindEmailAllowed();
+    }
+
+    @Override
+    public void setFindEmailAllowed(boolean findEmailAllowed) {
+        realm.setFindEmailAllowed(findEmailAllowed);
+        em.flush();
+    }
+
+    @Override
     public boolean isEditUsernameAllowed() {
         return realm.isEditUsernameAllowed();
     }
@@ -1430,6 +1441,18 @@ public class RealmAdapter implements RealmModel, JpaModel<RealmEntity> {
     @Override
     public void setResetCredentialsFlow(AuthenticationFlowModel flow) {
         realm.setResetCredentialsFlow(flow.getId());
+    }
+
+    @Override
+    public AuthenticationFlowModel getFindEmailFlow() {
+        String flowId = realm.getFindEmailFlow();
+        if (flowId == null) return null;
+        return getAuthenticationFlowById(flowId);
+    }
+
+    @Override
+    public void setFindEmailFlow(AuthenticationFlowModel flow) {
+        realm.setFindEmailFlow(flow.getId());
     }
 
     public AuthenticationFlowModel getClientAuthenticationFlow() {

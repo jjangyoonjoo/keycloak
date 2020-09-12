@@ -168,6 +168,14 @@ public class OIDCLoginProtocolService {
         return endpoint.forgotCredentials();
     }
 
+    @Path("find-email")
+    public Object findEmailPage() {
+        AuthorizationEndpoint endpoint = new AuthorizationEndpoint(realm, event);
+        ResteasyProviderFactory.getInstance().injectProperties(endpoint);
+        return endpoint.findEmail();
+    }
+
+
     /**
      * Token endpoint
      */

@@ -83,6 +83,9 @@ public enum EventType {
     RESET_PASSWORD(true),
     RESET_PASSWORD_ERROR(true),
 
+    FIND_EMAIL(true),
+    FIND_EMAIL_ERROR(true),
+
     RESTART_AUTHENTICATION(true),
     RESTART_AUTHENTICATION_ERROR(true),
 

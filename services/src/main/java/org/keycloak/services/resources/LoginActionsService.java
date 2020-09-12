@@ -20,17 +20,12 @@ import org.jboss.logging.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.TokenVerifier;
-import org.keycloak.authentication.AuthenticationFlowException;
-import org.keycloak.authentication.AuthenticationProcessor;
-import org.keycloak.authentication.ExplainedVerificationException;
-import org.keycloak.authentication.RequiredActionContext;
-import org.keycloak.authentication.RequiredActionContextResult;
-import org.keycloak.authentication.RequiredActionFactory;
-import org.keycloak.authentication.RequiredActionProvider;
+import org.keycloak.authentication.*;
 import org.keycloak.authentication.actiontoken.ActionTokenContext;
 import org.keycloak.authentication.actiontoken.ActionTokenHandler;
 import org.keycloak.authentication.actiontoken.DefaultActionTokenKey;
 import org.keycloak.authentication.actiontoken.ExplainedTokenVerificationException;
+import org.keycloak.authentication.actiontoken.findemail.FindEmailActionTokenHandler;
 import org.keycloak.authentication.actiontoken.resetcred.ResetCredentialsActionTokenHandler;
 import org.keycloak.authentication.authenticators.broker.AbstractIdpAuthenticator;
 import org.keycloak.authentication.authenticators.broker.util.PostBrokerLoginConstants;
@@ -47,16 +42,7 @@ import org.keycloak.events.Errors;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.events.EventType;
 import org.keycloak.exceptions.TokenNotActiveException;
-import org.keycloak.models.ActionTokenKeyModel;
-import org.keycloak.models.AuthenticationFlowModel;
-import org.keycloak.models.ClientModel;
-import org.keycloak.models.ClientScopeModel;
-import org.keycloak.models.ClientSessionContext;
-import org.keycloak.models.Constants;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.UserConsentModel;
-import org.keycloak.models.UserModel;
+import org.keycloak.models.*;
 import org.keycloak.models.utils.AuthenticationFlowResolver;
 import org.keycloak.models.utils.FormMessage;
 import org.keycloak.models.utils.KeycloakModelUtils;
@@ -82,20 +68,8 @@ import org.keycloak.sessions.AuthenticationSessionCompoundId;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import org.keycloak.sessions.RootAuthenticationSessionModel;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriBuilderException;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Providers;
 import java.net.URI;
 import java.util.Map;
@@ -114,6 +88,7 @@ public class LoginActionsService {
     public static final String AUTHENTICATE_PATH = "authenticate";
     public static final String REGISTRATION_PATH = "registration";
     public static final String RESET_CREDENTIALS_PATH = "reset-credentials";
+    public static final String FIND_EMAIL_PATH = "find-email";
     public static final String REQUIRED_ACTION = "required-action";
     public static final String FIRST_BROKER_LOGIN_PATH = "first-broker-login";
     public static final String POST_BROKER_LOGIN_PATH = "post-broker-login";
@@ -124,7 +99,7 @@ public class LoginActionsService {
 
     public static final String SESSION_CODE = "session_code";
     public static final String AUTH_SESSION_ID = "auth_session_id";
-    
+
     public static final String CANCEL_AIA = "cancel-aia";
 
     private RealmModel realm;
@@ -202,7 +177,7 @@ public class LoginActionsService {
 
     protected URI getLastExecutionUrl(String flowPath, String executionId, String clientId, String tabId) {
         return new AuthenticationFlowURLHelper(session, realm, session.getContext().getUri())
-                .getLastExecutionUrl(flowPath, executionId, clientId, tabId);
+            .getLastExecutionUrl(flowPath, executionId, clientId, tabId);
     }
 
 
@@ -217,7 +192,7 @@ public class LoginActionsService {
                                    @QueryParam(Constants.CLIENT_ID) String clientId,
                                    @QueryParam(Constants.TAB_ID) String tabId) {
         event.event(EventType.RESTART_AUTHENTICATION);
-        SessionCodeChecks checks = new SessionCodeChecks(realm, session.getContext().getUri(), request, clientConnection, session, event, authSessionId, null, null, clientId,  tabId, null);
+        SessionCodeChecks checks = new SessionCodeChecks(realm, session.getContext().getUri(), request, clientConnection, session, event, authSessionId, null, null, clientId, tabId, null);
 
         AuthenticationSessionModel authSession = checks.initialVerifyAuthSession();
         if (authSession == null) {
@@ -269,15 +244,15 @@ public class LoginActionsService {
 
     protected Response processFlow(boolean action, String execution, AuthenticationSessionModel authSession, String flowPath, AuthenticationFlowModel flow, String errorMessage, AuthenticationProcessor processor) {
         processor.setAuthenticationSession(authSession)
-                .setFlowPath(flowPath)
-                .setBrowserFlow(true)
-                .setFlowId(flow.getId())
-                .setConnection(clientConnection)
-                .setEventBuilder(event)
-                .setRealm(realm)
-                .setSession(session)
-                .setUriInfo(session.getContext().getUri())
-                .setRequest(request);
+            .setFlowPath(flowPath)
+            .setBrowserFlow(true)
+            .setFlowId(flow.getId())
+            .setConnection(clientConnection)
+            .setEventBuilder(event)
+            .setRealm(realm)
+            .setSession(session)
+            .setUriInfo(session.getContext().getUri())
+            .setRequest(request);
         if (errorMessage != null) {
             processor.setForwardedErrorMessage(new FormMessage(null, errorMessage));
         }
@@ -375,8 +350,54 @@ public class LoginActionsService {
         return resetCredentials(authSessionId, code, execution, clientId, tabId);
     }
 
+    @Path(FIND_EMAIL_PATH)
+    @POST
+    public Response findEmailPOST(@QueryParam(AUTH_SESSION_ID) String authSessionId, // optional, can get from cookie instead
+                                  @QueryParam(SESSION_CODE) String code,
+                                  @QueryParam(Constants.EXECUTION) String execution,
+                                  @QueryParam(Constants.CLIENT_ID) String clientId,
+                                  @QueryParam(Constants.TAB_ID) String tabId,
+                                  @QueryParam(Constants.KEY) String key) {
+        if (key != null) {
+            return handleActionToken(key, execution, clientId, tabId);
+        }
+
+        event.event(EventType.FIND_EMAIL);
+
+        return findEmail(authSessionId, code, execution, clientId, tabId);
+    }
+
+    @Path(FIND_EMAIL_PATH)
+    @GET
+    public Response findEmailGET(@QueryParam(AUTH_SESSION_ID) String authSessionId, // optional, can get from cookie instead
+                                 @QueryParam(SESSION_CODE) String code,
+                                 @QueryParam(Constants.EXECUTION) String execution,
+                                 @QueryParam(Constants.CLIENT_ID) String clientId,
+                                 @QueryParam(Constants.TAB_ID) String tabId) {
+        ClientModel client = realm.getClientByClientId(clientId);
+        AuthenticationSessionModel authSession = new AuthenticationSessionManager(session).getCurrentAuthenticationSession(realm, client, tabId);
+
+        authSession.clearExecutionStatus();
+        authSession.setAuthenticatedUser(null);
+        // we allow applications to link to find email without going through OAuth or SAML handshakes
+        if (authSession == null && code == null) {
+            if (!realm.isFindEmailAllowed()) {
+                event.event(EventType.FIND_EMAIL);
+                event.error(Errors.NOT_ALLOWED);
+                return ErrorPage.error(session, authSession, Response.Status.BAD_REQUEST, Messages.FIND_EMAIL_NOT_ALLOWED);
+
+            }
+            authSession = createAuthenticationSessionForClient();
+            return processFindEmail(false, null, authSession, null);
+        }
+
+        event.event(EventType.FIND_EMAIL);
+        return findEmail(authSessionId, code, execution, clientId, tabId);
+    }
+
+
     AuthenticationSessionModel createAuthenticationSessionForClient()
-      throws UriBuilderException, IllegalArgumentException {
+        throws UriBuilderException, IllegalArgumentException {
         AuthenticationSessionModel authSession;
 
         // set up the account service as the endpoint to call.
@@ -416,6 +437,21 @@ public class LoginActionsService {
         }
 
         return processResetCredentials(checks.isActionRequest(), execution, authSession, null);
+    }
+
+    protected Response findEmail(String authSessionId, String code, String execution, String clientId, String tabId) {
+        SessionCodeChecks checks = checksForCode(authSessionId, code, execution, clientId, tabId, FIND_EMAIL_PATH);
+        if (!checks.verifyActiveAndValidAction(AuthenticationSessionModel.Action.AUTHENTICATE.name(), ClientSessionCode.ActionType.USER)) {
+            return checks.getResponse();
+        }
+        final AuthenticationSessionModel authSession = checks.getAuthenticationSession();
+
+        if (!realm.isFindEmailAllowed()) {
+            event.error(Errors.NOT_ALLOWED);
+            return ErrorPage.error(session, authSession, Response.Status.BAD_REQUEST, Messages.FIND_EMAIL_NOT_ALLOWED);
+        }
+
+        return processFindEmail(checks.isActionRequest(), execution, authSession, null);
     }
 
     /**
@@ -468,28 +504,28 @@ public class LoginActionsService {
             DefaultActionTokenKey aToken = tokenVerifier.getToken();
 
             event
-              .detail(Details.TOKEN_ID, aToken.getId())
-              .detail(Details.ACTION, aToken.getActionId())
-              .user(aToken.getUserId());
+                .detail(Details.TOKEN_ID, aToken.getId())
+                .detail(Details.ACTION, aToken.getActionId())
+                .user(aToken.getUserId());
 
             handler = resolveActionTokenHandler(aToken.getActionId());
             eventError = handler.getDefaultEventError();
             defaultErrorMessage = handler.getDefaultErrorMessage();
 
-            if (! realm.isEnabled()) {
+            if (!realm.isEnabled()) {
                 throw new ExplainedTokenVerificationException(aToken, Errors.REALM_DISABLED, Messages.REALM_NOT_ENABLED);
             }
-            if (! checkSsl()) {
+            if (!checkSsl()) {
                 throw new ExplainedTokenVerificationException(aToken, Errors.SSL_REQUIRED, Messages.HTTPS_REQUIRED);
             }
 
             TokenVerifier<DefaultActionTokenKey> verifier = tokenVerifier
-                    .withChecks(
-                            // Token introspection checks
-                            TokenVerifier.IS_ACTIVE,
-                            new TokenVerifier.RealmUrlCheck(Urls.realmIssuer(session.getContext().getUri().getBaseUri(), realm.getName())),
-                            ACTION_TOKEN_BASIC_CHECKS
-                    );
+                .withChecks(
+                    // Token introspection checks
+                    TokenVerifier.IS_ACTIVE,
+                    new TokenVerifier.RealmUrlCheck(Urls.realmIssuer(session.getContext().getUri().getBaseUri(), realm.getName())),
+                    ACTION_TOKEN_BASIC_CHECKS
+                );
 
             String kid = verifier.getHeader().getKeyId();
             String algorithm = verifier.getHeader().getAlgorithm().name();
@@ -538,7 +574,7 @@ public class LoginActionsService {
                 authSession = handler.startFreshAuthenticationSession(token, tokenContext);
                 tokenContext.setAuthenticationSession(authSession, true);
             } else if (tokenAuthSessionCompoundId == null ||
-              ! LoginActionsServiceChecks.doesAuthenticationSessionFromCookieMatchOneFromToken(tokenContext, authSession, tokenAuthSessionCompoundId)) {
+                !LoginActionsServiceChecks.doesAuthenticationSessionFromCookieMatchOneFromToken(tokenContext, authSession, tokenAuthSessionCompoundId)) {
                 // There exists an authentication session but no auth session ID was received in the action token
                 logger.debugf("Authentication session in progress but no authentication session ID was found in action token %s, restarting.", token.getId());
                 authenticationSessionManager.removeAuthenticationSession(realm, authSession, false);
@@ -552,18 +588,18 @@ public class LoginActionsService {
 
             LoginActionsServiceChecks.checkIsUserValid(token, tokenContext);
             LoginActionsServiceChecks.checkIsClientValid(token, tokenContext);
-            
+
             session.getContext().setClient(authSession.getClient());
 
             TokenVerifier.createWithoutSignature(token)
-              .withChecks(handler.getVerifiers(tokenContext))
-              .verify();
+                .withChecks(handler.getVerifiers(tokenContext))
+                .verify();
 
             authSession = tokenContext.getAuthenticationSession();
             event = tokenContext.getEvent();
             event.event(handler.eventType());
 
-            if (! handler.canUseTokenRepeatedly(token, tokenContext)) {
+            if (!handler.canUseTokenRepeatedly(token, tokenContext)) {
                 LoginActionsServiceChecks.checkTokenWasNotUsedYet(token, tokenContext);
                 authSession.setAuthNote(AuthenticationManager.INVALIDATE_ACTION_TOKEN, token.serializeKey());
             }
@@ -578,8 +614,8 @@ public class LoginActionsService {
         } catch (LoginActionsServiceException ex) {
             Response response = ex.getResponse();
             return response == null
-              ? handleActionTokenVerificationException(tokenContext, ex, eventError, defaultErrorMessage)
-              : response;
+                ? handleActionTokenVerificationException(tokenContext, ex, eventError, defaultErrorMessage)
+                : response;
         } catch (VerificationException ex) {
             return handleActionTokenVerificationException(tokenContext, ex, eventError, defaultErrorMessage);
         }
@@ -615,8 +651,8 @@ public class LoginActionsService {
         }
 
         event
-          .detail(Details.REASON, ex == null ? "<unknown>" : ex.getMessage())
-          .error(eventError == null ? Errors.INVALID_CODE : eventError);
+            .detail(Details.REASON, ex == null ? "<unknown>" : ex.getMessage())
+            .error(eventError == null ? Errors.INVALID_CODE : eventError);
         return ErrorPage.error(session, null, Response.Status.BAD_REQUEST, errorMessage == null ? Messages.INVALID_CODE : errorMessage);
     }
 
@@ -624,6 +660,12 @@ public class LoginActionsService {
         AuthenticationProcessor authProcessor = new ResetCredentialsActionTokenHandler.ResetCredsAuthenticationProcessor();
 
         return processFlow(actionRequest, execution, authSession, RESET_CREDENTIALS_PATH, realm.getResetCredentialsFlow(), errorMessage, authProcessor);
+    }
+
+    protected Response processFindEmail(boolean actionRequest, String execution, AuthenticationSessionModel authSession, String errorMessage) {
+        AuthenticationProcessor authProcessor = new FindEmailActionTokenHandler.FindEmailAuthenticationProcessor();
+
+        return processFlow(actionRequest, execution, authSession, FIND_EMAIL_PATH, realm.getFindEmailFlow(), errorMessage, authProcessor);
     }
 
 
@@ -645,7 +687,7 @@ public class LoginActionsService {
                                  @QueryParam(Constants.EXECUTION) String execution,
                                  @QueryParam(Constants.CLIENT_ID) String clientId,
                                  @QueryParam(Constants.TAB_ID) String tabId) {
-        return registerRequest(authSessionId, code, execution, clientId,  tabId,false);
+        return registerRequest(authSessionId, code, execution, clientId, tabId, false);
     }
 
 
@@ -662,7 +704,7 @@ public class LoginActionsService {
                                     @QueryParam(Constants.EXECUTION) String execution,
                                     @QueryParam(Constants.CLIENT_ID) String clientId,
                                     @QueryParam(Constants.TAB_ID) String tabId) {
-        return registerRequest(authSessionId, code, execution, clientId,  tabId,true);
+        return registerRequest(authSessionId, code, execution, clientId, tabId, true);
     }
 
 
@@ -761,7 +803,7 @@ public class LoginActionsService {
         }
 
         event.detail(Details.IDENTITY_PROVIDER, identityProviderAlias)
-                .detail(Details.IDENTITY_PROVIDER_USERNAME, brokerContext.getUsername());
+            .detail(Details.IDENTITY_PROVIDER_USERNAME, brokerContext.getUsername());
 
 
         AuthenticationProcessor processor = new AuthenticationProcessor() {
@@ -775,9 +817,9 @@ public class LoginActionsService {
                         logger.errorf("Challenge encountered when executing %s flow. Auth requests with prompt=none are incompatible with challenges", flowPath);
                         LoginProtocol protocol = session.getProvider(LoginProtocol.class, authSession.getProtocol());
                         protocol.setRealm(realm)
-                                .setHttpHeaders(headers)
-                                .setUriInfo(session.getContext().getUri())
-                                .setEventBuilder(event);
+                            .setHttpHeaders(headers)
+                            .setUriInfo(session.getContext().getUri())
+                            .setEventBuilder(event);
                         return protocol.sendError(authSession, Error.PASSIVE_INTERACTION_REQUIRED);
                     }
                 }
@@ -812,7 +854,7 @@ public class LoginActionsService {
         String clientId = authSession.getClient().getClientId();
         String tabId = authSession.getTabId();
         URI redirect = firstBrokerLogin ? Urls.identityProviderAfterFirstBrokerLogin(uriInfo.getBaseUri(), realm.getName(), accessCode.getOrGenerateCode(), clientId, tabId) :
-                Urls.identityProviderAfterPostBrokerLogin(uriInfo.getBaseUri(), realm.getName(), accessCode.getOrGenerateCode(), clientId, tabId) ;
+            Urls.identityProviderAfterPostBrokerLogin(uriInfo.getBaseUri(), realm.getName(), accessCode.getOrGenerateCode(), clientId, tabId);
         logger.debugf("Redirecting to '%s' ", redirect);
 
         return Response.status(302).location(redirect).build();
@@ -849,9 +891,9 @@ public class LoginActionsService {
         if (formData.containsKey("cancel")) {
             LoginProtocol protocol = session.getProvider(LoginProtocol.class, authSession.getProtocol());
             protocol.setRealm(realm)
-                    .setHttpHeaders(headers)
-                    .setUriInfo(session.getContext().getUri())
-                    .setEventBuilder(event);
+                .setHttpHeaders(headers)
+                .setUriInfo(session.getContext().getUri())
+                .setEventBuilder(event);
             Response response = protocol.sendError(authSession, Error.CONSENT_DENIED);
             event.error(Errors.REJECTED_BY_USER);
             return response;
@@ -898,16 +940,16 @@ public class LoginActionsService {
         OIDCResponseMode responseMode = OIDCResponseMode.parse(respMode, OIDCResponseType.parse(responseType));
 
         event.event(EventType.LOGIN).client(authSession.getClient())
-                .detail(Details.CODE_ID, authSession.getParentSession().getId())
-                .detail(Details.REDIRECT_URI, authSession.getRedirectUri())
-                .detail(Details.AUTH_METHOD, authSession.getProtocol())
-                .detail(Details.RESPONSE_TYPE, responseType)
-                .detail(Details.RESPONSE_MODE, responseMode.toString().toLowerCase());
+            .detail(Details.CODE_ID, authSession.getParentSession().getId())
+            .detail(Details.REDIRECT_URI, authSession.getRedirectUri())
+            .detail(Details.AUTH_METHOD, authSession.getProtocol())
+            .detail(Details.RESPONSE_TYPE, responseType)
+            .detail(Details.RESPONSE_MODE, responseMode.toString().toLowerCase());
 
         UserModel authenticatedUser = authSession.getAuthenticatedUser();
         if (authenticatedUser != null) {
             event.user(authenticatedUser)
-                    .detail(Details.USERNAME, authenticatedUser.getUsername());
+                .detail(Details.USERNAME, authenticatedUser.getUsername());
         }
 
         String attemptedUsername = authSession.getAuthNote(AbstractUsernameFormAuthenticator.ATTEMPTED_USERNAME);
@@ -916,7 +958,7 @@ public class LoginActionsService {
         }
 
         String rememberMe = authSession.getAuthNote(Details.REMEMBER_ME);
-        if (rememberMe==null || !rememberMe.equalsIgnoreCase("true")) {
+        if (rememberMe == null || !rememberMe.equalsIgnoreCase("true")) {
             rememberMe = "false";
         }
         event.detail(Details.REMEMBER_ME, rememberMe);
@@ -925,7 +967,7 @@ public class LoginActionsService {
         String identityProvider = userSessionNotes.get(Details.IDENTITY_PROVIDER);
         if (identityProvider != null) {
             event.detail(Details.IDENTITY_PROVIDER, identityProvider)
-                    .detail(Details.IDENTITY_PROVIDER_USERNAME, userSessionNotes.get(Details.IDENTITY_PROVIDER_USERNAME));
+                .detail(Details.IDENTITY_PROVIDER_USERNAME, userSessionNotes.get(Details.IDENTITY_PROVIDER_USERNAME));
         }
     }
 
@@ -968,7 +1010,7 @@ public class LoginActionsService {
         event.event(EventType.CUSTOM_REQUIRED_ACTION);
         event.detail(Details.CUSTOM_REQUIRED_ACTION, action);
 
-        RequiredActionFactory factory = (RequiredActionFactory)session.getKeycloakSessionFactory().getProviderFactory(RequiredActionProvider.class, action);
+        RequiredActionFactory factory = (RequiredActionFactory) session.getKeycloakSessionFactory().getProviderFactory(RequiredActionProvider.class, action);
         if (factory == null) {
             ServicesLogger.LOGGER.actionProviderNull();
             event.error(Errors.INVALID_CODE);
@@ -983,7 +1025,7 @@ public class LoginActionsService {
         RequiredActionProvider provider = null;
         try {
             provider = AuthenticationManager.createRequiredAction(context);
-        }  catch (AuthenticationFlowException e) {
+        } catch (AuthenticationFlowException e) {
             if (e.getResponse() != null) {
                 return e.getResponse();
             }
@@ -992,7 +1034,7 @@ public class LoginActionsService {
 
 
         Response response;
-        
+
         if (isCancelAppInitiatedAction(authSession, context)) {
             provider.initiatedActionCanceled(session, authSession);
             context.cancelAIA();
@@ -1027,34 +1069,34 @@ public class LoginActionsService {
 
         return BrowserHistoryHelper.getInstance().saveResponseAndRedirect(session, authSession, response, true, request);
     }
-    
+
     private Response interruptionResponse(RequiredActionContextResult context, AuthenticationSessionModel authSession, String action, Error error) {
         LoginProtocol protocol = context.getSession().getProvider(LoginProtocol.class, authSession.getProtocol());
         protocol.setRealm(context.getRealm())
-                .setHttpHeaders(context.getHttpRequest().getHttpHeaders())
-                .setUriInfo(context.getUriInfo())
-                .setEventBuilder(event);
+            .setHttpHeaders(context.getHttpRequest().getHttpHeaders())
+            .setUriInfo(context.getUriInfo())
+            .setEventBuilder(event);
 
         event.detail(Details.CUSTOM_REQUIRED_ACTION, action);
-        
+
         event.error(Errors.REJECTED_BY_USER);
         return protocol.sendError(authSession, error);
     }
-    
+
     private boolean isCancelAppInitiatedAction(AuthenticationSessionModel authSession, RequiredActionContextResult context) {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
-        
+
         boolean userRequestedCancelAIA = formData.getFirst(CANCEL_AIA) != null;
         boolean isAIARequest = authSession.getClientNote(IS_AIA_REQUEST) != null;
-        
+
         return isAIARequest && userRequestedCancelAIA;
     }
-    
+
     private boolean isSilentAIACancel(AuthenticationSessionModel authSession, RequiredActionContextResult context) {
         String silentCancel = authSession.getClientNote(IS_SILENT_CANCEL);
         boolean isSilentCancel = "true".equalsIgnoreCase(silentCancel);
         boolean isAIACancel = isCancelAppInitiatedAction(authSession, context);
-        
+
         return isSilentCancel && isAIACancel;
     }
 

@@ -36,7 +36,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.keycloak.utils.IdentityProviderUtils.splitNameFromName;
+import static org.keycloak.utils.IdentityProviderUtils.splitNames;
+import static org.keycloak.utils.IdentityProviderUtils.stripMobilePhoneNumber;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -49,7 +50,7 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     public static void populateLastNameFirstNameUsingName(MultivaluedMap<String, String> formData) {
         String inputName = formData.getFirst(Validation.FIELD_NAME);
         if (!Validation.isBlank(inputName)) {
-            List<String> splittedName = splitNameFromName(inputName);
+            List<String> splittedName = splitNames(inputName);
             if (splittedName.size() > 0) {
                 formData.putSingle(Validation.FIELD_FIRST_NAME, splittedName.get(0));
                 if (splittedName.size() > 1) {
@@ -69,7 +70,11 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     }
 
     public static void populateAttributes(IUser user, MultivaluedMap<String, String> formData) {
-        user.setSingleAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER, formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER));
+        String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
+        mobilePhoneNumber = stripMobilePhoneNumber(mobilePhoneNumber);
+        if (mobilePhoneNumber != null){
+            user.setSingleAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER, mobilePhoneNumber );
+        }
         user.setSingleAttribute(Validation.FIELD_COMPANY, formData.getFirst(Validation.FIELD_COMPANY));
         user.setSingleAttribute(Validation.FIELD_BIRTH_DATE, formData.getFirst(Validation.FIELD_BIRTH_DATE));
         user.setSingleAttribute(Validation.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, Validation.FIELD_SERVICE_AGREEMENT));

@@ -78,7 +78,7 @@ public class AuthorizationEndpoint extends AuthorizationEndpointBase {
     private static final Pattern VALID_CODE_CHALLENGE_PATTERN = Pattern.compile("^[0-9a-zA-Z\\-\\.~_]+$");
 
     private enum Action {
-        REGISTER, CODE, FORGOT_CREDENTIALS
+        REGISTER, CODE, FORGOT_CREDENTIALS, FIND_EMAIL
     }
 
     private ClientModel client;
@@ -149,6 +149,8 @@ public class AuthorizationEndpoint extends AuthorizationEndpointBase {
                 return buildRegister();
             case FORGOT_CREDENTIALS:
                 return buildForgotCredential();
+            case FIND_EMAIL:
+                return buildFindEmail();
             case CODE:
                 return buildAuthorizationCodeAuthorizationResponse();
         }
@@ -177,6 +179,18 @@ public class AuthorizationEndpoint extends AuthorizationEndpointBase {
 
         return this;
     }
+
+    public AuthorizationEndpoint findEmail() {
+        event.event(EventType.FIND_EMAIL);
+        action = Action.FIND_EMAIL;
+
+        if (!realm.isFindEmailAllowed()) {
+            throw new ErrorPageException(session, authenticationSession, Response.Status.BAD_REQUEST, Messages.FIND_EMAIL_NOT_ALLOWED);
+        }
+
+        return this;
+    }
+
 
     private void checkClient(String clientId) {
         if (clientId == null) {
@@ -469,6 +483,18 @@ public class AuthorizationEndpoint extends AuthorizationEndpointBase {
     }
 
     private Response buildForgotCredential() {
+        authManager.expireIdentityCookie(realm, session.getContext().getUri(), clientConnection);
+
+        AuthenticationFlowModel flow = realm.getResetCredentialsFlow();
+        String flowId = flow.getId();
+
+        AuthenticationProcessor processor = createProcessor(authenticationSession, flowId, LoginActionsService.RESET_CREDENTIALS_PATH);
+        authenticationSession.setClientNote(APP_INITIATED_FLOW, LoginActionsService.RESET_CREDENTIALS_PATH);
+
+        return processor.authenticate();
+    }
+
+    private Response buildFindEmail() {
         authManager.expireIdentityCookie(realm, session.getContext().getUri(), clientConnection);
 
         AuthenticationFlowModel flow = realm.getResetCredentialsFlow();

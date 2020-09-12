@@ -186,6 +186,9 @@
             <column name="RESET_PASSWORD_ALLOWED" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
+            <column name="FIND_EMAIL_ALLOWED" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
             <column name="SOCIAL" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>

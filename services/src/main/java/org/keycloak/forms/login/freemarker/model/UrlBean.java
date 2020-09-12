@@ -81,6 +81,11 @@ public class UrlBean {
         return Urls.loginResetCredentials(baseURI, realm).toString();
     }
 
+    public String getLoginFindEmailUrl() {
+        return Urls.loginFindEmail(baseURI, realm).toString();
+    }
+
+
     public String getLoginUsernameReminderUrl() {
         return Urls.loginUsernameReminder(baseURI, realm).toString();
     }

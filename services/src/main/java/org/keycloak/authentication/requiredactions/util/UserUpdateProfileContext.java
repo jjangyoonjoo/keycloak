@@ -19,14 +19,11 @@ package org.keycloak.authentication.requiredactions.util;
 
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
-import org.keycloak.models.utils.FormMessage;
-import org.keycloak.services.messages.Messages;
-import org.keycloak.services.validation.Validation;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.keycloak.utils.IdentityProviderUtils.splitNameFromName;
+import static org.keycloak.utils.IdentityProviderUtils.splitNames;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -102,7 +99,7 @@ public class UserUpdateProfileContext implements UpdateProfileContext {
     @Override
     public void setName(String name) {
         if (name != null && !name.isEmpty()) {
-            List<String> splittedName = splitNameFromName(name);
+            List<String> splittedName = splitNames(name);
             if (splittedName.size() > 0) {
                 setFirstName(splittedName.get(0));
                 if (splittedName.size() > 1) {

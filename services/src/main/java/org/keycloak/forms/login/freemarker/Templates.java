@@ -52,6 +52,8 @@ public class Templates {
                 return "info.ftl";
             case ERROR:
                 return "error.ftl";
+            case LOGIN_DISPLAY_EMAIL:
+                return "login-display-email.ftl";
             case LOGIN_UPDATE_PROFILE:
                 return "login-update-profile.ftl";
             case CODE:

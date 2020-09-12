@@ -48,6 +48,11 @@
             <div id="submitDiv" class="instsign-button instsign-content-disabled" onclick="validateAndSubmit('kc-reset-password-form')">
                 <span>${msg("reset-password-button")}</span>
             </div>
+            <div class="instsign-content-footer">
+                <div class="instsign-link-text instsign-content-footer-login" onclick="goToUrl('${url.loginUrl}')">
+                    <span>${msg("instsign-go-back-to-login-link")}</span>
+                </div>
+            </div>
         </div>
     </form>
 </@layout.registrationLayout>

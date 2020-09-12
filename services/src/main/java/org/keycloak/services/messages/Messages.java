@@ -130,6 +130,7 @@ public class Messages {
 
     public static final String REGISTRATION_NOT_ALLOWED = "registrationNotAllowedMessage";
     public static final String RESET_CREDENTIAL_NOT_ALLOWED = "resetCredentialNotAllowedMessage";
+    public static final String FIND_EMAIL_NOT_ALLOWED = "findEmailNotAllowedMessage";
 
     public static final String PERMISSION_NOT_APPROVED = "permissionNotApprovedMessage";
 

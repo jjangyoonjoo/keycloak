@@ -68,7 +68,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="mobilePhoneNumber" name="mobilePhoneNumber" type="text"
-                 autocomplete="off"
+                 autocomplete="mobilePhoneNumber"
                  onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(register.formData.mobilePhoneNumber!'')}"
                  placeholder="${msg("instsign-content-mobile-phone-number-placeholder")}"/>
