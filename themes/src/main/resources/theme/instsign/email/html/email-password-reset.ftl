@@ -163,7 +163,7 @@
       letter-spacing: normal;
       color: #686d76;
       background-color: #ffffff;
-      padding: 20px 0;
+      padding: 40px 0;
     }
 
     .document-email-footer-1 {
@@ -260,26 +260,26 @@
     </div>
     <div class="email-title">
       <div class="email-title-1">
-        <span>${msg("emailVerificationTitle","${name}")?no_esc}</span>
+        <span>${msg("emailPasswordResetTitle","${name}")?no_esc}</span>
       </div>
     </div>
     <div class="email-subtitle">
       <div class="email-subtitle-1">
-        <span>${msg("emailVerificationSubtitle")?no_esc}</span>
+        <span>${msg("emailPasswordResetSubtitle")?no_esc}</span>
       </div>
     </div>
-    <div class="email-button-container width-100">
+    <div class="email-button-container width-130">
       <a href="${mainButtonUrl}"
          target="_blank2">
         <div class="email-main-button">
-          <span>${msg("emailVerificationButton")?no_esc}</span>
+          <span>${msg("emailPasswordResetButton")?no_esc}</span>
         </div>
       </a>
     </div>
   </div>
   <div class="document-email-footer-container">
     <p class="document-email-footer-1">
-    <span>${msg("emailVerificationFooter")?no_esc}</span>
+      <span>${msg("emailPasswordResetFooter")?no_esc}</span>
     </p>
   </div>
 </div>

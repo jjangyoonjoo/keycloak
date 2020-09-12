@@ -17,16 +17,6 @@
 
 package org.keycloak.email.freemarker;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.common.util.ObjectUtil;
 import org.keycloak.email.EmailException;
@@ -43,9 +33,12 @@ import org.keycloak.sessions.AuthenticationSessionModel;
 import org.keycloak.theme.FreeMarkerException;
 import org.keycloak.theme.FreeMarkerUtil;
 import org.keycloak.theme.Theme;
-import org.keycloak.theme.ThemeProvider;
 import org.keycloak.theme.beans.LinkExpirationFormatterMethod;
 import org.keycloak.theme.beans.MessageFormatterMethod;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
@@ -116,8 +109,9 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
         addLinkInfoIntoAttributes(link, expirationInMinutes, attributes);
 
         attributes.put("realmName", getRealmName());
+        addCommonAttributes(attributes, link);
 
-        send("passwordResetSubject", "password-reset.ftl", attributes);
+        send("emailPasswordResetSubject", "email-password-reset.ftl", attributes);
     }
 
     @Override
@@ -148,7 +142,7 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
         attributes.put("identityProviderContext", brokerContext);
         attributes.put("identityProviderAlias", idpAlias);
 
-        List<Object> subjectAttrs = Arrays.<Object> asList(idpAlias);
+        List<Object> subjectAttrs = Arrays.<Object>asList(idpAlias);
         send("identityProviderLinkSubject", subjectAttrs, "identity-provider-link.ftl", attributes);
     }
 
@@ -170,16 +164,31 @@ public class FreeMarkerEmailTemplateProvider implements EmailTemplateProvider {
         addLinkInfoIntoAttributes(link, expirationInMinutes, attributes);
 
         attributes.put("realmName", getRealmName());
+        addCommonAttributes(attributes, link);
 
         send("emailVerificationSubject", "email-verification.ftl", attributes);
     }
 
+    protected void addCommonAttributes(Map<String, Object> attributes, String buttonLink) {
+        attributes.put("homeUrl", "https://app.instsign.com");
+        attributes.put("documentUrl", "https://app.instsign.com/my-document/inbox");
+        String name = "";
+        if (user.getLastName() != null && !user.getLastName().isEmpty()) {
+            name += user.getLastName();
+        }
+        if (user.getFirstName() != null && !user.getFirstName().isEmpty()) {
+            name += user.getFirstName();
+        }
+        attributes.put("name", name);
+        attributes.put("mainButtonUrl", buttonLink);
+    }
+
     /**
      * Add link info into template attributes.
-     * 
-     * @param link to add
+     *
+     * @param link                to add
      * @param expirationInMinutes to add
-     * @param attributes to add link info into
+     * @param attributes          to add link info into
      */
     protected void addLinkInfoIntoAttributes(String link, long expirationInMinutes, Map<String, Object> attributes) throws EmailException {
         attributes.put("link", link);
