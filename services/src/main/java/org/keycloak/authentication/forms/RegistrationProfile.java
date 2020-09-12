@@ -72,11 +72,18 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     public static void populateAttributes(IUser user, MultivaluedMap<String, String> formData) {
         String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
         mobilePhoneNumber = stripMobilePhoneNumber(mobilePhoneNumber);
-        if (mobilePhoneNumber != null){
-            user.setSingleAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER, mobilePhoneNumber );
+        if (mobilePhoneNumber != null) {
+            user.setSingleAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER, mobilePhoneNumber);
         }
-        user.setSingleAttribute(Validation.FIELD_COMPANY, formData.getFirst(Validation.FIELD_COMPANY));
-        user.setSingleAttribute(Validation.FIELD_BIRTH_DATE, formData.getFirst(Validation.FIELD_BIRTH_DATE));
+        String company = formData.getFirst(Validation.FIELD_COMPANY);
+        if (company != null && !company.isEmpty()) {
+            user.setSingleAttribute(Validation.FIELD_COMPANY, company);
+        }
+
+        String birthDate = formData.getFirst(Validation.FIELD_BIRTH_DATE);
+        if (birthDate != null && !birthDate.isEmpty()) {
+            user.setSingleAttribute(Validation.FIELD_BIRTH_DATE, birthDate);
+        }
         user.setSingleAttribute(Validation.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, Validation.FIELD_SERVICE_AGREEMENT));
         user.setSingleAttribute(Validation.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, Validation.FIELD_PRIVACY_AGREEMENT));
         user.setSingleAttribute(Validation.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, Validation.FIELD_MARKETING_AGREEMENT));

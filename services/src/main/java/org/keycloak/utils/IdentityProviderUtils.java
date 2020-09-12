@@ -241,6 +241,9 @@ public class IdentityProviderUtils {
             return null;
         }
         String returnValue = inputValue.trim();
+        if (returnValue.startsWith("+82 ")){
+            returnValue = "0" + returnValue.substring(4);
+        }
         returnValue = returnValue.replaceAll("-", "");
         returnValue = returnValue.replaceAll("/", "");
         returnValue = returnValue.replaceAll("\\(", "");

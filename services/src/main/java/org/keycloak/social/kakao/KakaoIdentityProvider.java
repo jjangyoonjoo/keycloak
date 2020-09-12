@@ -21,65 +21,87 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
-import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
+import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.UserModel;
 import org.keycloak.utils.IdentityProviderUtils;
+
+import static org.keycloak.utils.IdentityProviderUtils.stripMobilePhoneNumber;
 
 /**
  * @author <a href="mailto:yoonjoo.jang@gmail.com">YoonJoo jang</a>
  */
 public class KakaoIdentityProvider extends AbstractOAuth2IdentityProvider implements SocialIdentityProvider {
 
-	public static final String AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
-	public static final String TOKEN_URL = "https://kauth.kakao.com/oauth/token";
-	public static final String PROFILE_URL = "https://kapi.kakao.com/v2/user/me";
-	public static final String DEFAULT_SCOPE = "";
+    public static final String AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
+    public static final String TOKEN_URL = "https://kauth.kakao.com/oauth/token";
+    public static final String PROFILE_URL = "https://kapi.kakao.com/v2/user/me";
+    public static final String DEFAULT_SCOPE = "";
 
-	public KakaoIdentityProvider(KeycloakSession session, OAuth2IdentityProviderConfig config) {
-		super(session, config);
-		config.setAuthorizationUrl(AUTH_URL);
-		config.setTokenUrl(TOKEN_URL);
-		config.setUserInfoUrl(PROFILE_URL);
-	}
+    public KakaoIdentityProvider(KeycloakSession session, OAuth2IdentityProviderConfig config) {
+        super(session, config);
+        config.setAuthorizationUrl(AUTH_URL);
+        config.setTokenUrl(TOKEN_URL);
+        config.setUserInfoUrl(PROFILE_URL);
+    }
 
-	protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
-		try {
-			JsonNode raw = SimpleHttp.doGet(PROFILE_URL,session).auth(accessToken).asJson();
-			
-			JsonNode account = raw.get("kakao_account");
-			JsonNode profile = account.get("profile");
-			
-			logger.debug(raw.toString());
-			logger.debug(account.toString());
-			logger.debug(profile.toString());
-			
-			String id = getJsonProperty(raw, "id");
+    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
+        try {
+            JsonNode raw = SimpleHttp.doGet(PROFILE_URL, session).auth(accessToken).asJson();
 
-			BrokeredIdentityContext user = new BrokeredIdentityContext(id);
+            JsonNode account = raw.get("kakao_account");
+            JsonNode profile = account.get("profile");
 
-			String full_name = getJsonProperty(profile, "nickname");
-			IdentityProviderUtils.setName(user, full_name);
+            logger.debug(raw.toString());
+            logger.debug(account.toString());
+            logger.debug(profile.toString());
 
-			String email = getJsonProperty(account, "email");
-			user.setEmail(email);
-			user.setUsername(email);
-			
-			user.setIdpConfig(getConfig());
-			user.setIdp(this);
+            String id = getJsonProperty(raw, "id");
 
-			AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, account, getConfig().getAlias());
+            BrokeredIdentityContext user = new BrokeredIdentityContext(id);
 
-			return user;
-		} catch (Exception e) {
-			throw new IdentityBrokerException("Could not obtain user profile from kakao.", e);
-		}
-	}
+            String full_name = getJsonProperty(profile, "nickname");
+            IdentityProviderUtils.setName(user, full_name);
 
-	@Override
-	protected String getDefaultScopes() {
-		return DEFAULT_SCOPE;
-	}
+            String email = getJsonProperty(account, "email");
+            user.setEmail(email);
+            user.setUsername(email);
+
+            String phoneNumber = getJsonProperty(account, "phone_number");
+            if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                phoneNumber = stripMobilePhoneNumber(phoneNumber);
+                user.setUserAttribute(UserModel.MOBILE_PHONE_NUMBER, phoneNumber);
+            }
+            String birthYear = getJsonProperty(account, "birthyear");
+            String birthDay = getJsonProperty(account, "birthday");
+            if (birthYear != null && !birthYear.isEmpty() && birthDay != null && !birthDay.isEmpty()) {
+                birthYear = birthYear.trim();
+                birthDay = birthDay.trim();
+                if (birthYear.length() == 4 && birthDay.length() == 4) {
+                    String birthDate = birthYear + "/" + birthDay.substring(0, 2) + "/" + birthDay.substring(2);
+                    user.setUserAttribute(UserModel.BIRTH_DATE, birthDate);
+                }
+            }
+            String gender = getJsonProperty(account, "gender");
+            if (gender != null && !gender.isEmpty()) {
+                user.setUserAttribute(UserModel.GENDER, gender.trim());
+            }
+            user.setIdpConfig(getConfig());
+            user.setIdp(this);
+
+            AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, account, getConfig().getAlias());
+
+            return user;
+        } catch (Exception e) {
+            throw new IdentityBrokerException("Could not obtain user profile from kakao.", e);
+        }
+    }
+
+    @Override
+    protected String getDefaultScopes() {
+        return DEFAULT_SCOPE;
+    }
 }

@@ -214,7 +214,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                     messageKey = "login-social-"+identityProviderId;
                 }
                 if (messageKey != null) {
-                    this.attributes.put("socialName", getMessage(messageKey));
+                    attributes.put("socialName", getMessage(messageKey));
                 }
                 String name = "";
                 if (userCtx.getLastName() != null && !userCtx.getLastName().isEmpty()) {
@@ -223,8 +223,11 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 if (userCtx.getFirstName() != null && !userCtx.getFirstName().isEmpty()) {
                     name += userCtx.getFirstName();
                 }
-                this.attributes.put("name", name);
-
+                attributes.put(Validation.FIELD_NAME, name);
+                String mobilePhoneNumber = userCtx.getFirstAttribute(UserModel.MOBILE_PHONE_NUMBER);
+                if (mobilePhoneNumber != null && !mobilePhoneNumber.isEmpty()) {
+                    attributes.put(Validation.FIELD_MOBILE_PHONE_NUMBER, mobilePhoneNumber);
+                }
                 break;
             case LOGIN_IDP_LINK_CONFIRM:
             case LOGIN_IDP_LINK_EMAIL:

@@ -47,9 +47,9 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="mobilePhoneNumber" name="mobilePhoneNumber" type="text"
-                 autocomplete="off"
+                 autocomplete="mobilePhoneNumber"
                  onchange="isRequiredFieldValueEntered(this, true)"
-                 value="${(user.mobilePhoneNumber!'')}"
+                 value="${(mobilePhoneNumber!user.mobilePhoneNumber!'')}"
                  placeholder="${msg("instsign-content-mobile-phone-number-placeholder")}"/>
         </div>
       </div>
@@ -59,8 +59,8 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="company" name="company" type="text"
-                 autocomplete="off"
-                 value="${(user.company!'')}"
+                 autocomplete="company"
+                 value="${(company!user.company!'')}"
                  placeholder="${msg("instsign-content-company-placeholder")}"/>
         </div>
       </div>
