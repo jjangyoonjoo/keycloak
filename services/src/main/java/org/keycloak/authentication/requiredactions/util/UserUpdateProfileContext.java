@@ -26,7 +26,7 @@ import org.keycloak.services.validation.Validation;
 import java.util.List;
 import java.util.Map;
 
-import static org.keycloak.authentication.forms.RegistrationProfile.LAST_NAMES;
+import static org.keycloak.utils.IdentityProviderUtils.splitNameFromName;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -39,6 +39,14 @@ public class UserUpdateProfileContext implements UpdateProfileContext {
     public UserUpdateProfileContext(RealmModel realm, UserModel user) {
         this.realm = realm;
         this.user = user;
+    }
+
+    public String getFederationLink() {
+        return user.getFederationLink();
+    }
+
+    public String getServiceAccountClientLink() {
+        return user.getServiceAccountClientLink();
     }
 
     @Override
@@ -94,19 +102,12 @@ public class UserUpdateProfileContext implements UpdateProfileContext {
     @Override
     public void setName(String name) {
         if (name != null && !name.isEmpty()) {
-            boolean lastNameFound = false;
-            for (int i = 0; i < LAST_NAMES.length; i++) {
-                String temp = LAST_NAMES[i];
-                if (name.startsWith(temp)) {
-                    setLastName(temp);
-                    setFirstName(name.substring((temp.length())));
-                    lastNameFound = true;
-                    break;
+            List<String> splittedName = splitNameFromName(name);
+            if (splittedName.size() > 0) {
+                setFirstName(splittedName.get(0));
+                if (splittedName.size() > 1) {
+                    setLastName(splittedName.get(1));
                 }
-            }
-            if (!lastNameFound) {
-                setLastName(name.substring(0, 1));
-                setFirstName(name.substring(1));
             }
         } else {
             setLastName(null);

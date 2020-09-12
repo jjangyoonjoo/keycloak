@@ -36,6 +36,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.keycloak.utils.IdentityProviderUtils.splitNameFromName;
+
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
@@ -44,31 +46,15 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     public static final String PROVIDER_ID = "registration-profile-action";
     private static final Logger logger = Logger.getLogger(RegistrationProfile.class);
 
-    public static final String[] LAST_NAMES = new String[]{"남궁", "동방", "무본", "서문", "선우", "어금", "제갈", "황목", "황보"};
-
-
     public static void populateLastNameFirstNameUsingName(MultivaluedMap<String, String> formData) {
         String inputName = formData.getFirst(Validation.FIELD_NAME);
         if (!Validation.isBlank(inputName)) {
-            boolean lastNameFound = false;
-            for (int i = 0; i < LAST_NAMES.length; i++) {
-                String temp = LAST_NAMES[i];
-                if (inputName.startsWith(temp)) {
-                    formData.putSingle(Validation.FIELD_LAST_NAME, temp);
-                    formData.putSingle(Validation.FIELD_FIRST_NAME, inputName.substring((temp.length())));
-                    lastNameFound = true;
-                    break;
+            List<String> splittedName = splitNameFromName(inputName);
+            if (splittedName.size() > 0) {
+                formData.putSingle(Validation.FIELD_FIRST_NAME, splittedName.get(0));
+                if (splittedName.size() > 1) {
+                    formData.putSingle(Validation.FIELD_LAST_NAME, splittedName.get(1));
                 }
-            }
-            if (!lastNameFound) {
-                if (inputName.length() > 4){
-                    formData.remove(Validation.FIELD_LAST_NAME);
-                    formData.putSingle(Validation.FIELD_FIRST_NAME, inputName);
-                } else {
-                    formData.putSingle(Validation.FIELD_LAST_NAME, inputName.substring(0, 1));
-                    formData.putSingle(Validation.FIELD_FIRST_NAME, inputName.substring(1));
-                }
-
             }
         }
     }

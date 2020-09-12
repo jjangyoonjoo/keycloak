@@ -18,6 +18,7 @@ package org.keycloak.forms.login.freemarker;
 
 import org.jboss.logging.Logger;
 import org.keycloak.OAuth2Constants;
+import org.keycloak.authentication.authenticators.broker.util.SerializedBrokeredIdentityContext;
 import org.keycloak.authentication.requiredactions.util.UpdateProfileContext;
 import org.keycloak.authentication.requiredactions.util.UserUpdateProfileContext;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
@@ -43,6 +44,10 @@ import org.keycloak.services.Urls;
 import org.keycloak.services.messages.Messages;
 import org.keycloak.services.resources.LoginActionsService;
 import org.keycloak.sessions.AuthenticationSessionModel;
+import org.keycloak.social.facebook.FacebookIdentityProvider;
+import org.keycloak.social.google.GoogleIdentityProvider;
+import org.keycloak.social.kakao.KakaoIdentityProvider;
+import org.keycloak.social.naver.NaverIdentityProvider;
 import org.keycloak.theme.BrowserSecurityHeaderSetup;
 import org.keycloak.theme.FreeMarkerException;
 import org.keycloak.theme.FreeMarkerUtil;
@@ -66,6 +71,7 @@ import java.util.*;
 
 
 import static org.keycloak.models.UserModel.RequiredAction.UPDATE_PASSWORD;
+import static org.keycloak.models.UserModel.RequiredAction.UPDATE_PROFILE;
 import static org.keycloak.services.managers.AuthenticationManager.IS_AIA_REQUEST;
 
 /**
@@ -89,7 +95,9 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
     protected MultivaluedMap<String, String> formData;
 
     protected KeycloakSession session;
-    /** authenticationSession can be null for some renderings, mainly error pages */
+    /**
+     * authenticationSession can be null for some renderings, mainly error pages
+     */
     protected AuthenticationSessionModel authenticationSession;
     protected RealmModel realm;
     protected ClientModel client;
@@ -180,11 +188,13 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
         if (status != null) {
             attributes.put("statusCode", status.getStatusCode());
         }
-        
+
         if (authenticationSession != null && authenticationSession.getClientNote(IS_AIA_REQUEST) != null) {
             attributes.put("isAppInitiatedAction", true);
         }
-        
+
+
+
         switch (page) {
             case LOGIN_CONFIG_TOTP:
                 attributes.put("totp", new TotpBean(session, realm, user, uriInfo.getRequestUriBuilder()));
@@ -192,6 +202,27 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
             case LOGIN_UPDATE_PROFILE:
                 UpdateProfileContext userCtx = (UpdateProfileContext) attributes.get(LoginFormsProvider.UPDATE_PROFILE_CONTEXT_ATTR);
                 attributes.put("user", new ProfileBean(userCtx, formData));
+
+                String messageKey = null;
+                String identityProviderId = null;
+                if (userCtx instanceof SerializedBrokeredIdentityContext){
+                    identityProviderId = ((SerializedBrokeredIdentityContext)userCtx).getIdentityProviderId();
+                }
+                if (identityProviderId != null && !identityProviderId.isEmpty()){
+                    messageKey = "login-social-"+identityProviderId;
+                }
+                if (messageKey != null) {
+                    this.attributes.put("socialName", getMessage(messageKey));
+                }
+                String name = "";
+                if (userCtx.getLastName() != null && !userCtx.getLastName().isEmpty()) {
+                    name += userCtx.getLastName();
+                }
+                if (userCtx.getFirstName() != null && !userCtx.getFirstName().isEmpty()) {
+                    name += userCtx.getFirstName();
+                }
+                this.attributes.put("name", name);
+
                 break;
             case LOGIN_IDP_LINK_CONFIRM:
             case LOGIN_IDP_LINK_EMAIL:
@@ -207,7 +238,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 break;
             case OAUTH_GRANT:
                 attributes.put("oauth",
-                        new OAuthGrantBean(accessCode, client, clientScopesRequested));
+                    new OAuthGrantBean(accessCode, client, clientScopesRequested));
                 attributes.put("advancedMsg", new AdvancedMessageFormatterMethod(locale, messagesBundle));
                 break;
             case CODE:
@@ -223,7 +254,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
         return processTemplate(theme, Templates.getTemplate(page), locale);
     }
-    
+
     @Override
     public Response createForm(String form) {
         Theme theme;
@@ -247,9 +278,9 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
     /**
      * Prepare base uri builder for later use
-     * 
+     *
      * @param resetRequestUriParams - for some reason Resteasy 2.3.7 doesn't like query params and form params with the same name and will null out the code form param, so we have to reset them for some pages
-     * @return base uri builder  
+     * @return base uri builder
      */
     protected UriBuilder prepareBaseUriBuilder(boolean resetRequestUriParams) {
         String requestURI = uriInfo.getBaseUri().getPath();
@@ -269,7 +300,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
     /**
      * Get Theme used for page rendering.
-     * 
+     *
      * @return theme for page rendering, never null
      * @throws IOException in case of Theme loading problem
      */
@@ -279,8 +310,8 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
     /**
      * Load message bundle and place it into <code>msg</code> template attribute. Also load Theme properties and place them into <code>properties</code> template attribute.
-     * 
-     * @param theme actual Theme to load bundle from
+     *
+     * @param theme  actual Theme to load bundle from
      * @param locale to load bundle for
      * @return message bundle for other use
      */
@@ -305,8 +336,8 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
     /**
      * Handle messages to be shown on the page - set them to template attributes
-     * 
-     * @param locale to be used for message text loading
+     *
+     * @param locale         to be used for message text loading
      * @param messagesBundle to be used for message text loading
      * @see #messageType
      * @see #messages
@@ -364,13 +395,12 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
     /**
      * Create common attributes used in all templates.
-     * 
-     * @param theme actual Theme used (provided by <code>getTheme()</code>) 
-     * @param locale actual locale
+     *
+     * @param theme          actual Theme used (provided by <code>getTheme()</code>)
+     * @param locale         actual locale
      * @param messagesBundle actual message bundle (provided by <code>handleThemeResources()</code>)
      * @param baseUriBuilder actual base uri builder (provided by <code>prepareBaseUriBuilder()</code>)
-     * @param page in case if common page is rendered, is null if called from <code>createForm()</code>
-     * 
+     * @param page           in case if common page is rendered, is null if called from <code>createForm()</code>
      */
     protected void createCommonAttributes(Theme theme, Locale locale, Properties messagesBundle, UriBuilder baseUriBuilder, LoginFormsPages page) {
         URI baseUri = baseUriBuilder.build();
@@ -412,7 +442,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                     }
                 } else {
                     b = UriBuilder.fromUri(baseUri)
-                            .path(uriInfo.getPath());
+                        .path(uriInfo.getPath());
                 }
 
                 if (execution != null) {
@@ -433,10 +463,10 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
 
     /**
      * Process FreeMarker template and prepare Response. Some fields are used for rendering also.
-     * 
-     * @param theme to be used (provided by <code>getTheme()</code>)
+     *
+     * @param theme        to be used (provided by <code>getTheme()</code>)
      * @param templateName name of the template to be rendered
-     * @param locale to be used
+     * @param locale       to be used
      * @return Response object to be returned to the browser, never null
      */
     protected Response processTemplate(Theme theme, String templateName, Locale locale) {

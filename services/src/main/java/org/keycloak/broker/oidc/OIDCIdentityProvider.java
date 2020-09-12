@@ -34,12 +34,7 @@ import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.jose.jws.JWSInputException;
 import org.keycloak.jose.jws.crypto.RSAProvider;
 import org.keycloak.keys.loader.PublicKeyStorageManager;
-import org.keycloak.models.ClientModel;
-import org.keycloak.models.FederatedIdentityModel;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.UserModel;
-import org.keycloak.models.UserSessionModel;
+import org.keycloak.models.*;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.IDToken;
 import org.keycloak.representations.JsonWebToken;
@@ -55,14 +50,11 @@ import org.keycloak.util.JsonSerialization;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.security.PublicKey;
+
+import static org.keycloak.utils.IdentityProviderUtils.populateLastNameFirstNameUsingName;
 
 /**
  * @author Pedro Igor
@@ -134,7 +126,7 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
     protected void backchannelLogout(UserSessionModel userSession, String idToken) {
         String sessionId = userSession.getId();
         UriBuilder logoutUri = UriBuilder.fromUri(getConfig().getLogoutUrl())
-                .queryParam("state", sessionId);
+            .queryParam("state", sessionId);
         logoutUri.queryParam("id_token_hint", idToken);
         String url = logoutUri.build().toString();
         try {
@@ -159,12 +151,12 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
         } else {
             String sessionId = userSession.getId();
             UriBuilder logoutUri = UriBuilder.fromUri(getConfig().getLogoutUrl())
-                    .queryParam("state", sessionId);
+                .queryParam("state", sessionId);
             if (idToken != null) logoutUri.queryParam("id_token_hint", idToken);
             String redirect = RealmsResource.brokerUrl(uriInfo)
-                    .path(IdentityBrokerService.class, "getEndpoint")
-                    .path(OIDCEndpoint.class, "logoutResponse")
-                    .build(realm.getName(), getConfig().getAlias()).toString();
+                .path(IdentityBrokerService.class, "getEndpoint")
+                .path(OIDCEndpoint.class, "logoutResponse")
+                .build(realm.getName(), getConfig().getAlias()).toString();
             logoutUri.queryParam("post_logout_redirect_uri", redirect);
             Response response = Response.status(302).location(logoutUri.build()).build();
             return response;
@@ -182,10 +174,10 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
         String refreshToken = userSession.getNote(FEDERATED_REFRESH_TOKEN);
         try {
             return SimpleHttp.doPost(getConfig().getTokenUrl(), session)
-                    .param("refresh_token", refreshToken)
-                    .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_REFRESH_TOKEN)
-                    .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
-                    .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret()).asString();
+                .param("refresh_token", refreshToken)
+                .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_REFRESH_TOKEN)
+                .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
+                .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret()).asString();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -232,10 +224,10 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
                     return exchangeTokenExpired(uriInfo, authorizedClient, tokenUserSession, tokenSubject);
                 }
                 String response = SimpleHttp.doPost(getConfig().getTokenUrl(), session)
-                        .param("refresh_token", tokenResponse.getRefreshToken())
-                        .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_REFRESH_TOKEN)
-                        .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
-                        .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret()).asString();
+                    .param("refresh_token", tokenResponse.getRefreshToken())
+                    .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_REFRESH_TOKEN)
+                    .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
+                    .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret()).asString();
                 if (response.contains("error")) {
                     logger.debugv("Error refreshing token, refresh token expiration?: {0}", response);
                     model.setToken(null);
@@ -255,7 +247,7 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
                     newResponse.setRefreshExpiresIn(tokenResponse.getRefreshExpiresIn());
                 }
                 response = JsonSerialization.writeValueAsString(newResponse);
-                
+
                 String oldToken = tokenUserSession.getNote(FEDERATED_ACCESS_TOKEN);
                 if (oldToken != null && oldToken.equals(tokenResponse.getToken())) {
                     int accessTokenExpiration = newResponse.getExpiresIn() > 0 ? Time.currentTime() + (int) newResponse.getExpiresIn() : 0;
@@ -309,10 +301,10 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
                 return Response.ok(tokenResponse).type(MediaType.APPLICATION_JSON_TYPE).build();
             }
             String response = SimpleHttp.doPost(getConfig().getTokenUrl(), session)
-                    .param("refresh_token", refreshToken)
-                    .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_REFRESH_TOKEN)
-                    .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
-                    .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret()).asString();
+                .param("refresh_token", refreshToken)
+                .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_REFRESH_TOKEN)
+                .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
+                .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret()).asString();
             if (response.contains("error")) {
                 logger.debugv("Error refreshing token, refresh token expiration?: {0}", response);
                 event.detail(Details.REASON, "requested_issuer token expired");
@@ -422,6 +414,7 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
                     name = getJsonProperty(userInfo, "name");
                     preferredUsername = getUsernameFromUserInfo(userInfo);
                     email = getJsonProperty(userInfo, "email");
+                    populateLastNameFirstNameUsingName(identity, name);
                     AbstractJsonUserAttributeMapper.storeUserProfileForMapper(identity, userInfo, getConfig().getAlias());
                 }
             }
@@ -472,7 +465,7 @@ public class OIDCIdentityProvider extends AbstractOAuth2IdentityProvider<OIDCIde
             }
             throw new IdentityBrokerException("Failed to invoke url [" + url + "]: " + msg);
         }
-        return  response;
+        return response;
     }
 
     private String verifyAccessToken(AccessTokenResponse tokenResponse) {

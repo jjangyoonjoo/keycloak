@@ -15,10 +15,13 @@
     <input name="email" type="hidden"  value="${(user.email!'')}">
     <div class="instsign-content instsign-content-register">
       <div class="instsign-content-title">
-          ${msg("update-profile-content-title")}
+          ${msg("login-update-profile-content-title")}
+      </div>
+      <div class="instsign-content-subtitle">
+          ${msg("login-update-profile-content-subtitle", "${(socialName!'')}")}
       </div>
       <br/>
-      <div class="instsign-content-input-group margin-top-30">
+      <div class="instsign-content-input-group margin-top-20">
         <div class="instsign-content-input-label">
           <span>${msg("register-content-email")}</span>
         </div>
@@ -34,7 +37,7 @@
         <div class="instsign-content-input-text">
           <input id="name" name="name" type="text"
                  onchange="isRequiredFieldValueEntered(this, true)"
-                 value="${(user.name!'')}"
+                 value="${(name!user.name!'')}"
                  placeholder="${msg("instsign-content-name-placeholder")}"/>
         </div>
       </div>
