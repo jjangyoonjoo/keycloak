@@ -202,9 +202,11 @@
             specialCharacterExists = true;
             validCount++;
           }
-          if (inputPassword.length >= 8) {
+          if (inputPassword.length >= 8 && inputPassword.length <= 12) {
             lengthGreaterThanSeven = true;
             validCount++;
+          } else {
+              validCount = 0;
           }
         }
         console.log('validatePassword:' + inputPassword, validCount, numberExists, lowerCaseAlphabetExists, upperCaseAlphabetExists, specialCharacterExists, lengthGreaterThanSeven);
@@ -215,7 +217,7 @@
           document.getElementById('instsign-password-strength-group').classList.remove("instsign-content-hide");
         }
         var spanElement = document.getElementById('instsign-password-strength-value-span');
-        if (validCount === 5) {
+        if (validCount >= 4) {
           spanElement.classList.remove("instsign-content-weak");
           spanElement.classList.remove("instsign-content-normal");
           spanElement.classList.remove("instsign-content-strong");
