@@ -73,7 +73,7 @@ Before contributing to Keycloak please read our [contributing guidelines](CONTRI
 
 
 ## Docker Theme Copy
-docker cp themes/src/main/resources/theme/instsign dcfc003bf641:/opt/jboss/keycloak/themes/instsign
+sudo docker cp themes/src/main/resources/theme/instsign dcfc003bf641:/opt/jboss/keycloak/themes/instsign
 
 ## Docker Theme Test
 cd testsuite/utils
