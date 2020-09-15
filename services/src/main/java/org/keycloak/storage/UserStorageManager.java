@@ -718,11 +718,6 @@ public class UserStorageManager implements UserProvider, OnUserCache, OnCreateCo
     }
 
     @Override
-    public boolean validate(RealmModel realm, UserPasswordRepresentation userPasswordRepresentation) {
-        return localStorage().validate(realm, userPasswordRepresentation);
-    }
-
-    @Override
     public void removeImportedUsers(RealmModel realm, String storageProviderId) {
         localStorage().removeImportedUsers(realm, storageProviderId);
     }

@@ -859,11 +859,6 @@ public class UserCacheSession implements UserCache {
     }
 
     @Override
-    public boolean validate(RealmModel realm, UserPasswordRepresentation userPasswordRepresentation) {
-        return getDelegate().validate(realm, userPasswordRepresentation);
-    }
-
-    @Override
     public void removeImportedUsers(RealmModel realm, String storageProviderId) {
         getDelegate().removeImportedUsers(realm, storageProviderId);
         clear();

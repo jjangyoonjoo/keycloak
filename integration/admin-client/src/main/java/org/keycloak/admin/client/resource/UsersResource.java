@@ -124,10 +124,4 @@ public interface UsersResource {
     @DELETE
     Response delete(@PathParam("id") String id);
 
-    @POST
-    @Path("password/validate")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    boolean validate(UserPasswordRepresentation userPasswordRepresentation);
-
 }

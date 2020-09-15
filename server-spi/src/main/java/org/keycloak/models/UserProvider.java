@@ -99,6 +99,4 @@ public interface UserProvider extends Provider,
 
     void preRemove(RealmModel realm, ComponentModel component);
 
-    boolean validate(RealmModel realm, UserPasswordRepresentation userPasswordRepresentation);
-
 }

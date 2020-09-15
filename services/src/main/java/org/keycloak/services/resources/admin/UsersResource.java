@@ -272,13 +272,5 @@ public class UsersResource {
         return results;
     }
 
-    @POST
-    @Path("password/validate")
-    @NoCache
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean validate(UserPasswordRepresentation userPasswordRepresentation){
-//        auth.users().requireView();
-        return session.users().validate(realm, userPasswordRepresentation);
-    }
+
 }
