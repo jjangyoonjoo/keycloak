@@ -446,7 +446,17 @@ module.controller('RealmThemeCtrl', function($scope, Current, Realm, realm, serv
             }
 
             if (!$scope.realm.defaultLocale || supportedLocales.indexOf($scope.realm.defaultLocale) == -1) {
-                $scope.realm.defaultLocale = 'en';
+                var localLocale = "";
+                if (navigator.languages != undefined)
+                    localLocale = navigator.languages[0];
+                else
+                    localLocale = navigator.language;
+                if (localLocale !== undefined && localLocale !== null && localLocale.length > 0){
+                    $scope.realm.defaultLocale = localLocale;
+                } else {
+                    $scope.realm.defaultLocale = 'ko';
+                }
+
             }
         }
     }
