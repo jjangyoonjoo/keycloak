@@ -84,6 +84,13 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         if (birthDate != null && !birthDate.isEmpty()) {
             user.setSingleAttribute(Validation.FIELD_BIRTH_DATE, birthDate);
         }
+        String referralCode = formData.getFirst(Validation.FIELD_REFERRAL_CODE);
+        if (referralCode != null){
+            referralCode = referralCode.trim();
+            if (!referralCode.isEmpty()){
+                user.setSingleAttribute(Validation.FIELD_REFERRAL_CODE, getBooleanValue(formData, Validation.FIELD_REFERRAL_CODE));
+            }
+        }
         user.setSingleAttribute(Validation.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, Validation.FIELD_SERVICE_AGREEMENT));
         user.setSingleAttribute(Validation.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, Validation.FIELD_PRIVACY_AGREEMENT));
         user.setSingleAttribute(Validation.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, Validation.FIELD_MARKETING_AGREEMENT));
@@ -109,9 +116,9 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
 
         Validation.validateProfileForm(formData, errors);
         String email = formData.getFirst(Validation.FIELD_EMAIL);
-        String password = formData.getFirst(Validation.FIELD_PASSWORD);
-        String name = formData.getFirst(Validation.FIELD_NAME);
-        String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
+//        String password = formData.getFirst(Validation.FIELD_PASSWORD);
+//        String name = formData.getFirst(Validation.FIELD_NAME);
+//        String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
 
         boolean emailValid = true;
         if (Validation.isBlank(email)) {

@@ -85,6 +85,16 @@
                  placeholder="${msg("instsign-content-company-placeholder")}"/>
         </div>
       </div>
+      <div class="instsign-content-input-group margin-top-20">
+        <div class="instsign-content-input-label">
+          <span>${msg("register-content-referral-code")}</span>
+        </div>
+        <div class="instsign-content-input-text">
+          <input id="referralCode" name="referralCode" type="text"
+                 autocomplete="off"
+                 value="${(register.formData.referralCode!'')}"/>
+        </div>
+      </div>
       <div id="register-agreement-section" class="register-agreement">
         <div class="register-agreement-select">
           <div class="register-agreement-checkbox" onclick="onAllAgreementClick()">

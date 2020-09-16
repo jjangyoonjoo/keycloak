@@ -73,7 +73,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         List<FormMessage> errors = new ArrayList<>();
         context.getEvent().detail(Details.REGISTER_METHOD, "form");
 
-        String inputName = formData.getFirst(Validation.FIELD_NAME);
+//        String inputName = formData.getFirst(Validation.FIELD_NAME);
 
         populateLastNameFirstNameUsingName(formData);
 
@@ -81,9 +81,10 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
 
         String email = formData.getFirst(Validation.FIELD_EMAIL);
         String username = formData.getFirst(Validation.FIELD_USERNAME);
-        String password = formData.getFirst(Validation.FIELD_PASSWORD);
-        String name = formData.getFirst(Validation.FIELD_NAME);
-        String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
+//        String password = formData.getFirst(Validation.FIELD_PASSWORD);
+//        String name = formData.getFirst(Validation.FIELD_NAME);
+//        String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
+//        String referralCode = formData.getFirst(Validation.FIELD_REFERRAL_CODE);
 
         context.getEvent().detail(Details.USERNAME, username);
         context.getEvent().detail(Details.EMAIL, email);
@@ -146,8 +147,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         }
         context.getEvent().detail(Details.USERNAME, username)
                 .detail(Details.REGISTER_METHOD, "form")
-                .detail(Details.EMAIL, email)
-        ;
+                .detail(Details.EMAIL, email);
         UserModel user = context.getSession().users().addUser(context.getRealm(), username);
         user.setEnabled(true);
 
