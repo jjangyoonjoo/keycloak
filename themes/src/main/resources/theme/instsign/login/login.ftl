@@ -42,17 +42,17 @@
                       </div>
                     </#if>
                 </#list>
-                <#list social.providers as p>
-                    <#if p.alias == "facebook">
-                      <div class="instsign-login-social-link-${p.alias}" onclick="goToUrl('${p.loginUrl}')">
-                        <div class="instsign-login-social-link-${p.alias}-svg">
-                        </div>
-                        <div class="instsign-login-social-link-text">
-                          <span>${msg("login-social-${p.alias}")}</span>
-                        </div>
-                      </div>
-                    </#if>
-                </#list>
+<#--                <#list social.providers as p>-->
+<#--                    <#if p.alias == "facebook">-->
+<#--                      <div class="instsign-login-social-link-${p.alias}" onclick="goToUrl('${p.loginUrl}')">-->
+<#--                        <div class="instsign-login-social-link-${p.alias}-svg">-->
+<#--                        </div>-->
+<#--                        <div class="instsign-login-social-link-text">-->
+<#--                          <span>${msg("login-social-${p.alias}")}</span>-->
+<#--                        </div>-->
+<#--                      </div>-->
+<#--                    </#if>-->
+<#--                </#list>-->
             </div>
           </#if>
       </div>
