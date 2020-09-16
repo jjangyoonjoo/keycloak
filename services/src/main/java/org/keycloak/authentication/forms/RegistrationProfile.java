@@ -108,6 +108,10 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
                 user.setSingleAttribute(Validation.FIELD_REFERRED_BY_CODE, referredByCode);
             }
         }
+        String currentLocale = user.getFirstAttribute(Validation.FIELD_LOCALE);
+        if (currentLocale == null || currentLocale.isEmpty()) {
+            user.setSingleAttribute(Validation.FIELD_LOCALE, "ko");
+        }
         String referralCode = generateReferralCode();
         user.setSingleAttribute(Validation.FIELD_REFERRAL_CODE, referralCode);
         user.setSingleAttribute(Validation.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, Validation.FIELD_SERVICE_AGREEMENT));
