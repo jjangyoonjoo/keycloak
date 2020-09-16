@@ -90,7 +90,7 @@
           <span>${msg("register-content-referral-code")}</span>
         </div>
         <div class="instsign-content-input-text">
-          <input id="referralCode" name="referralCode" type="text"
+          <input id="referredByCode" name="referredByCode" type="text"
                  autocomplete="off"
                  value="${(register.formData.referralCode!'')}"/>
         </div>

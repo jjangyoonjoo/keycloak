@@ -42,6 +42,7 @@ public class Validation {
     public static final String FIELD_USERNAME = "username";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_REFERRAL_CODE = "referralCode";
+    public static final String FIELD_REFERRED_BY_CODE = "referredByCode";
     public static final String FIELD_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
     public static final String FIELD_ENTER_REQUIRED = "enterRequired";
     public static final String FIELD_BIRTH_DATE = "birthDate";

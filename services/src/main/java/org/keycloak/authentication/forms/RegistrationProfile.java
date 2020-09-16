@@ -17,6 +17,7 @@
 
 package org.keycloak.authentication.forms;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.authentication.FormAction;
@@ -84,13 +85,16 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         if (birthDate != null && !birthDate.isEmpty()) {
             user.setSingleAttribute(Validation.FIELD_BIRTH_DATE, birthDate);
         }
-        String referralCode = formData.getFirst(Validation.FIELD_REFERRAL_CODE);
-        if (referralCode != null){
-            referralCode = referralCode.trim();
-            if (!referralCode.isEmpty()){
-                user.setSingleAttribute(Validation.FIELD_REFERRAL_CODE, getBooleanValue(formData, Validation.FIELD_REFERRAL_CODE));
+        String referredByCode = formData.getFirst(Validation.FIELD_REFERRED_BY_CODE);
+        if (referredByCode != null){
+            referredByCode = referredByCode.trim();
+            if (!referredByCode.isEmpty()){
+                user.setSingleAttribute(Validation.FIELD_REFERRED_BY_CODE, referredByCode);
             }
         }
+        String referralCode = RandomStringUtils.randomAlphanumeric(6);
+        referralCode = referralCode.toUpperCase();
+        user.setSingleAttribute(Validation.FIELD_REFERRAL_CODE, referralCode);
         user.setSingleAttribute(Validation.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, Validation.FIELD_SERVICE_AGREEMENT));
         user.setSingleAttribute(Validation.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, Validation.FIELD_PRIVACY_AGREEMENT));
         user.setSingleAttribute(Validation.FIELD_MARKETING_AGREEMENT, getBooleanValue(formData, Validation.FIELD_MARKETING_AGREEMENT));
