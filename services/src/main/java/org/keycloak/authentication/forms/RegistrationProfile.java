@@ -17,7 +17,7 @@
 
 package org.keycloak.authentication.forms;
 
-import org.apache.commons.lang.RandomStringUtils;
+import java.util.Random;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.authentication.FormAction;
@@ -70,6 +70,22 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         populateAttributes(user, formData);
     }
 
+    public static String generateReferralCode() {
+        int leftLimit = 48; // numeral '0'
+//        int rightLimit = 122; // letter 'z'
+        int rightLimit = 90; // letter 'Z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+            .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+            .limit(targetStringLength)
+            .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+            .toString();
+
+        return generatedString.toUpperCase();
+    }
+
     public static void populateAttributes(IUser user, MultivaluedMap<String, String> formData) {
         String mobilePhoneNumber = formData.getFirst(Validation.FIELD_MOBILE_PHONE_NUMBER);
         mobilePhoneNumber = stripMobilePhoneNumber(mobilePhoneNumber);
@@ -92,8 +108,7 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
                 user.setSingleAttribute(Validation.FIELD_REFERRED_BY_CODE, referredByCode);
             }
         }
-        String referralCode = RandomStringUtils.randomAlphanumeric(6);
-        referralCode = referralCode.toUpperCase();
+        String referralCode = generateReferralCode();
         user.setSingleAttribute(Validation.FIELD_REFERRAL_CODE, referralCode);
         user.setSingleAttribute(Validation.FIELD_SERVICE_AGREEMENT, getBooleanValue(formData, Validation.FIELD_SERVICE_AGREEMENT));
         user.setSingleAttribute(Validation.FIELD_PRIVACY_AGREEMENT, getBooleanValue(formData, Validation.FIELD_PRIVACY_AGREEMENT));
