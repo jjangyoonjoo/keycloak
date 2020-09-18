@@ -28,6 +28,7 @@ public class Messages {
 
     public static final String INVALID_EMAIL = "invalidEmailMessage";
     public static final String INVALID_MOBILE_PHONE_NUMBER = "invalidMobilePhoneNumberMessage";
+    public static final String INVALID_PASSWORD_STRENGTH = "invalidPasswordStrengthMessage";
 
     public static final String ACCOUNT_DISABLED = "accountDisabledMessage";
 

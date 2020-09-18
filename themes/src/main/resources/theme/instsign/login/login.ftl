@@ -87,7 +87,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input tabindex="2" id="password" name="password" type="password" autocomplete="off"
-                 maxlength="20"
+                 maxlength="12"
                  placeholder="${msg("instsign-content-password-placeholder")}"/>
         </div>
       </div>

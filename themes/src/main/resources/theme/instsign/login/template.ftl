@@ -204,7 +204,6 @@
           }
           if (inputPassword.length >= 8 && inputPassword.length <= 12) {
             lengthGreaterThanSeven = true;
-            validCount++;
           } else {
               validCount = 0;
           }
@@ -217,13 +216,13 @@
           document.getElementById('instsign-password-strength-group').classList.remove("instsign-content-hide");
         }
         var spanElement = document.getElementById('instsign-password-strength-value-span');
-        if (validCount >= 4) {
+        if (validCount >= 2 && lengthGreaterThanSeven === true) {
           spanElement.classList.remove("instsign-content-weak");
           spanElement.classList.remove("instsign-content-normal");
           spanElement.classList.remove("instsign-content-strong");
           spanElement.classList.add("instsign-content-strong");
           spanElement.innerHTML = "${msg("instsign-password-strength-strong")}";
-        } else if (validCount >= 3) {
+        } else if (validCount === 1 && lengthGreaterThanSeven === true) {
           spanElement.classList.remove("instsign-content-weak");
           spanElement.classList.remove("instsign-content-normal");
           spanElement.classList.remove("instsign-content-strong");
@@ -290,14 +289,14 @@
         console.log('onAllAgreementDropdownClick', checkedValue);
         if (isValueTrue(checkedValue)) {
           document.getElementById('all-agreement-dropdown').value = false;
-          document.getElementById('all-agreement-dropdown').classList.remove("dropdown-clicked");
-          document.getElementById('all-agreement-dropdown').classList.add("dropdown-default");
+          document.getElementById('div-all-agreement-dropdown').classList.remove("dropdown-clicked");
+          document.getElementById('div-all-agreement-dropdown').classList.add("dropdown-default");
           document.getElementById('register-agreement-option-section').classList.add("instsign-content-hide");
           document.getElementById('register-button').classList.remove("margin-top-155");
         } else {
           document.getElementById('all-agreement-dropdown').value = true;
-          document.getElementById('all-agreement-dropdown').classList.remove("dropdown-default");
-          document.getElementById('all-agreement-dropdown').classList.add("dropdown-clicked");
+          document.getElementById('div-all-agreement-dropdown').classList.remove("dropdown-default");
+          document.getElementById('div-all-agreement-dropdown').classList.add("dropdown-clicked");
           document.getElementById('register-agreement-option-section').classList.remove("instsign-content-hide");
           document.getElementById('register-button').classList.add("margin-top-155");
         }

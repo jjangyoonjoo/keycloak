@@ -31,6 +31,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class Validation {
 
@@ -52,6 +53,10 @@ public class Validation {
     public static final String FIELD_SERVICE_AGREEMENT = "serviceAgreement";
     public static final String FIELD_PRIVACY_AGREEMENT = "privacyAgreement";
     public static final String FIELD_MARKETING_AGREEMENT = "marketingAgreement";
+    public static final String REGEX_NUMBER = "[0-9]";
+    public static final String REGEX_LOWER_CASE_ALPHABET = "[a-z]+";
+    public static final String REGEX_UPPER_CASE_ALPHABET = "[A-Z]+";
+    public static final String REGEX_SPECIAL_CHARACTER = "[~!@#$%^&*()_+|<>?:{}]+";
 
     // Actually allow same emails like angular. See ValidationTest.testEmailValidation()
     private static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*");
@@ -84,10 +89,17 @@ public class Validation {
             addError(errors, FIELD_MOBILE_PHONE_NUMBER, Messages.INVALID_MOBILE_PHONE_NUMBER);
         }
 
+        if (isBlank(password)) {
+            addError(errors, FIELD_PASSWORD, Messages.MISSING_PASSWORD);
+        } else if (!isPasswordValid(password)) {
+            addError(errors, FIELD_PASSWORD, Messages.INVALID_PASSWORD_STRENGTH);
+        }
+
         if (isBlank(email) || isBlank(password) ||
             isBlank(name) || isBlank(mobilePhoneNumber)) {
             addError(errors, FIELD_ENTER_REQUIRED, Messages.MISSING_REQUIRED_FIELDS);
         }
+
     }
 
     public static void validateAgreementForm(MultivaluedMap<String, String> formData, List<FormMessage> errors) {
@@ -198,4 +210,48 @@ public class Validation {
         return MOBILE_PHONE_NUMBER_PATTERN.matcher(mobilePhoneNumber).matches();
     }
 
+    public static boolean isPasswordValid(String password){
+        boolean numberExists = false;
+        boolean lowerCaseAlphabetExists = false;
+        boolean upperCaseAlphabetExists = false;
+        boolean specialCharacterExists = false;
+        boolean lengthGreaterThanSeven = false;
+        int validCount = 0;
+        boolean returnValue = false;
+        if (password != null && password.trim().length() > 0) {
+            password = password.trim();
+            if (Pattern.compile(REGEX_NUMBER).matcher(password).find()) {
+                numberExists = true;
+                validCount++;
+            }
+            if (Pattern.compile(REGEX_LOWER_CASE_ALPHABET).matcher(password).find()) {
+                lowerCaseAlphabetExists = true;
+                validCount++;
+            }
+            if (Pattern.compile(REGEX_UPPER_CASE_ALPHABET).matcher(password).find()) {
+                upperCaseAlphabetExists = true;
+                validCount++;
+            }
+            if (Pattern.compile(REGEX_SPECIAL_CHARACTER).matcher(password).find()) {
+                specialCharacterExists = true;
+                validCount++;
+            }
+            if (password.length() >= 8) {
+                lengthGreaterThanSeven = true;
+            } else {
+                validCount = 0;
+            }
+            if (validCount >= 2 && lengthGreaterThanSeven == true) {
+                // strong
+                returnValue = true;
+            } else if (validCount == 1 && lengthGreaterThanSeven == true) {
+                // normal
+                returnValue = true;
+            } else {
+                // weaka
+                returnValue = false;
+            }
+        }
+        return returnValue;
+    }
 }

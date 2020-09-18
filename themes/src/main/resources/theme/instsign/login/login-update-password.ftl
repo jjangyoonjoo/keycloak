@@ -24,7 +24,7 @@
               <div class="instsign-content-input-text">
                   <input id="password-new" name="password-new" type="password" autofocus autocomplete="new-password"
                          placeholder="${msg("instsign-content-password-placeholder")}"
-                         maxlength="20"
+                         maxlength="12"
                          onchange="validatePassword(this)"/>
                   <div id="instsign-password-strength-group" class="instsign-password-strength instsign-content-hide">
                       <div class="instsign-password-strength-text">
@@ -43,7 +43,7 @@
               <div class="instsign-content-input-text">
                   <input id="password-confirm" name="password-confirm" type="password" autocomplete="new-password"
                          placeholder="${msg("instsign-content-confirm-password-placeholder")}"
-                         maxlength="20"
+                         maxlength="12"
                          onchange="validatePassword(this)"/>
               </div>
           </div>

@@ -78,7 +78,7 @@
           <div class="register-agreement-text">
             <span>${msg("register-content-all-agreement")}</span>
           </div>
-          <div id="all-agreement-dropdown" class="all-agreement-dropdown dropdown-default"
+          <div id="div-all-agreement-dropdown" class="all-agreement-dropdown dropdown-default"
                onclick="onAllAgreementDropdownClick(event)">
           </div>
         </div>

@@ -40,7 +40,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="password" name="password" type="password" autocomplete="new-password"
-                 maxlength="20"
+                 maxlength="12"
                  placeholder="${msg("instsign-content-password-placeholder")}" onchange="validatePassword(this)"/>
           <input id="password-confirm" name="password-confirm" type="hidden"/>
           <div id="instsign-password-strength-group" class="instsign-password-strength instsign-content-hide">
@@ -97,7 +97,7 @@
         <div class="instsign-content-input-text">
           <input id="referredByCode" name="referredByCode" type="text"
                  autocomplete="off" maxlength="6"
-                 value="${(register.formData.referralCode!'')}"/>
+                 value="${(register.formData.referredByCode!'')}"/>
         </div>
       </div>
       <div id="register-agreement-section" class="register-agreement">
@@ -111,7 +111,7 @@
           <div class="register-agreement-text">
             <span>${msg("register-content-all-agreement")}</span>
           </div>
-          <div id="all-agreement-dropdown" class="all-agreement-dropdown dropdown-default"
+          <div id="div-all-agreement-dropdown" class="all-agreement-dropdown dropdown-default"
                onclick="onAllAgreementDropdownClick(event)">
           </div>
         </div>
