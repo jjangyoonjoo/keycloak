@@ -361,7 +361,7 @@
   <body>
   <div class="instsign-main">
     <div class="instsign-header">
-      <div class="instsign-header-img">
+      <div class="instsign-header-img" onclick="goToUrl('${url.homeUrl}')">
 
       </div>
     </div>

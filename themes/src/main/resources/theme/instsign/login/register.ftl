@@ -29,6 +29,7 @@
           <input id="email" name="email" type="text"
                  autocomplete="email" onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(register.formData.email!'')}"
+                 maxlength="100"
                  placeholder="${msg("instsign-content-email-placeholder")}"/>
         </div>
       </div>
@@ -39,6 +40,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="password" name="password" type="password" autocomplete="new-password"
+                 maxlength="20"
                  placeholder="${msg("instsign-content-password-placeholder")}" onchange="validatePassword(this)"/>
           <input id="password-confirm" name="password-confirm" type="hidden"/>
           <div id="instsign-password-strength-group" class="instsign-password-strength instsign-content-hide">
@@ -59,6 +61,7 @@
           <input id="name" name="name" type="text"
                  onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(register.formData.name!'')}"
+                 maxlength="50"
                  placeholder="${msg("instsign-content-name-placeholder")}"/>
         </div>
       </div>
@@ -71,6 +74,7 @@
                  autocomplete="mobilePhoneNumber"
                  onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(register.formData.mobilePhoneNumber!'')}"
+                 maxlength="20"
                  placeholder="${msg("instsign-content-mobile-phone-number-placeholder")}"/>
         </div>
       </div>
@@ -81,6 +85,7 @@
         <div class="instsign-content-input-text">
           <input id="company" name="company" type="text"
                  autocomplete="off"
+                 maxlength="100"
                  value="${(register.formData.company!'')}"
                  placeholder="${msg("instsign-content-company-placeholder")}"/>
         </div>
@@ -91,7 +96,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input id="referredByCode" name="referredByCode" type="text"
-                 autocomplete="off"
+                 autocomplete="off" maxlength="6"
                  value="${(register.formData.referralCode!'')}"/>
         </div>
       </div>

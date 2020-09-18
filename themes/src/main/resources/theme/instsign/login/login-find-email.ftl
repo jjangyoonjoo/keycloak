@@ -39,6 +39,7 @@
                 <div class="instsign-content-input-text">
                     <input id="name" name="name" type="text"
                            autocomplete="name"
+                           maxlength="50"
                            autofocus onchange="inputValueChange(event.target.value)"
                            value="${(name!'')}"
                            placeholder="${msg("instsign-content-name-placeholder")}"/>
@@ -51,6 +52,7 @@
                 <div class="instsign-content-input-text">
                     <input id="mobilePhoneNumber" name="mobilePhoneNumber" type="text"
                            autocomplete="mobilePhoneNumber"
+                           maxlength="20"
                            onchange="inputValueChange(event.target.value)"
                            value="${(mobilePhoneNumber!'')}"
                            placeholder="${msg("instsign-content-mobile-phone-number-placeholder")}"/>

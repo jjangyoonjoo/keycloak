@@ -38,6 +38,7 @@
           <input id="name" name="name" type="text"
                  onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(name!user.name!'')}"
+                 maxlength="50"
                  placeholder="${msg("instsign-content-name-placeholder")}"/>
         </div>
       </div>
@@ -48,6 +49,7 @@
         <div class="instsign-content-input-text">
           <input id="mobilePhoneNumber" name="mobilePhoneNumber" type="text"
                  autocomplete="mobilePhoneNumber"
+                 maxlength="20"
                  onchange="isRequiredFieldValueEntered(this, true)"
                  value="${(mobilePhoneNumber!user.mobilePhoneNumber!'')}"
                  placeholder="${msg("instsign-content-mobile-phone-number-placeholder")}"/>
@@ -60,6 +62,7 @@
         <div class="instsign-content-input-text">
           <input id="company" name="company" type="text"
                  autocomplete="company"
+                 maxlength="100"
                  value="${(company!user.company!'')}"
                  placeholder="${msg("instsign-content-company-placeholder")}"/>
         </div>

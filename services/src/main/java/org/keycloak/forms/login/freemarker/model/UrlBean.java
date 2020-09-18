@@ -106,4 +106,23 @@ public class UrlBean {
         URI uri = Urls.themeRoot(baseURI);
         return uri.getPath() + "/" + theme.getType().toString().toLowerCase() +"/" + theme.getName();
     }
+
+    public String getHomeUrl() {
+        String baseUrl = actionuri.toString();
+        int index =  baseUrl.indexOf("//");
+        String domainSuffix = ".instsign.com";
+        String protocol = baseUrl.substring(0, index + 2);
+        if (baseUrl.contains("authtest" + domainSuffix)){
+            return protocol + "test"+ domainSuffix;
+        } else if (baseUrl.contains("authdemo" + domainSuffix)){
+            return protocol + "demo"+ domainSuffix;
+        } else if (baseUrl.contains("auth" + domainSuffix)){
+            return protocol + "app"+ domainSuffix;
+        } else if (baseUrl.contains("localhost")){
+            return protocol + "localhost:8080";
+        } else {
+            return baseUrl;
+        }
+    }
+
 }

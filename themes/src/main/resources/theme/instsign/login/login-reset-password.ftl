@@ -41,6 +41,7 @@
                 <div class="instsign-content-input-text">
                     <input id="email" name="username" type="text"
                            autocomplete="email"
+                           maxlength="100"
                            autofocus onchange="emailOnChange(event.target.value)"
                            placeholder="${msg("instsign-content-email-placeholder")}"/>
                 </div>

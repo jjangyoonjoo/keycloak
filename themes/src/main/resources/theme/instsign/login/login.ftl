@@ -72,9 +72,11 @@
         <div class="instsign-content-input-text">
             <#if usernameEditDisabled??>
               <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" disabled
+                     maxlength="100"
               placeholder="${msg("instsign-content-email-placeholder")}" />
             <#else>
               <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" autofocus
+                     maxlength="100"
                      autocomplete="off" placeholder="${msg("instsign-content-email-placeholder")}" />
             </#if>
         </div>
@@ -85,6 +87,7 @@
         </div>
         <div class="instsign-content-input-text">
           <input tabindex="2" id="password" name="password" type="password" autocomplete="off"
+                 maxlength="20"
                  placeholder="${msg("instsign-content-password-placeholder")}"/>
         </div>
       </div>
