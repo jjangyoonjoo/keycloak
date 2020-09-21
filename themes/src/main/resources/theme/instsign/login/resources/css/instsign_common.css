@@ -137,17 +137,31 @@ body {
   width: 300px;
   margin-left: -197px;
 }
-
-.instsign-content-wrapper {
-  display: inline-block;
-  vertical-align: top;
-  position: relative;
-  justify-content: center;
-  align-content: center;
-  height: 100%;
-  width: 100%;
-  margin-top: 50px;
-  margin-bottom: 50px;
+@media (max-width:450px){
+  .instsign-content-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+}
+@media (min-width:450px) {
+  .instsign-content-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
 }
 
 .instsign-header {
@@ -182,15 +196,29 @@ body {
   width: 100%;
 }
 
-.instsign-content {
-  display: inline-block;
-  margin-left: calc(50% - 250px);
-  vertical-align: top;
-  width: 500px;
-  box-shadow: 0 0 9px 0 #cfd3e4;
-  background-color: #ffffff;
-  padding: 50px 51px;
+@media (max-width:450px){
+  .instsign-content {
+    display: inline-block;
+    margin-left: calc(50% - 170px);
+    vertical-align: top;
+    width: 340px;
+    box-shadow: 0 0 9px 0 #cfd3e4;
+    background-color: #ffffff;
+    padding: 50px 51px;
+  }
 }
+@media (min-width:450px){
+  .instsign-content {
+    display: inline-block;
+    margin-left: calc(50% - 250px);
+    vertical-align: top;
+    width: 500px;
+    box-shadow: 0 0 9px 0 #cfd3e4;
+    background-color: #ffffff;
+    padding: 50px 51px;
+  }
+}
+
 
 .margin-top-20 {
   margin-top: 20px;
@@ -247,15 +275,26 @@ body {
   color: #000000;
 }
 
-.instsign-content-input-text input {
-  width: 400px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: #f0f2f9;
-  border: none;
-  padding: 3px 15px;
+@media (max-width:450px){
+  .instsign-content-input-text input {
+    width: 240px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #f0f2f9;
+    border: none;
+    padding: 3px 15px;
+  }
 }
-
+@media (min-width:450px) {
+  .instsign-content-input-text input {
+    width: 400px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #f0f2f9;
+    border: none;
+    padding: 3px 15px;
+  }
+}
 .instsign-content-input-text input:focus {
   text-decoration: none;
   outline: none;

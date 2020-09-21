@@ -1,3 +1,4 @@
+
 .instsign-content-login {
 }
 
@@ -82,14 +83,25 @@
   width: 100%;
   margin-top: 37px;
 }
-
-.instsign-content-or .instsign-content-or-divider {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 7px;
-  width: 165px;
-  height: 1px;
-  border: solid 1px #d1d6e2;
+@media (max-width:450px){
+  .instsign-content-or .instsign-content-or-divider {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 7px;
+    width: 85px;
+    height: 1px;
+    border: solid 1px #d1d6e2;
+  }
+}
+@media (min-width:450px) {
+  .instsign-content-or .instsign-content-or-divider {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 7px;
+    width: 165px;
+    height: 1px;
+    border: solid 1px #d1d6e2;
+  }
 }
 
 .instsign-content-or .instsign-content-or-text {

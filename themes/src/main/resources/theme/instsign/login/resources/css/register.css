@@ -61,24 +61,46 @@
   background-color: #ffffff;
 }
 
-.instsign-content-register .register-agreement-checkbox {
-  display: inline-block;
-  vertical-align: top;
-  margin: 10px 10px;
-  width: 22px;
-  height: 22px;
-  border-radius: 2px;
-  background-color: #275ae6;
+@media (max-width:450px){
+  .instsign-content-register .register-agreement-checkbox {
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px 5px 10px 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 2px;
+    background-color: #275ae6;
+  }
+  .instsign-content-register .register-agreement-checkbox-small {
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px 5px 10px 10px;
+    width: 19px;
+    height: 19px;
+    border-radius: 2px;
+    background-color: #275ae6;
+  }
 }
 
-.instsign-content-register .register-agreement-checkbox-small {
-  display: inline-block;
-  vertical-align: top;
-  margin: 10px 10px;
-  width: 19px;
-  height: 19px;
-  border-radius: 2px;
-  background-color: #275ae6;
+@media (min-width:450px) {
+  .instsign-content-register .register-agreement-checkbox {
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 2px;
+    background-color: #275ae6;
+  }
+  .instsign-content-register .register-agreement-checkbox-small {
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px 10px;
+    width: 19px;
+    height: 19px;
+    border-radius: 2px;
+    background-color: #275ae6;
+  }
 }
 
 .all-agreement-checkbox-checked-svg {
@@ -101,38 +123,74 @@
   background: url("../img/checkbox-selected-icon.svg") no-repeat center center;
 }
 
-.register-agreement-text {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 15px;
-  margin-left: 1px;
-  height: 14px;
-  font-family: NanumSquareOTFB, sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 0.88;
-  letter-spacing: normal;
-  color: #000000;
-}
 
-.register-agreement-text-small {
-  display: inline-block;
-  vertical-align: top;
-  border-bottom: 1px solid #0000ff;
-  margin-top: 15px;
-  margin-left: 1px;
-  padding-bottom: 2px;
-  height: 14px;
-  font-family: NanumSquareOTFB, sans-serif;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 0.88;
-  letter-spacing: normal;
-  color: #000000;
+@media (max-width:450px){
+  .register-agreement-text {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 15px;
+    margin-left: 1px;
+    height: 14px;
+    font-family: NanumSquareOTFB, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.88;
+    letter-spacing: normal;
+    color: #000000;
+  }
+  .register-agreement-text-small {
+    display: inline-block;
+    vertical-align: top;
+    border-bottom: 1px solid #0000ff;
+    margin-top: 15px;
+    margin-left: 1px;
+    padding-bottom: 2px;
+    height: 14px;
+    font-family: NanumSquareOTFB, sans-serif;
+    font-size: 11px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.88;
+    letter-spacing: normal;
+    color: #000000;
+  }
+}
+@media (min-width:450px) {
+  .register-agreement-text {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 15px;
+    margin-left: 1px;
+    height: 14px;
+    font-family: NanumSquareOTFB, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.88;
+    letter-spacing: normal;
+    color: #000000;
+  }
+  .register-agreement-text-small {
+    display: inline-block;
+    vertical-align: top;
+    border-bottom: 1px solid #0000ff;
+    margin-top: 15px;
+    margin-left: 1px;
+    padding-bottom: 2px;
+    height: 14px;
+    font-family: NanumSquareOTFB, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.88;
+    letter-spacing: normal;
+    color: #000000;
+  }
 }
 
 .all-agreement-dropdown {
