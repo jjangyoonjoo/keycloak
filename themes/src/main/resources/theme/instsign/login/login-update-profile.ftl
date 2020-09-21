@@ -11,7 +11,7 @@
 
       window.addEventListener('load', onLoadFunction);
     </script>
-    <input id="password" name="password" type="hidden" value="1111">
+    <input id="password" name="password" type="hidden" value="1111QWwwe!">
     <input name="email" type="hidden"  value="${(user.email!'')}">
     <div class="instsign-content instsign-content-register">
       <div class="instsign-content-title">

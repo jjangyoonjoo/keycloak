@@ -62,7 +62,7 @@ public class Validation {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*");
     private static final Pattern MOBILE_PHONE_NUMBER_PATTERN = Pattern.compile("^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$");
 
-    public static void validateProfileForm(MultivaluedMap<String, String> formData, List<FormMessage> errors) {
+    public static void validateProfileForm(MultivaluedMap<String, String> formData, List<FormMessage> errors, boolean validatePassword) {
         String email = formData.getFirst(FIELD_EMAIL);
         String username = formData.getFirst(FIELD_USERNAME);
         String password = formData.getFirst(FIELD_PASSWORD);
@@ -89,13 +89,15 @@ public class Validation {
             addError(errors, FIELD_MOBILE_PHONE_NUMBER, Messages.INVALID_MOBILE_PHONE_NUMBER);
         }
 
-        if (isBlank(password)) {
-            addError(errors, FIELD_PASSWORD, Messages.MISSING_PASSWORD);
-        } else if (!isPasswordValid(password)) {
-            addError(errors, FIELD_PASSWORD, Messages.INVALID_PASSWORD_STRENGTH);
+        if (validatePassword) {
+            if (isBlank(password)) {
+                addError(errors, FIELD_PASSWORD, Messages.MISSING_PASSWORD);
+            } else if (!isPasswordValid(password)) {
+                addError(errors, FIELD_PASSWORD, Messages.INVALID_PASSWORD_STRENGTH);
+            }
         }
 
-        if (isBlank(email) || isBlank(password) ||
+        if (isBlank(email) || (validatePassword && isBlank(password)) ||
             isBlank(name) || isBlank(mobilePhoneNumber)) {
             addError(errors, FIELD_ENTER_REQUIRED, Messages.MISSING_REQUIRED_FIELDS);
         }
@@ -118,7 +120,7 @@ public class Validation {
             addError(errors, FIELD_USERNAME, Messages.MISSING_USERNAME);
         }
 
-        validateProfileForm(formData, errors);
+        validateProfileForm(formData, errors, true);
 
         if (requiredCredentialTypes.contains(CredentialRepresentation.PASSWORD)) {
             if (isBlank(formData.getFirst(FIELD_PASSWORD))) {
@@ -147,7 +149,7 @@ public class Validation {
         if (!realm.isRegistrationEmailAsUsername() && realm.isEditUsernameAllowed() && isBlank(formData.getFirst(FIELD_USERNAME))) {
             addError(errors, FIELD_USERNAME, Messages.MISSING_USERNAME);
         }
-        validateProfileForm(formData, errors);
+        validateProfileForm(formData, errors, false);
 
         return errors;
     }

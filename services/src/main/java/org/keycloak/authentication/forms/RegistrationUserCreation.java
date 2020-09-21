@@ -77,7 +77,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
 
         populateLastNameFirstNameUsingName(formData);
 
-        Validation.validateProfileForm(formData, errors);
+        Validation.validateProfileForm(formData, errors, true);
 
         String email = formData.getFirst(Validation.FIELD_EMAIL);
         String username = formData.getFirst(Validation.FIELD_USERNAME);
