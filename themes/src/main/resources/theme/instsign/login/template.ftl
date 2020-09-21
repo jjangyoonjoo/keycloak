@@ -354,6 +354,11 @@
         // console.log(document.getElementById('marketing-agreement-checkbox'));
         isAgreementRequired(updateAllAgreement, inputValidateAllFields);
       }
+
+      function openNewWindows (newUrl, height, width) {
+        var features = 'height=' + height + ',width=' + width;
+        window.open(newUrl, '_blank', features);
+      }
     </script>
   </head>
 
