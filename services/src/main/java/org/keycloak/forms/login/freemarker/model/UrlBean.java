@@ -108,7 +108,7 @@ public class UrlBean {
     }
 
     public String getHomeUrl() {
-        String baseUrl = actionuri.toString();
+        String baseUrl = baseURI.toString();
         int index =  baseUrl.indexOf("//");
         String domainSuffix = ".instsign.com";
         String protocol = baseUrl.substring(0, index + 2);
