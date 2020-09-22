@@ -26,7 +26,7 @@ import org.keycloak.broker.provider.IdentityBrokerException;
 import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.UserModel;
+import org.keycloak.services.validation.Validation;
 import org.keycloak.utils.IdentityProviderUtils;
 
 import static org.keycloak.utils.IdentityProviderUtils.stripMobilePhoneNumber;
@@ -73,7 +73,7 @@ public class KakaoIdentityProvider extends AbstractOAuth2IdentityProvider implem
             String phoneNumber = getJsonProperty(account, "phone_number");
             if (phoneNumber != null && !phoneNumber.isEmpty()) {
                 phoneNumber = stripMobilePhoneNumber(phoneNumber);
-                user.setUserAttribute(UserModel.MOBILE_PHONE_NUMBER, phoneNumber);
+                user.setUserAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER, phoneNumber);
             }
             String birthYear = getJsonProperty(account, "birthyear");
             String birthDay = getJsonProperty(account, "birthday");
@@ -82,13 +82,22 @@ public class KakaoIdentityProvider extends AbstractOAuth2IdentityProvider implem
                 birthDay = birthDay.trim();
                 if (birthYear.length() == 4 && birthDay.length() == 4) {
                     String birthDate = birthYear + "/" + birthDay.substring(0, 2) + "/" + birthDay.substring(2);
-                    user.setUserAttribute(UserModel.BIRTH_DATE, birthDate);
+                    user.setUserAttribute(Validation.FIELD_BIRTH_DATE, birthDate);
                 }
             }
-            String gender = getJsonProperty(account, "gender");
-            if (gender != null && !gender.isEmpty()) {
-                user.setUserAttribute(UserModel.GENDER, gender.trim());
+            String genderCode = getJsonProperty(account, "gender");
+            if (genderCode != null && !genderCode.isEmpty()) {
+                user.setUserAttribute(Validation.FIELD_GENDER_CODE, genderCode.trim());
             }
+            String imageUrl = getJsonProperty(profile, "profile_image_url");
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                user.setUserAttribute(Validation.FIELD_PROFILE_IMAGE_URL, imageUrl.trim());
+            }
+            String thumbnailImageUrl = getJsonProperty(profile, "thumbnail_image_url");
+            if (thumbnailImageUrl != null && !thumbnailImageUrl.isEmpty()) {
+                user.setUserAttribute(Validation.FIELD_PROFILE_THUMBNAIL_IMAGE_URL, thumbnailImageUrl.trim());
+            }
+
             user.setIdpConfig(getConfig());
             user.setIdp(this);
 

@@ -101,6 +101,18 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         if (birthDate != null && !birthDate.isEmpty()) {
             user.setSingleAttribute(Validation.FIELD_BIRTH_DATE, birthDate);
         }
+        String profileImageUrl = formData.getFirst(Validation.FIELD_PROFILE_IMAGE_URL);
+        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+            user.setSingleAttribute(Validation.FIELD_PROFILE_IMAGE_URL, profileImageUrl);
+        }
+        String profileThumbnailImageUrl = formData.getFirst(Validation.FIELD_PROFILE_THUMBNAIL_IMAGE_URL);
+        if (profileThumbnailImageUrl != null && !profileThumbnailImageUrl.isEmpty()) {
+            user.setSingleAttribute(Validation.FIELD_PROFILE_THUMBNAIL_IMAGE_URL, profileThumbnailImageUrl);
+        }
+        String genderCode = formData.getFirst(Validation.FIELD_GENDER_CODE);
+        if (genderCode != null && !genderCode.isEmpty()) {
+            user.setSingleAttribute(Validation.FIELD_GENDER_CODE, genderCode);
+        }
         String referredByCode = formData.getFirst(Validation.FIELD_REFERRED_BY_CODE);
         if (referredByCode != null){
             referredByCode = referredByCode.trim();

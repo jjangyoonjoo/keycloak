@@ -45,10 +45,12 @@ public class Validation {
     public static final String FIELD_REFERRAL_CODE = "referralCode";
     public static final String FIELD_REFERRED_BY_CODE = "referredByCode";
     public static final String FIELD_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
+    public static final String FIELD_PROFILE_IMAGE_URL = "profileImageUrl";
+    public static final String FIELD_PROFILE_THUMBNAIL_IMAGE_URL = "profileThumbnailImageUrl";
     public static final String FIELD_ENTER_REQUIRED = "enterRequired";
     public static final String FIELD_BIRTH_DATE = "birthDate";
     public static final String FIELD_LOCALE = "locale";
-    public static final String FIELD_GENDER = "GENDER";
+    public static final String FIELD_GENDER_CODE = "genderCode";
     public static final String FIELD_COMPANY = "company";
     public static final String FIELD_SERVICE_AGREEMENT = "serviceAgreement";
     public static final String FIELD_PRIVACY_AGREEMENT = "privacyAgreement";
