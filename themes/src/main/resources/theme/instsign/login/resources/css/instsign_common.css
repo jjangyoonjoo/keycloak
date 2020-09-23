@@ -313,6 +313,16 @@ body {
 
 .instsign-content-disabled input{
   color: #acb0bb !important;
+  width: 100%;
+}
+
+.instsign-button-disabled{
+  border: solid 1px #e6e9f1 !important;
+  background-color: #d9d9d9 !important;
+}
+
+.instsign-button-disabled span{
+  color: #bcbcbc !important;
 }
 
 .instsign-button {
@@ -429,13 +439,6 @@ input[type=password] {
   color: #275ae6;
 }
 
-.instsign-content-disabled {
-  background-color: #d9d9d9 !important;
-}
-
-.instsign-content-disabled span{
-  color: #bcbcbc !important;
-}
 .instsign-content-weak {
   color: #a0141b;
 }

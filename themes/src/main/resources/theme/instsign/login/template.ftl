@@ -83,9 +83,9 @@
         if (isEmailEntered === true && isPasswordEntered === true &&
           isNameEntered === true && isMobilePhoneNumberEntered === true &&
           isServiceAgreementEntered === true && isPrivacyAgreementEntered === true) {
-          document.getElementById('register-button').classList.remove("instsign-content-disabled");
+          document.getElementById('register-button').classList.remove("instsign-button-disabled");
         } else {
-          document.getElementById('register-button').classList.add("instsign-content-disabled");
+          document.getElementById('register-button').classList.add("instsign-button-disabled");
         }
         if (isEmailEntered === true && isPasswordEntered === true &&
           isNameEntered === true && isMobilePhoneNumberEntered === true &&
