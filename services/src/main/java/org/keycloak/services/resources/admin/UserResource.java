@@ -718,12 +718,30 @@ public class UserResource {
 
             String link = builder.build(realm.getName()).toString();
 
-            this.session.getProvider(EmailTemplateProvider.class)
-              .setAttribute(Constants.TEMPLATE_ATTR_REQUIRED_ACTIONS, token.getRequiredActions())
-              .setRealm(realm)
-              .setUser(user)
-              .sendExecuteActions(link, TimeUnit.SECONDS.toMinutes(lifespan));
-
+            boolean sendSuccessful = false;
+            if (actions != null && !actions.isEmpty()){
+                if (UserModel.RequiredAction.VERIFY_EMAIL.name().equals(actions.get(0))) {
+                    this.session.getProvider(EmailTemplateProvider.class)
+                        .setRealm(realm)
+                        .setUser(user)
+                        .sendVerifyEmail((redirectUri !=null && !redirectUri.isEmpty()? redirectUri : link), TimeUnit.SECONDS.toMinutes(lifespan));
+                    sendSuccessful = true;
+                } else if (UserModel.RequiredAction.UPDATE_PASSWORD.name().equals(actions.get(0))) {
+                    this.session.getProvider(EmailTemplateProvider.class)
+                        .setRealm(realm)
+                        .setUser(user)
+                        .sendPasswordReset((redirectUri !=null && !redirectUri.isEmpty()? redirectUri : link), TimeUnit.SECONDS.toMinutes(lifespan));
+                    sendSuccessful = true;
+                }
+            }
+            if (!sendSuccessful) {
+                this.session.getProvider(EmailTemplateProvider.class)
+                    .setAttribute(Constants.TEMPLATE_ATTR_REQUIRED_ACTIONS,
+                        token.getRequiredActions())
+                    .setRealm(realm)
+                    .setUser(user)
+                    .sendExecuteActions(link, TimeUnit.SECONDS.toMinutes(lifespan));
+            }
             //audit.user(user).detail(Details.EMAIL, user.getEmail()).detail(Details.CODE_ID, accessCode.getCodeId()).success();
 
             adminEvent.operation(OperationType.ACTION).resourcePath(session.getContext().getUri()).success();

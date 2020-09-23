@@ -121,6 +121,11 @@ public interface UserResource {
     @Deprecated
     public void resetPasswordEmail(@QueryParam("client_id") String clientId);
 
+    @PUT
+    @Path("reset-password-email")
+    public void resetPasswordEmail(@QueryParam("client_id") String clientId, @QueryParam("redirect_uri") String redirectUri);
+
+
     /**
      * Sends an email to the user with a link within it.  If they click on the link they will be asked to perform some actions
      * i.e. reset password, update profile, etc.
@@ -155,6 +160,10 @@ public interface UserResource {
     @PUT
     @Path("send-verify-email")
     public void sendVerifyEmail(@QueryParam("client_id") String clientId);
+
+    @PUT
+    @Path("send-verify-email")
+    public void sendVerifyEmail(@QueryParam("client_id") String clientId, @QueryParam("redirect_uri") String redirectUri);
 
     @GET
     @Path("sessions")
