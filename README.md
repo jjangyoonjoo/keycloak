@@ -73,20 +73,35 @@ Before contributing to Keycloak please read our [contributing guidelines](CONTRI
 
 
 ## Docker Theme Copy
-sudo docker cp themes/src/main/resources/theme/instsign dcfc003bf641:/opt/jboss/keycloak/themes/instsign
+    sudo docker cp themes/src/main/resources/theme/instsign dcfc003bf641:/opt/jboss/keycloak/themes/instsign
 
 ## Docker Theme Test
-cd testsuite/utils
-mvn clean package
-mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme"
-mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme" -Dimport="../../../signus-service/src/main/docker/realm-config/instsign-realm.json"
-Use following url for debugging: http://localhost:8081/auth/realms/instsign/account
+    cd testsuite/utils
+    mvn clean package
+    mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme"
+    mvn exec:java -Pkeycloak-server -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme" -Dimport="../../../signus-service/src/main/docker/realm-config/instsign-realm.json"
+    Use following url for debugging: http://localhost:8081/auth/realms/instsign/account
 
-intellij debug setting
-create maven run 
-set working directory:
-keycloak/testsuite/utils
-set command line:
-exec:java -Dresources -Pkeycloak.theme.dir=../../themes/src/main/resources/theme "-Dimport=../../../signus-service/src/main/docker/realm-config/instsign-realm.json"
-set profiles:
-keycloak-server
+## intellij debug setting
+
+####create maven run 
+#### set working directory:
+    keycloak/testsuite/utils
+#### set command line:
+    exec:java -Dresources -Pkeycloak.theme.dir=../../themes/src/main/resources/theme "-Dimport=../../../signus-service/src/main/docker/realm-config/instsign-realm.json"
+#### set profiles:
+    keycloak-server
+
+## command line
+    mvn exec:java -Pkeycloak-server -Dkeycloak.migration.action=import \
+     -Dkeycloak.migration.provider=dir \
+     -Dkeycloak.migration.dir=./realm-config \
+     -Dkeycloak.migration.strategy=OVERWRITE_EXISTING \
+     -Djboss.socket.binding.port-offset=1000 \
+     -Djboss.as.management.blocking.timeout=6000 \
+     -Dkeycloak.port=9080 \
+     -Dkeycloak.connectionsJpa.driver=com.mysql.jdbc.Driver \
+     -Dkeycloak.connectionsJpa.password=blocko2019\!1 \
+     -Dkeycloak.connectionsJpa.user=blocko \
+     -Dresources -Pkeycloak.theme.dir="../../themes/src/main/resources/theme" \
+     -Dkeycloak.connectionsJpa.url="jdbc:mysql://localhost:3316/keycloak?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Seoul&createDatabaseIfNotExist=true"
