@@ -180,23 +180,32 @@ public class Validation {
         List<String> mobilePhoneNumberValueList = user.getAttribute(Validation.FIELD_MOBILE_PHONE_NUMBER);
         List<String> serviceAgreementValueList = user.getAttribute(Validation.FIELD_SERVICE_AGREEMENT);
         List<String> privacyAgreementValueList = user.getAttribute(Validation.FIELD_PRIVACY_AGREEMENT);
-        boolean isMobilePhoneNumberBlank = true;
+        String mobilePhoneNumber = null;
         if (mobilePhoneNumberValueList != null && mobilePhoneNumberValueList.size() > 0 &&
             mobilePhoneNumberValueList.get(0) != null && !mobilePhoneNumberValueList.get(0).isEmpty()) {
-            isMobilePhoneNumberBlank = false;
+            mobilePhoneNumber = mobilePhoneNumberValueList.get(0);
         }
-        boolean isServiceAgreementBlank = true;
+        boolean isServiceAgreement = false;
         if (serviceAgreementValueList != null && serviceAgreementValueList.size() > 0 &&
             serviceAgreementValueList.get(0) != null && !serviceAgreementValueList.get(0).isEmpty()) {
-            isServiceAgreementBlank = false;
+            try {
+                isServiceAgreement = Boolean.parseBoolean(serviceAgreementValueList.get(0));
+            } catch (Exception e){
+                isServiceAgreement = false;
+            }
         }
-        boolean isPrivacyAgreementBlank = true;
+        boolean isPrivacyAgreement = false;
         if (privacyAgreementValueList != null && privacyAgreementValueList.size() > 0 &&
             privacyAgreementValueList.get(0) != null && !privacyAgreementValueList.get(0).isEmpty()) {
-            isPrivacyAgreementBlank = false;
+            try {
+                isPrivacyAgreement = Boolean.parseBoolean(privacyAgreementValueList.get(0));
+            } catch (Exception e){
+                isPrivacyAgreement = false;
+            }
         }
-        return !(isBlank(user.getEmail()) || isBlank(user.getName()) || isMobilePhoneNumberBlank ||
-            isServiceAgreementBlank || isPrivacyAgreementBlank);
+        return !((isBlank(user.getEmail()) || isBlank(user.getName()) || isBlank(mobilePhoneNumber) ||
+            !isMobilePhoneNumberValid(mobilePhoneNumber) ||
+            !isServiceAgreement || !isPrivacyAgreement));
     }
 
     /**
