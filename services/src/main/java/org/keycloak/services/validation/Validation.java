@@ -203,9 +203,9 @@ public class Validation {
                 isPrivacyAgreement = false;
             }
         }
-        return !((isBlank(user.getEmail()) || isBlank(user.getName()) || isBlank(mobilePhoneNumber) ||
+        return !(isBlank(user.getEmail()) || isBlank(user.getName()) || isBlank(mobilePhoneNumber) ||
             !isMobilePhoneNumberValid(mobilePhoneNumber) ||
-            !isServiceAgreement || !isPrivacyAgreement));
+            !isServiceAgreement || !isPrivacyAgreement);
     }
 
     /**
