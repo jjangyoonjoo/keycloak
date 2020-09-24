@@ -2,7 +2,7 @@
 <@layout.registrationLayout displayInfo=false displayMessage=false; section>
   <div class="instsign-content instsign-content-verify-email">
     <div class="instsign-content-title">
-        ${msg("verify-email-content-title")}
+        <span>${msg("verify-email-content-title")}</span>
     </div>
     <div class="instsign-content-subtitle">
         ${msg("verify-email-content-subtitle", '${email}')?no_esc}
