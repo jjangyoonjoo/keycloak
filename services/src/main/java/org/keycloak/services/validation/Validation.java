@@ -99,6 +99,8 @@ public class Validation {
             }
         }
 
+        validateAgreementForm(formData, errors);
+
         if (isBlank(email) || (validatePassword && isBlank(password)) ||
             isBlank(name) || isBlank(mobilePhoneNumber)) {
             addError(errors, FIELD_ENTER_REQUIRED, Messages.MISSING_REQUIRED_FIELDS);
@@ -107,10 +109,21 @@ public class Validation {
     }
 
     public static void validateAgreementForm(MultivaluedMap<String, String> formData, List<FormMessage> errors) {
-        if (isBlank(formData.getFirst((FIELD_SERVICE_AGREEMENT)))) {
+        String serviceAgreementString = formData.getFirst(FIELD_SERVICE_AGREEMENT);
+        String privacyAgreementString = formData.getFirst(FIELD_PRIVACY_AGREEMENT);
+        Boolean serviceAgreement = null;
+        Boolean privacyAgreement = null;
+        try {
+            serviceAgreement = Boolean.parseBoolean(serviceAgreementString);
+            privacyAgreement = Boolean.parseBoolean(privacyAgreementString);
+        } catch (Exception e){
+            serviceAgreement = null;
+            privacyAgreement = null;
+        }
+        if (isBlank(serviceAgreementString) || !Boolean.TRUE.equals(serviceAgreement)) {
             addError(errors, FIELD_SERVICE_AGREEMENT, Messages.MISSING_SERVICE_AGREEMENT);
         }
-        if (isBlank(formData.getFirst((FIELD_PRIVACY_AGREEMENT)))) {
+        if (isBlank(privacyAgreementString) || !Boolean.TRUE.equals(privacyAgreement)) {
             addError(errors, FIELD_PRIVACY_AGREEMENT, Messages.MISSING_PRIVACY_AGREEMENT);
         }
     }

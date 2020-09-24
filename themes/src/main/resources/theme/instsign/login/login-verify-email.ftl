@@ -12,7 +12,7 @@
 <#--      <span>${account.email}</span>-->
 <#--    </div>-->
     <div id="verify-email-button" class="instsign-button" onclick="goToUrl('${url.loginAction}')">
-      <span>${msg("instsign-content-button-ok")}</span>
+      <span>${msg("verify-email-link")}</span>
     </div>
   </div>
 </@layout.registrationLayout>
