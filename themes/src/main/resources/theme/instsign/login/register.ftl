@@ -157,6 +157,65 @@
       <div class="register-login" onclick="goToUrl('${url.loginUrl}')">
         <span>${msg("register-login-link")}</span>
       </div>
+      <div class="instsign-content-or margin-bottom-30">
+        <div class="instsign-content-or-divider">
+        </div>
+        <div class="instsign-content-or-text">
+          <span>or</span>
+        </div>
+        <div class="instsign-content-or-divider">
+        </div>
+      </div>
+        <#if realm.password && social.providers??>
+          <div class="instsign-login-social-link-group">
+              <#list social.providers as p>
+                  <#if p.alias == "google">
+                  <#--                      <div class="instsign-login-social-link-${p.alias}" onclick="goToUrl('${p.loginUrl}')">-->
+                    <div class="instsign-login-social-link-${p.alias}" onclick="displayAlert('${msg("alert-preparing")}')">
+                      <div class="instsign-login-social-link-${p.alias}-svg">
+                      </div>
+                      <div class="instsign-login-social-link-text">
+                        <span>${msg("login-social-${p.alias}")}</span>
+                      </div>
+                    </div>
+                  </#if>
+              </#list>
+              <#list social.providers as p>
+                  <#if p.alias == "kakao">
+                    <div class="instsign-login-social-link-${p.alias}" onclick="goToUrl('${p.loginUrl}')">
+                      <div class="instsign-login-social-link-${p.alias}-svg">
+                      </div>
+                      <div class="instsign-login-social-link-text">
+                        <span>${msg("login-social-${p.alias}")}</span>
+                      </div>
+                    </div>
+                  </#if>
+              </#list>
+              <#list social.providers as p>
+                  <#if p.alias == "naver">
+                  <#--                      <div class="instsign-login-social-link-${p.alias}" onclick="goToUrl('${p.loginUrl}')">-->
+                    <div class="instsign-login-social-link-${p.alias}" onclick="displayAlert('${msg("alert-preparing")}')">
+                      <div class="instsign-login-social-link-${p.alias}-svg">
+                      </div>
+                      <div class="instsign-login-social-link-text">
+                        <span>${msg("login-social-${p.alias}")}</span>
+                      </div>
+                    </div>
+                  </#if>
+              </#list>
+              <#--                <#list social.providers as p>-->
+              <#--                    <#if p.alias == "facebook">-->
+              <#--                      <div class="instsign-login-social-link-${p.alias}" onclick="goToUrl('${p.loginUrl}')">-->
+              <#--                        <div class="instsign-login-social-link-${p.alias}-svg">-->
+              <#--                        </div>-->
+              <#--                        <div class="instsign-login-social-link-text">-->
+              <#--                          <span>${msg("login-social-${p.alias}")}</span>-->
+              <#--                        </div>-->
+              <#--                      </div>-->
+              <#--                    </#if>-->
+              <#--                </#list>-->
+          </div>
+        </#if>
     </div>
   </form>
 </@layout.registrationLayout>
