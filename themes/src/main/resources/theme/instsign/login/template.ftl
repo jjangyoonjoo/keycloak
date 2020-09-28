@@ -42,6 +42,10 @@
         return false;
       }
 
+      function displayAlert(message){
+        alert(message);
+      }
+
       var REGEX_NUMBER = /[0-9]/;
       var REGEX_LOWER_CASE_ALPHABET = /[a-z]/;
       var REGEX_UPPER_CASE_ALPHABET = /[A-Z]/;
