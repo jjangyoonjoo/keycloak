@@ -220,13 +220,13 @@
           document.getElementById('instsign-password-strength-group').classList.remove("instsign-content-hide");
         }
         var spanElement = document.getElementById('instsign-password-strength-value-span');
-        if (validCount >= 2 && lengthGreaterThanSeven === true) {
+        if (validCount >= 3 && lengthGreaterThanSeven === true) {
           spanElement.classList.remove("instsign-content-weak");
           spanElement.classList.remove("instsign-content-normal");
           spanElement.classList.remove("instsign-content-strong");
           spanElement.classList.add("instsign-content-strong");
           spanElement.innerHTML = "${msg("instsign-password-strength-strong")}";
-        } else if (validCount === 1 && lengthGreaterThanSeven === true) {
+        } else if (validCount === 2 && lengthGreaterThanSeven === true) {
           spanElement.classList.remove("instsign-content-weak");
           spanElement.classList.remove("instsign-content-normal");
           spanElement.classList.remove("instsign-content-strong");
