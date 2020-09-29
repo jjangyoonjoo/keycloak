@@ -267,10 +267,10 @@ public class Validation {
             } else {
                 validCount = 0;
             }
-            if (validCount >= 2 && lengthGreaterThanSeven == true) {
+            if (validCount >= 3 && lengthGreaterThanSeven == true) {
                 // strong
                 returnValue = true;
-            } else if (validCount == 1 && lengthGreaterThanSeven == true) {
+            } else if (validCount == 2 && lengthGreaterThanSeven == true) {
                 // normal
                 returnValue = true;
             } else {
