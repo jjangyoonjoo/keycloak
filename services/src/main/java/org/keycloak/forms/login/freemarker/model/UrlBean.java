@@ -108,17 +108,28 @@ public class UrlBean {
     }
 
     public String getHomeUrl() {
-        String baseUrl = baseURI.toString();
-        int index =  baseUrl.indexOf("//");
+        String baseUrl = baseURI != null ? baseURI.toString():"";
+        String actionUrl = actionuri != null ? actionuri.toString():"";
+        int index = -1;
+        if (baseUrl != null){
+            index = baseUrl.indexOf("//");
+        }
+        if (index < 0 && actionUrl != null){
+            index = actionUrl.indexOf("//");
+        }
         String domainSuffix = ".instsign.com";
         String protocol = baseUrl.substring(0, index + 2);
-        if (baseUrl.contains("authtest" + domainSuffix)){
+        if ((baseUrl != null && baseUrl.contains("authtest" + domainSuffix)) ||
+            (actionUrl != null && actionUrl.contains("authtest" + domainSuffix))){
             return protocol + "test"+ domainSuffix;
-        } else if (baseUrl.contains("authdemo" + domainSuffix)){
+        } else if ((baseUrl != null && baseUrl.contains("authdemo" + domainSuffix)) ||
+            (actionUrl != null && actionUrl.contains("authdemo" + domainSuffix))){
             return protocol + "demo"+ domainSuffix;
-        } else if (baseUrl.contains("auth" + domainSuffix)){
+        } else if ((baseUrl != null && baseUrl.contains("auth" + domainSuffix)) ||
+            (actionUrl != null && actionUrl.contains("auth" + domainSuffix))){
             return protocol + "app"+ domainSuffix;
-        } else if (baseUrl.contains("localhost")){
+        } else if ((baseUrl != null && baseUrl.contains("localhost")) ||
+            (actionUrl != null && actionUrl.contains("localhost"))){
             return protocol + "localhost:8080";
         } else {
             return baseUrl;
