@@ -17,8 +17,10 @@
 
 package org.keycloak.authentication.forms;
 
+import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 import java.util.Random;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.spi.HttpRequest;
 import org.keycloak.Config;
 import org.keycloak.authentication.FormAction;
 import org.keycloak.authentication.FormActionFactory;
@@ -61,8 +63,18 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
         }
     }
 
-    public static void populateFormFields(IUser user, MultivaluedMap<String, String> formData) {
+
+    public static void populateReferredByCode(HttpRequest httpRequest, MultivaluedMap<String, String> formData) {
+        Object referralCodeObject = httpRequest.getAttribute(Constants.REFERRAL_CODE);
+        String referralCode = referralCodeObject != null ? referralCodeObject.toString() : null;
+        if (referralCode != null){
+            formData.add(Validation.FIELD_REFERRED_BY_CODE, referralCode);
+        }
+    }
+
+    public static void populateFormFields(HttpRequest httpRequest, IUser user, MultivaluedMap<String, String> formData) {
         populateLastNameFirstNameUsingName(formData);
+        populateReferredByCode(httpRequest, formData);
         user.setFirstName(formData.getFirst(Validation.FIELD_FIRST_NAME));
         user.setLastName(formData.getFirst(Validation.FIELD_LAST_NAME));
         user.setEmail(formData.getFirst(Validation.FIELD_EMAIL));
@@ -194,7 +206,7 @@ public class RegistrationProfile implements FormAction, FormActionFactory {
     public void success(FormContext context) {
         UserModel user = context.getUser();
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
-        populateFormFields(user, formData);
+        populateFormFields(context.getHttpRequest(), user, formData);
         logger.info(user.toString());
     }
 

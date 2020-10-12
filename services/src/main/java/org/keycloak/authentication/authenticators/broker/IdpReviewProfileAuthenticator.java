@@ -113,7 +113,7 @@ public class IdpReviewProfileAuthenticator extends AbstractIdpAuthenticator {
             return;
         }
 
-        populateFormFields(userCtx, formData);
+        populateFormFields(context.getHttpRequest(), userCtx, formData);
 
         String username = realm.isRegistrationEmailAsUsername() ? formData.getFirst(UserModel.EMAIL) : formData.getFirst(UserModel.USERNAME);
         userCtx.setUsername(username);

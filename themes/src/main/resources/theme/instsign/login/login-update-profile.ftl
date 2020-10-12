@@ -67,6 +67,16 @@
                  placeholder="${msg("instsign-content-company-placeholder")}"/>
         </div>
       </div>
+      <div class="instsign-content-input-group margin-top-20">
+        <div class="instsign-content-input-label">
+          <span>${msg("register-content-referral-code")}</span>
+        </div>
+        <div class="instsign-content-input-text">
+          <input id="referredByCode" name="referredByCode" type="text"
+                 autocomplete="off" maxlength="6"
+                 value="${(referredByCode!user.referredByCode!'')}"/>
+        </div>
+      </div>
       <div id="register-agreement-section" class="register-agreement">
         <div class="register-agreement-select">
           <div class="register-agreement-checkbox" onclick="onAllAgreementClick()">

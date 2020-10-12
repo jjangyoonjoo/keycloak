@@ -44,6 +44,7 @@ import org.keycloak.events.EventType;
 import org.keycloak.exceptions.TokenNotActiveException;
 import org.keycloak.models.*;
 import org.keycloak.models.utils.AuthenticationFlowResolver;
+import org.keycloak.models.utils.DefaultAuthenticationFlows;
 import org.keycloak.models.utils.FormMessage;
 import org.keycloak.models.utils.KeycloakModelUtils;
 import org.keycloak.models.utils.SystemClientUtil;
@@ -74,6 +75,8 @@ import javax.ws.rs.ext.Providers;
 import java.net.URI;
 import java.util.Map;
 
+import static org.keycloak.authentication.AuthenticationProcessor.CURRENT_AUTHENTICATION_EXECUTION;
+import static org.keycloak.authentication.AuthenticationProcessor.CURRENT_REFERRED_BY_CODE;
 import static org.keycloak.authentication.actiontoken.DefaultActionToken.ACTION_TOKEN_BASIC_CHECKS;
 import static org.keycloak.services.managers.AuthenticationManager.IS_AIA_REQUEST;
 import static org.keycloak.services.managers.AuthenticationManager.IS_SILENT_CANCEL;
@@ -87,6 +90,7 @@ public class LoginActionsService {
 
     public static final String AUTHENTICATE_PATH = "authenticate";
     public static final String REGISTRATION_PATH = "registration";
+    public static final String DIRECT_REGISTRATION_PATH = "direct-registration";
     public static final String RESET_CREDENTIALS_PATH = "reset-credentials";
     public static final String FIND_EMAIL_PATH = "find-email";
     public static final String REQUIRED_ACTION = "required-action";
@@ -395,6 +399,58 @@ public class LoginActionsService {
         return findEmail(authSessionId, code, execution, clientId, tabId);
     }
 
+    @Path(DIRECT_REGISTRATION_PATH)
+    @GET
+    public Response directRegister(@QueryParam(Constants.REFERRAL_CODE) String referralCode) {
+        event.event(EventType.REGISTER);
+        String clientId = "account";
+        AuthenticationSessionModel authSession = createAuthenticationSessionForClient(clientId);
+        if (referralCode != null) {
+            authSession.setClientNote(CURRENT_REFERRED_BY_CODE, referralCode);
+        }
+//        AuthenticationProcessor processor = new AuthenticationProcessor();
+//        AuthenticationFlowModel flowModel = realm.getRegistrationFlow();
+//        processor.setAuthenticationSession(authSession)
+//            .setFlowPath(REGISTRATION_PATH)
+//            .setBrowserFlow(true)
+//            .setFlowId(flowModel.getId())
+//            .setConnection(clientConnection)
+//            .setEventBuilder(event)
+//            .setRealm(realm)
+//            .setSession(session)
+//            .setUriInfo(session.getContext().getUri())
+//            .setRequest(request);
+//        Response response = processor.authenticateOnly();
+////        AuthenticationFlow authenticationFlow = processor.createFlowExecution(realm.getRegistrationFlow().getId(), null);
+//        Response response2 = processFlow(true, authSession.getAuthNote(CURRENT_AUTHENTICATION_EXECUTION), authSession, REGISTRATION_PATH, flowModel, null, processor);
+//        return response2;
+        ClientModel client = realm.getClientByClientId(clientId);
+        session.getContext().setClient(client);
+        Response response = processRegistration(false, null, authSession, null);
+        return response;
+    }
+
+    AuthenticationSessionModel createAuthenticationSessionForClient(String clientId)
+        throws UriBuilderException, IllegalArgumentException {
+        AuthenticationSessionModel authSession;
+
+        // set up the account service as the endpoint to call.
+        ClientModel client = realm.getClientByClientId(clientId);
+
+        RootAuthenticationSessionModel rootAuthSession = new AuthenticationSessionManager(session).createAuthenticationSession(realm, true);
+        authSession = rootAuthSession.createAuthenticationSession(client);
+
+        authSession.setAction(AuthenticationSessionModel.Action.AUTHENTICATE.name());
+        //authSession.setNote(AuthenticationManager.END_AFTER_REQUIRED_ACTIONS, "true");
+        authSession.setProtocol(OIDCLoginProtocol.LOGIN_PROTOCOL);
+        String redirectUri = Urls.accountBase(session.getContext().getUri().getBaseUri()).path("/").build(realm.getName()).toString();
+        authSession.setRedirectUri(redirectUri);
+        authSession.setClientNote(OIDCLoginProtocol.RESPONSE_TYPE_PARAM, OAuth2Constants.CODE);
+        authSession.setClientNote(OIDCLoginProtocol.REDIRECT_URI_PARAM, redirectUri);
+        authSession.setClientNote(OIDCLoginProtocol.ISSUER, Urls.realmIssuer(session.getContext().getUri().getBaseUri(), realm.getName()));
+
+        return authSession;
+    }
 
     AuthenticationSessionModel createAuthenticationSessionForClient()
         throws UriBuilderException, IllegalArgumentException {
@@ -1052,7 +1108,7 @@ public class LoginActionsService {
             event.event(EventType.LOGIN);
             authSession.removeRequiredAction(factory.getId());
             authSession.getAuthenticatedUser().removeRequiredAction(factory.getId());
-            authSession.removeAuthNote(AuthenticationProcessor.CURRENT_AUTHENTICATION_EXECUTION);
+            authSession.removeAuthNote(CURRENT_AUTHENTICATION_EXECUTION);
 
             response = AuthenticationManager.nextActionAfterAuthentication(session, authSession, clientConnection, request, session.getContext().getUri(), event);
         } else if (context.getStatus() == RequiredActionContext.Status.CHALLENGE) {

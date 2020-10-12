@@ -151,7 +151,7 @@ public class RegistrationUserCreation implements FormAction, FormActionFactory {
         UserModel user = context.getSession().users().addUser(context.getRealm(), username);
         user.setEnabled(true);
 
-        populateFormFields(user, formData);
+        populateFormFields(context.getHttpRequest(), user, formData);
 
         for(Map.Entry<String, List<String>> entry: user.getAttributes().entrySet()){
             logger.info(entry.getKey()+":"+entry.getValue());

@@ -16,6 +16,7 @@
  */
 package org.keycloak.forms.login.freemarker;
 
+import javax.ws.rs.core.MultivaluedHashMap;
 import org.jboss.logging.Logger;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.authentication.authenticators.broker.util.SerializedBrokeredIdentityContext;
@@ -71,6 +72,7 @@ import java.text.MessageFormat;
 import java.util.*;
 
 
+import static org.keycloak.authentication.AuthenticationProcessor.CURRENT_REFERRED_BY_CODE;
 import static org.keycloak.models.UserModel.RequiredAction.UPDATE_PASSWORD;
 import static org.keycloak.models.UserModel.RequiredAction.UPDATE_PROFILE;
 import static org.keycloak.services.managers.AuthenticationManager.IS_AIA_REQUEST;
@@ -228,6 +230,12 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 if (mobilePhoneNumber != null && !mobilePhoneNumber.isEmpty()) {
                     attributes.put(Validation.FIELD_MOBILE_PHONE_NUMBER, mobilePhoneNumber);
                 }
+                if (this.authenticationSession != null && this.authenticationSession.getClientNote(CURRENT_REFERRED_BY_CODE) != null){
+                    if (formData == null){
+                        formData = new MultivaluedHashMap<>();
+                    }
+                    attributes.put(Validation.FIELD_REFERRED_BY_CODE, this.authenticationSession.getClientNote(CURRENT_REFERRED_BY_CODE));
+                }
                 break;
             case LOGIN_IDP_LINK_CONFIRM:
             case LOGIN_IDP_LINK_EMAIL:
@@ -248,6 +256,12 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 }
                 break;
             case REGISTER:
+                if (this.authenticationSession != null && this.authenticationSession.getClientNote(CURRENT_REFERRED_BY_CODE) != null){
+                    if (formData == null){
+                        formData = new MultivaluedHashMap<>();
+                    }
+                    formData.add(Validation.FIELD_REFERRED_BY_CODE, this.authenticationSession.getClientNote(CURRENT_REFERRED_BY_CODE));
+                }
                 attributes.put("register", new RegisterBean(formData));
                 break;
             case OAUTH_GRANT:
