@@ -72,9 +72,17 @@
           <span>${msg("register-content-referral-code")}</span>
         </div>
         <div class="instsign-content-input-text">
-          <input id="referredByCode" name="referredByCode" type="text"
-                 autocomplete="off" maxlength="6"
-                 value="${(referredByCode!user.referredByCode!'')}"/>
+            <#if referredByCode?? && referredByCode?has_content >
+              <input id="referredByCode" name="referredByCode1" type="text"
+                     disabled class="instsign-content-disabled"
+                     value="${(referredByCode!'')}"/>
+              <input name="referredByCode" type="hidden"
+                     value="${(referredByCode!'')}"/>
+            <#else>
+              <input id="referredByCode" name="referredByCode" type="text"
+                     autocomplete="off" maxlength="6"
+                     value="${(referredByCode!'')}"/>
+            </#if>
         </div>
       </div>
       <div id="register-agreement-section" class="register-agreement">
